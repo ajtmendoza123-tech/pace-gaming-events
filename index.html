@@ -561,7 +561,7 @@ select option{background:#fff;color:#1a1612;}
 const IS_VIEW = new URLSearchParams(location.search).has('view');
 
 let VENUES_ORDER = [
-  'BAHA MAR','HARD ROCK PUNTA CANA','HARD ROCK HOLLYWOOD','MOHEGAN SUN','MONTE CARLO','RITZ CARLTON',
+  'BAHA MAR','CASINO ROYALE','HARD ROCK PUNTA CANA','HARD ROCK HOLLYWOOD','MOHEGAN SUN','MONTE CARLO','RITZ CARLTON',
   'ALLEGIANT STADIUM','DURANGO','MGM GRAND','RED ROCK','SUNSET STATION','T-MOBILE ARENA','VIRGIN LAS VEGAS','WYNN LAS VEGAS',
   'BIG EVENT','CRUISE','DRAFTKINGS'
 ];
@@ -611,7 +611,7 @@ function shortDateRange(start,end){
 }
 function uid(){return Math.random().toString(36).slice(2);}
 // ── PERSISTENCE ──
-const LS_KEY = 'pace_events_v1';
+const LS_KEY = 'pace_events_v3';
 
 function getEventsPayload(){
   return events.map(function(e){return{
@@ -635,12 +635,11 @@ function loadFromStorage(){
         // Detect corrupted data: names with date ranges baked in like "10/2 to 3 - Name"
         var corrupted=arr.some(function(r){return /^\d{1,2}\/\d{1,2}\s+(to|-)/.test(r.name);});
         if(corrupted){localStorage.removeItem(LS_KEY);return false;}
-        events=arr.map(function(r){return{
-          id:r.id,venue:r.venue,name:r.name,
-          date:r.date?new Date(r.date+'T12:00:00'):null,
-          endDate:r.endDate?new Date(r.endDate+'T12:00:00'):null,
-          note:r.note||'',type:r.type||'regular'
-        };});
+        events=arr.map(function(r){
+          var d=r.date?new Date(r.date+'T12:00:00'):null;
+          var de=r.endDate?new Date(r.endDate+'T12:00:00'):d;
+          return{id:r.id,venue:r.venue,name:r.name,date:d,endDate:de,note:r.note||'',type:r.type||'regular'};
+        });
         return true;
       }
     }
@@ -663,6 +662,9 @@ const raw=[
   {v:'BAHA MAR',n:"3rd Annual Skin's Golf Event",d:'11/6',de:'11/7'},
   {v:'BAHA MAR',n:'Wahoo Fishing Tournament',d:'11/12',de:'11/15'},
   {v:'BAHA MAR',n:'Baha Mar Hoops',d:'11/19'},
+  {v:'BIG EVENT',n:'Players Era 16 Men\'s Tournament',d:'11/24',note:'Dates: 11/24, 11/26 & 11/27',t:'big'},
+  {v:'BIG EVENT',n:'Players Era 16 Men\'s Tournament',d:'11/26',note:'Dates: 11/24, 11/26 & 11/27',t:'big'},
+  {v:'BIG EVENT',n:'Players Era 16 Men\'s Tournament',d:'11/27',note:'Dates: 11/24, 11/26 & 11/27',t:'big'},
   {v:'BAHA MAR',n:'Mark Wahlberg Celebrity Golf Invitational 2026',d:'11/15',de:'11/18'},
   {v:'BAHA MAR',n:'Hero World Challenge',d:'12/3',de:'12/6'},
   {v:'BAHA MAR',n:'Baha Mar Tennis Cup',d:'12/3',de:'12/6'},
@@ -756,28 +758,26 @@ const raw=[
   {v:'DRAFTKINGS',n:'World Cup Suites (4 tickets per suite, each state)',note:'All states where games are played'},
   {v:'DRAFTKINGS',n:'NBA Finals'},
 ];
-raw.forEach(r=>events.push({
-  id:uid(),venue:r.v,name:r.n,
-  date:parseDate(r.d||''),endDate:parseDate(r.de||''),
-  note:r.note||'',type:r.t||'regular'
-}));
-loadFromStorage(); // override defaults with saved events if any
-  // Load from URL ?data= for shared view links
-  try{
-    var params=new URLSearchParams(location.search);
-    var enc=params.get('data');
-    if(enc){
-      var arr=JSON.parse(decodeURIComponent(enc));
-      if(arr&&arr.length){
-        events=arr.map(function(r){return{
-          id:r.id,venue:r.venue,name:r.name,
-          date:r.date?new Date(r.date+'T12:00:00'):null,
-          endDate:r.endDate?new Date(r.endDate+'T12:00:00'):null,
-          note:r.note||'',type:r.type||'regular'
-        };});
-      }
-    }
-  }catch(e){}
+raw.forEach(r=>{
+  const d=parseDate(r.d||'');
+  const de=parseDate(r.de||'')||d; // if no end date, use start date so range block always shows
+  events.push({id:uid(),venue:r.v,name:r.n,date:d,endDate:de,note:r.note||'',type:r.t||'regular'});
+});
+// Clear stale cache so updated default events always load fresh
+localStorage.removeItem(LS_KEY);
+// loadFromStorage(); // disabled — always use latest default data
+// Auto-remove past events on load
+(function(){
+  var t=new Date();t=new Date(t.getFullYear(),t.getMonth(),t.getDate());
+  var before=events.length;
+  events=events.filter(function(e){
+    if(e.type==='recurring')return true; // never remove recurring
+    var d=e.endDate||e.date;
+    return !d||d>=t;
+  });
+  if(events.length<before)saveToStorage();
+})();
+  // View-only mode uses hardcoded default events — no URL data needed
 
 
 
@@ -884,9 +884,13 @@ function closeAdd(){document.getElementById('addForm').classList.remove('open');
 function addEvent(){
   const name=document.getElementById('f-name').value.trim();
   if(!name){alert('Please enter an event name.');return;}
-  events.push({id:uid(),venue:document.getElementById('f-venue').value,name,
-    date:parseDate(document.getElementById('f-date').value),
-    endDate:parseDate(document.getElementById('f-date-end').value),
+  const _d=parseDate(document.getElementById('f-date').value);
+  const _de=parseDate(document.getElementById('f-date-end').value)||_d;
+  const _venue=document.getElementById('f-venue').value;
+  const _dup=events.find(e=>e.name.trim().toLowerCase()===name.toLowerCase()&&e.venue===_venue);
+  if(_dup&&!confirm('⚠️ "'+name+'" at '+_venue+' already exists. Add anyway?'))return;
+  events.push({id:uid(),venue:_venue,name,
+    date:_d,endDate:_de,
     note:document.getElementById('f-note').value.trim(),
     type:document.getElementById('f-type').value});
   ['f-name','f-note','f-date','f-date-end'].forEach(id=>document.getElementById(id).value='');
@@ -985,9 +989,25 @@ function parseBulkLine(line){
       date:parseDate(rangeToDay[1]+'/'+rangeToDay[2]),
       endDate:parseDate(rangeToDay[1]+'/'+rangeToDay[3]),note};
   }
-  // Date - Name
+  // "m/d, d & d - Name" or "m/d, d, d - Name" e.g. "11/24, 26 & 27 - Event" → first to last day
+  const multiDay=line.match(/^(\d{1,2})\/(\d{1,2})(?:[,&\s]+\d{1,2})*[,&\s]+(\d{1,2})\s*[-–]\s*(.+)$/);
+  if(multiDay){
+    // extract all day numbers to find first and last
+    const monthStr=multiDay[1];
+    const allDays=[];
+    const dayParts=line.split(/\s*[-–]/)[0]; // everything before the dash
+    const dayNums=dayParts.match(/\d+/g);
+    dayNums.forEach(function(n,i){if(i===0)return;allDays.push(parseInt(n,10));});
+    allDays.sort(function(a,b){return a-b;});
+    const firstDay=parseInt(multiDay[2],10);
+    const lastDay=allDays[allDays.length-1];
+    return{name:multiDay[4].trim(),type:'regular',
+      date:parseDate(monthStr+'/'+firstDay),
+      endDate:parseDate(monthStr+'/'+lastDay),note};
+  }
+  // Date - Name (single date — use same date as endDate so range always shows)
   const dateM=line.match(/^(\d{1,2}\/\d{1,2})\s*[-–]\s*(.+)$/);
-  if(dateM)return{name:dateM[2].trim(),type:'regular',date:parseDate(dateM[1]),endDate:null,note};
+  if(dateM){const d=parseDate(dateM[1]);return{name:dateM[2].trim(),type:'regular',date:d,endDate:d,note};}
   // Just name
   return{name:line,type:'regular',date:null,endDate:null,note};
 }
@@ -1009,12 +1029,18 @@ function confirmBulk(){
   const lines=document.getElementById('bulkText').value.split('\n').filter(l=>l.trim());
   if(!lines.length){alert('Please enter at least one event.');return;}
   let added=0;
+  const dupes=[];
   lines.forEach(line=>{
     const p=parseBulkLine(line);
     if(!p||!p.name)return;
-    events.push({id:uid(),venue,name:p.name,date:p.date,endDate:p.endDate,note:p.note,type:p.type});
+    const dup=events.find(e=>e.name.trim().toLowerCase()===p.name.trim().toLowerCase()&&e.venue===venue);
+    if(dup){dupes.push(p.name);return;}
+    events.push({id:uid(),venue,name:p.name,date:p.date,endDate:p.endDate||p.date,note:p.note,type:p.type});
     added++;
   });
+  if(dupes.length){
+    alert('⚠️ Skipped '+dupes.length+' duplicate(s):\n• '+dupes.slice(0,5).join('\n• ')+(dupes.length>5?'\n…and '+(dupes.length-5)+' more':''));
+  }
   closeBulk();render();saveToStorage();
   // brief toast
   const t=document.createElement('div');
@@ -1215,9 +1241,7 @@ function copyText(){
 
 // ── SHARE ──
 function openShare(){
-  const payload=getEventsPayload();
-  const encoded=encodeURIComponent(JSON.stringify(payload));
-  const url=location.href.split('?')[0]+'?view&data='+encoded;
+  const url=location.href.split('?')[0]+'?view';
   document.getElementById('shareUrl').value=url;
   document.getElementById('openShareLink').href=url;
   document.getElementById('shareModal').classList.add('open');

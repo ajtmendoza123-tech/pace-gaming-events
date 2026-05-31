@@ -632,6 +632,9 @@ function loadFromStorage(){
     if(d){
       var arr=JSON.parse(d);
       if(arr&&arr.length){
+        // Detect corrupted data: names with date ranges baked in like "10/2 to 3 - Name"
+        var corrupted=arr.some(function(r){return /^\d{1,2}\/\d{1,2}\s+(to|-)/.test(r.name);});
+        if(corrupted){localStorage.removeItem(LS_KEY);return false;}
         events=arr.map(function(r){return{
           id:r.id,venue:r.venue,name:r.name,
           date:r.date?new Date(r.date+'T12:00:00'):null,
@@ -969,9 +972,19 @@ function parseBulkLine(line){
   let note='';
   const noteM=line.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
   if(noteM){line=noteM[1].trim();note=noteM[2].trim();}
-  // Start - End - Name
+  // Start - End - Name  e.g. "5/1 - 5/3 - Event"
   const rangeM=line.match(/^(\d{1,2}\/\d{1,2})\s*[-–]\s*(\d{1,2}\/\d{1,2})\s*[-–]\s*(.+)$/);
   if(rangeM)return{name:rangeM[3].trim(),type:'regular',date:parseDate(rangeM[1]),endDate:parseDate(rangeM[2]),note};
+  // "m/d to m/d - Name"  e.g. "10/22 to 10/26 - Festival"
+  const rangeToFull=line.match(/^(\d{1,2}\/\d{1,2})\s+to\s+(\d{1,2}\/\d{1,2})\s*[-–]\s*(.+)$/i);
+  if(rangeToFull)return{name:rangeToFull[3].trim(),type:'regular',date:parseDate(rangeToFull[1]),endDate:parseDate(rangeToFull[2]),note};
+  // "m/d to d - Name"  e.g. "10/2 to 3 - Tournament" (same month, end day only)
+  const rangeToDay=line.match(/^(\d{1,2})\/(\d{1,2})\s+to\s+(\d{1,2})\s*[-–]\s*(.+)$/i);
+  if(rangeToDay){
+    return{name:rangeToDay[4].trim(),type:'regular',
+      date:parseDate(rangeToDay[1]+'/'+rangeToDay[2]),
+      endDate:parseDate(rangeToDay[1]+'/'+rangeToDay[3]),note};
+  }
   // Date - Name
   const dateM=line.match(/^(\d{1,2}\/\d{1,2})\s*[-–]\s*(.+)$/);
   if(dateM)return{name:dateM[2].trim(),type:'regular',date:parseDate(dateM[1]),endDate:null,note};

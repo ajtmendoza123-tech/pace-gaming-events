@@ -266,8 +266,8 @@ select option{background:#fff;color:#1a1612;}
     <div class="toolbar">
       <div class="toolbar-title" id="toolbarTitle">All Venues</div>
       <div class="filter-pills">
-        <div class="pill active" onclick="setFilter('all',this)">All</div>
-        <div class="pill" onclick="setFilter('upcoming',this)">Upcoming</div>
+        <div class="pill" onclick="setFilter('all',this)">All</div>
+        <div class="pill active" onclick="setFilter('upcoming',this)">Upcoming</div>
         <div class="pill past-pill" onclick="setFilter('past',this)">Past</div>
       </div>
     </div>
@@ -568,7 +568,7 @@ let VENUES_ORDER = [
 
 let events = [];
 let currentVenue = 'ALL';
-let currentFilter = 'all';
+let currentFilter = 'upcoming';
 
 (function setupHeader(){
   const wrap = document.getElementById('headerActions');
@@ -582,15 +582,19 @@ let currentFilter = 'all';
       <button class="btn btn-danger btn-sm" onclick="removePastEvents()" title="Remove all past events">⏪ Remove Past</button>
       <button class="btn btn-outline btn-sm" onclick="openReport()">♦ Report</button>
       <button class="btn btn-ghost btn-sm" onclick="openShare()" style="border-color:rgba(201,168,76,0.3);color:var(--gold-light);">⬡ Share ↗</button>
+      <button class="btn btn-gold btn-sm" onclick="saveSnapshot()" title="Save current events as HTML file">💾 Save</button>
     `;
   }
 })();
 
 function parseDate(s){
   if(!s)return null;
-  const y=new Date().getFullYear(),t=s.trim();
+  const t=s.trim();
   const m=t.match(/^(\d{1,2})\/(\d{1,2})$/);
-  if(m)return new Date(y,+m[1]-1,+m[2]);
+  if(m){
+    // Use 2026 as base year for all m/d format dates (data is 2026-based)
+    return new Date(2026,+m[1]-1,+m[2]);
+  }
   const i=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if(i)return new Date(+i[1],+i[2]-1,+i[3]);
   return null;
@@ -616,14 +620,20 @@ const raw=[
   {v:'BIG EVENT',n:'The Rematch: May Weather VS. Manny Pacquiao @ Sphere Las Vegas',d:'9/19',t:'big'},
   {v:'BAHA MAR',n:'$100,000 Cinco de Mayo Slot Tournament',d:'5/9'},
   {v:'BAHA MAR',n:'$100,000 Spring Spin-tacular Slot Tournament',d:'5/16'},
-  {v:'BAHA MAR',n:'$100k Summer Splash Slot Tournament',d:'7/24',de:'7/25'},
-  {v:'BAHA MAR',n:'$250k Poker Tournament',d:'8/14',de:'8/15',note:'Fact sheet available'},
+  {v:'BAHA MAR',n:'French Montana',d:'7/10'},
+  {v:'BAHA MAR',n:'$100k Summer Splash Slot Tournament',d:'7/25'},
+  {v:'BAHA MAR',n:'$250k Poker Tournament',d:'8/15',note:'Fact sheet available'},
   {v:'BAHA MAR',n:'$100k Slot Tournament',d:'9/12'},
-  {v:'BAHA MAR',n:'$250k Blackjack Tournament',d:'10/3'},
-  {v:'BAHA MAR',n:'Culinary & Arts Festival',d:'10/22'},
-  {v:'BAHA MAR',n:"3rd Annual Skin's Golf Event",d:'11/7'},
-  {v:'BAHA MAR',n:'Wahoo Fishing Tournament',d:'11/12'},
+  {v:'BAHA MAR',n:'$250k Blackjack Tournament',d:'10/2',de:'10/3'},
+  {v:'BAHA MAR',n:'Culinary & Arts Festival',d:'10/22',de:'10/26'},
+  {v:'BAHA MAR',n:"3rd Annual Skin's Golf Event",d:'11/6',de:'11/7'},
+  {v:'BAHA MAR',n:'Wahoo Fishing Tournament',d:'11/12',de:'11/15'},
   {v:'BAHA MAR',n:'Baha Mar Hoops',d:'11/19'},
+  {v:'BAHA MAR',n:'Mark Wahlberg Celebrity Golf Invitational 2026',d:'11/15',de:'11/18'},
+  {v:'BAHA MAR',n:'Hero World Challenge',d:'12/3',de:'12/6'},
+  {v:'BAHA MAR',n:'Baha Mar Tennis Cup',d:'12/3',de:'12/6'},
+  {v:'BAHA MAR',n:'Derek Jeter Celebrity Weekend',d:'12/6',de:'12/9'},
+  {v:'BAHA MAR',n:'$100K Presidents Slot Tournament',d:'12/12'},
   {v:'CASINO ROYALE',n:'Spin Royale – Spring Trials ($20K Prize Pool)',d:'5/7',de:'5/9'},
   {v:'CASINO ROYALE',n:'Spin Royale – Grand Finals ($20K Prize Pool)',d:'11/5',de:'11/7'},
   {v:'CASINO ROYALE',n:"Winner's Circle ($5K – both tournament players)",d:'11/7'},
@@ -718,6 +728,40 @@ raw.forEach(r=>events.push({
   note:r.note||'',type:r.t||'regular'
 }));
 
+// Load saved events from embedded data element (populated by Save button)
+(function(){
+  var savedEl = document.getElementById('__events_data__');
+  if(savedEl && savedEl.textContent.trim()){
+    try{
+      var saved = JSON.parse(savedEl.textContent);
+      if(saved && saved.length){
+        events = saved.map(function(r){return{
+          id:r.id, venue:r.venue, name:r.name,
+          date:r.date ? new Date(r.date+'T12:00:00') : null,
+          endDate:r.endDate ? new Date(r.endDate+'T12:00:00') : null,
+          note:r.note||'', type:r.type||'regular'
+        };});
+      }
+    }catch(e){}
+  }
+  // Also check URL-encoded events for view links
+  try{
+    var params = new URLSearchParams(location.search);
+    var encoded = params.get('data');
+    if(encoded){
+      var saved = JSON.parse(decodeURIComponent(encoded));
+      if(saved && saved.length){
+        events = saved.map(function(r){return{
+          id:r.id, venue:r.venue, name:r.name,
+          date:r.date ? new Date(r.date+'T12:00:00') : null,
+          endDate:r.endDate ? new Date(r.endDate+'T12:00:00') : null,
+          note:r.note||'', type:r.type||'regular'
+        };});
+      }
+    }
+  }catch(e){}
+})();
+
 let selectedIds = new Set();
 let selectMode = false;
 
@@ -764,9 +808,14 @@ function mkCard(e){
   let cls='event-card';
   if(past)cls+=' is-past';if(tod)cls+=' is-today';if(soon)cls+=' is-soon';
   if(selectedIds.has(e.id))cls+=' selected';
-  const day=e.date?e.date.getDate().toString().padStart(2,'0'):'—';
+  const hasRange=e.date&&e.endDate;
+  const crossMonth=hasRange&&e.date.getMonth()!==e.endDate.getMonth();
   const mon=e.date?e.date.toLocaleDateString('en-US',{month:'short'}).toUpperCase():'';
-  const endDay=e.endDate?'–'+e.endDate.getDate().toString().padStart(2,'0'):'';
+  const day=e.date?e.date.getDate().toString():'';
+  let endLabel='';
+  if(hasRange){
+    endLabel=crossMonth?'→'+(e.endDate.getMonth()+1)+'/'+e.endDate.getDate():'to '+e.endDate.getDate();
+  }
   let badges='';
   if(e.type==='big')badges+='<span class="badge badge-big">⭐ Big</span>';
   if(e.type==='recurring')badges+='<span class="badge badge-rec">🔁 Recurring</span>';
@@ -780,13 +829,14 @@ function mkCard(e){
     </div>`;
   }
   const checkbox=IS_VIEW?'':` <input type="checkbox" class="card-check" ${selectedIds.has(e.id)?'checked':''} onchange="toggleSelect('${e.id}',this.checked)" onclick="event.stopPropagation()">`;
+  const dateBlockHtml=e.type==='recurring'
+    ?`<div class="date-block"><div class="date-month">REC</div><div class="date-day" style="font-size:18px;">🔁</div></div>`
+    :e.date
+      ?`<div class="date-block"><div class="date-month">${mon}</div><div class="date-day">${day}</div>${endLabel?`<div class="date-end" style="font-size:10px;color:#a07820;font-weight:600;letter-spacing:0;">${endLabel}</div>`:''}</div>`
+      :`<div class="date-block"><div class="date-month" style="font-size:8px;margin-top:4px;">DATE</div><div class="date-day" style="font-size:14px;font-weight:700;color:#a07820;letter-spacing:0.05em;">TBD</div></div>`;
   return `<div class="${cls}" id="card-${e.id}">
     ${checkbox}
-    <div class="date-block">
-      <div class="date-month">${mon}</div>
-      <div class="date-day">${day}</div>
-      ${endDay?`<div class="date-end">${endDay}</div>`:''}
-    </div>
+    ${dateBlockHtml}
     <div class="event-info">
       <div class="event-name">${e.name}</div>
       <div class="event-venue-label">${e.venue}</div>
@@ -900,9 +950,19 @@ function parseBulkLine(line){
   let note='';
   const noteM=line.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
   if(noteM){line=noteM[1].trim();note=noteM[2].trim();}
-  // Start - End - Name
+  // Start - End - Name  (e.g. "5/1 - 5/3 - Event Name")
   const rangeM=line.match(/^(\d{1,2}\/\d{1,2})\s*[-–]\s*(\d{1,2}\/\d{1,2})\s*[-–]\s*(.+)$/);
   if(rangeM)return{name:rangeM[3].trim(),type:'regular',date:parseDate(rangeM[1]),endDate:parseDate(rangeM[2]),note};
+  // "m/d to m/d - Name"  (e.g. "10/22 to 10/26 - Culinary Festival")
+  const rangeToFull=line.match(/^(\d{1,2}\/\d{1,2})\s+to\s+(\d{1,2}\/\d{1,2})\s*[-–]\s*(.+)$/i);
+  if(rangeToFull)return{name:rangeToFull[3].trim(),type:'regular',date:parseDate(rangeToFull[1]),endDate:parseDate(rangeToFull[2]),note};
+  // "m/d to d - Name"  (e.g. "10/2 to 3 - $250k Tournament" — same month, end day only)
+  const rangeToDay=line.match(/^(\d{1,2})\/(\d{1,2})\s+to\s+(\d{1,2})\s*[-–]\s*(.+)$/i);
+  if(rangeToDay){
+    const startDate=parseDate(rangeToDay[1]+'/'+rangeToDay[2]);
+    const endDate=parseDate(rangeToDay[1]+'/'+rangeToDay[3]);
+    return{name:rangeToDay[4].trim(),type:'regular',date:startDate,endDate,note};
+  }
   // Date - Name
   const dateM=line.match(/^(\d{1,2}\/\d{1,2})\s*[-–]\s*(.+)$/);
   if(dateM)return{name:dateM[2].trim(),type:'regular',date:parseDate(dateM[1]),endDate:null,note};
@@ -1133,7 +1193,9 @@ function copyText(){
 
 // ── SHARE ──
 function openShare(){
-  const url = location.href.split('?')[0] + '?view';
+  const payload = getEventsPayload();
+  const encoded = encodeURIComponent(JSON.stringify(payload));
+  const url = location.href.split('?')[0] + '?view&data=' + encoded;
   document.getElementById('shareUrl').value = url;
   document.getElementById('openShareLink').href = url;
   document.getElementById('shareModal').classList.add('open');
@@ -1299,9 +1361,46 @@ function copyDraftText(){
   });
 }
 
+function getEventsPayload(){
+  return events.map(function(e){return{
+    id:e.id, venue:e.venue, name:e.name,
+    date:e.date?e.date.toISOString().slice(0,10):'',
+    endDate:e.endDate?e.endDate.toISOString().slice(0,10):'',
+    note:e.note||'', type:e.type||'regular'
+  };});
+}
+
+function saveSnapshot(){
+  // Store current events in a hidden JSON element embedded in the page
+  var el = document.getElementById('__events_data__');
+  if(!el){
+    el = document.createElement('script');
+    el.id = '__events_data__';
+    el.type = 'application/json';
+    document.head.appendChild(el);
+  }
+  el.textContent = JSON.stringify(getEventsPayload());
+
+  var src = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+  var blob = new Blob([src], {type:'text/html'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'pace-events-' + new Date().toISOString().slice(0,10) + '.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+
+  document.querySelectorAll('button').forEach(function(b){
+    if(b.textContent.trim().indexOf('Save') !== -1 && b.textContent.trim().length < 15){
+      var orig = b.textContent;
+      b.textContent = '\u2713 Saved!';
+      setTimeout(function(){ b.textContent = orig; }, 2000);
+    }
+  });
+}
+
 function downloadReport(){
   const {html,title} = buildReport();
-  const fullHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title></head><body style="margin:0;padding:20px;background:#e8e4dc;">${html}</body></html>`;
+  const fullHtml = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+title+'</title></head><body style="margin:0;padding:20px;background:#e8e4dc;">'+html+'</body></html>';
   const blob = new Blob([fullHtml], {type:'text/html'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);

@@ -477,59 +477,37 @@ select option{background:#fff;color:#1a1612;}
         </select>
       </div>
     </div>
-    <!-- Split body -->
-    <div style="display:flex;flex:1;overflow:hidden;min-height:0;height:calc(92vh - 220px);">
-      <!-- LEFT: Preview -->
-      <div style="flex:1.1;display:flex;flex-direction:column;border-right:1px solid rgba(160,120,32,0.15);min-width:0;">
-        <div style="padding:8px 16px;background:#f0ece0;border-bottom:1px solid rgba(160,120,32,0.1);">
+    <!-- Template selector bar -->
+    <div style="background:#f2eeff;border-bottom:2px solid rgba(120,80,200,0.18);padding:8px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <span style="font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#7040b0;">✉ Email Template</span>
+      <select id="draft-template" onchange="applyDraftTemplate()" style="border-color:rgba(120,80,200,0.25);background:#fff;font-size:12px;padding:5px 8px;border-radius:4px;color:#1a1612;">
+        <option value="newsletter">Newsletter</option>
+        <option value="followup">Follow-Up</option>
+        <option value="highlight">Highlights</option>
+        <option value="brief">Brief</option>
+        <option value="vip">VIP Invite</option>
+        <option value="reminder">Reminder</option>
+        <option value="welcome">Welcome / Intro</option>
+        <option value="thankyou">Thank You</option>
+      </select>
+      <div style="flex:1;"></div>
+      <span style="font-size:9px;color:#8a7a60;font-style:italic;">Greeting &amp; sign-off appear inside the report preview below</span>
+    </div>
+    <!-- Hidden fields kept for copyDraftText -->
+    <input type="hidden" id="draft-subject">
+    <textarea id="draft-body" style="display:none;"></textarea>
+    <!-- Preview -->
+    <div style="display:flex;flex:1;overflow:hidden;min-height:0;height:calc(92vh - 260px);">
+      <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
+        <div style="padding:6px 16px;background:#f0ece0;border-bottom:1px solid rgba(160,120,32,0.1);display:flex;align-items:center;gap:16px;">
           <span style="font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#8a7a60;">Preview</span>
+          <div style="margin-left:auto;display:flex;gap:16px;">
+            <span style="font-size:11px;color:#a07820;"><b id="rstat-upcoming">0</b> <span style="color:#8a7a60;font-size:10px;">Upcoming</span></span>
+            <span style="font-size:11px;color:#c05050;"><b id="rstat-big">0</b> <span style="color:#8a7a60;font-size:10px;">Big</span></span>
+            <span style="font-size:11px;color:#1a6a3c;"><b id="rstat-recurring">0</b> <span style="color:#8a7a60;font-size:10px;">Recurring</span></span>
+          </div>
         </div>
         <div class="email-preview-wrap" id="reportContent" style="flex:1;overflow-y:auto;background:#e8e4dc;padding:16px;max-height:none;border-radius:0;border:none;"></div>
-        <!-- Stats bar -->
-        <div style="display:flex;border-top:1px solid rgba(160,120,32,0.15);background:#fff;flex-shrink:0;">
-          <div style="flex:1;text-align:center;padding:10px 6px;border-right:1px solid rgba(160,120,32,0.08);">
-            <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#a07820;line-height:1;" id="rstat-upcoming">0</div>
-            <div style="font-size:9px;color:#8a7a60;letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;">Upcoming</div>
-          </div>
-          <div style="flex:1;text-align:center;padding:10px 6px;border-right:1px solid rgba(160,120,32,0.08);">
-            <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#c05050;line-height:1;" id="rstat-big">0</div>
-            <div style="font-size:9px;color:#8a7a60;letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;">Big Events</div>
-          </div>
-          <div style="flex:1;text-align:center;padding:10px 6px;">
-            <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#1a6a3c;line-height:1;" id="rstat-recurring">0</div>
-            <div style="font-size:9px;color:#8a7a60;letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;">Recurring</div>
-          </div>
-        </div>
-      </div>
-      <!-- RIGHT: Email Draft -->
-      <div style="width:340px;flex-shrink:0;display:flex;flex-direction:column;background:#f8f5ff;">
-        <div style="padding:8px 16px;background:#ede8fa;border-bottom:1px solid rgba(120,80,200,0.15);">
-          <span style="font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#7040b0;">Email Draft</span>
-        </div>
-        <div style="padding:12px 14px;border-bottom:1px solid rgba(120,80,200,0.1);background:#f2eeff;">
-          <div class="form-group" style="margin-bottom:8px;">
-            <label class="form-label" style="color:#7040b0;">Template</label>
-            <select id="draft-template" onchange="applyDraftTemplate()" style="border-color:rgba(120,80,200,0.25);background:#fff;">
-              <option value="newsletter">Events Newsletter</option>
-              <option value="followup">Follow-Up / Check-In</option>
-              <option value="highlight">Highlights Only</option>
-              <option value="brief">Brief &amp; Direct</option>
-            </select>
-          </div>
-          <div class="form-group" style="margin-bottom:8px;">
-            <label class="form-label" style="color:#7040b0;">Subject</label>
-            <input type="text" id="draft-subject" style="border-color:rgba(120,80,200,0.25);background:#fff;font-size:12px;" oninput="syncDraftPreview()">
-          </div>
-        </div>
-        <div style="padding:10px 14px;flex:1;display:flex;flex-direction:column;min-height:0;">
-          <label class="form-label" style="color:#7040b0;margin-bottom:4px;">Body (Editable)</label>
-          <textarea id="draft-body" style="flex:1;width:100%;font-family:'Raleway',sans-serif;font-size:12px;line-height:1.7;background:#fff;border:1px solid rgba(120,80,200,0.25);border-radius:4px;padding:10px 12px;color:#1a1612;resize:none;outline:none;min-height:0;" oninput="syncDraftPreview()"></textarea>
-        </div>
-        <div style="padding:10px 14px;border-top:1px solid rgba(120,80,200,0.1);background:#ede8fa;">
-          <button class="btn btn-sm" onclick="copyDraftText()" style="width:100%;background:linear-gradient(135deg,#5a28b0,#7c44d4);color:#fff;border:none;padding:9px;font-size:11px;border-radius:4px;cursor:pointer;letter-spacing:0.06em;">
-            ☰ Copy Email Draft
-          </button>
-        </div>
       </div>
     </div>
     <!-- Footer -->
@@ -537,6 +515,7 @@ select option{background:#fff;color:#1a1612;}
       <button class="btn btn-ghost btn-sm" onclick="closeReport()">Close</button>
       <button class="btn btn-outline btn-sm" onclick="copyHtml()">Copy HTML</button>
       <button class="btn btn-outline btn-sm" onclick="copyText()">Copy Plain Text</button>
+      <button class="btn btn-sm" onclick="copyDraftText()" style="background:linear-gradient(135deg,#5a28b0,#7c44d4);color:#fff;border:none;padding:8px 16px;font-size:11px;border-radius:4px;cursor:pointer;font-family:'Raleway',sans-serif;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;">☰ Copy Email Draft</button>
       <button class="btn btn-gold btn-sm" onclick="downloadReport()">⬇ Download Report</button>
     </div>
   </div>
@@ -621,6 +600,15 @@ function isPast(e){const t=today(),d=e.endDate||e.date;return d&&d<t;}
 function isToday(e){const t=today();return e.date&&e.date.getTime()===t.getTime();}
 function isSoon(e){const t=today(),d=e.date-t;return d>=0&&d<=7*864e5;}
 function shortDate(d){if(!d)return'';return d.toLocaleDateString('en-US',{month:'long',day:'numeric'});}
+function shortDateRange(start,end){
+  if(!start)return'';
+  const m=start.getMonth(),d=start.getDate();
+  const mStr=(m+1);
+  if(!end)return mStr+'/'+d;
+  const em=end.getMonth(),ed=end.getDate();
+  if(em===m)return mStr+'/'+d+' to '+ed;
+  return mStr+'/'+d+' to '+(em+1)+'/'+ed;
+}
 function uid(){return Math.random().toString(36).slice(2);}
 
 const raw=[
@@ -762,7 +750,7 @@ function render(){
     let h='';
     VENUES_ORDER.forEach(v=>{
       if(!bv[v]||!bv[v].length)return;
-      h+=`<div class="group-label"><span>${v}</span><span>${bv[v].length}</span></div>`;
+      h+=`<div class="group-label" style="background:rgba(160,120,32,0.10);border-radius:4px;padding:7px 10px 7px 12px;margin-bottom:6px;"><span>${v}</span><span>${bv[v].length}</span></div>`;
       bv[v].forEach(e=>h+=mkCard(e));
     });
     el.innerHTML=h;
@@ -974,22 +962,20 @@ function buildReport(){
   function mkEventCell(e,bg){
     let datePart='';
     if(e.type==='recurring')datePart='Recurring';
-    else if(e.date){datePart=shortDate(e.date);if(e.endDate)datePart+=' – '+shortDate(e.endDate);}
+    else if(e.date){datePart=shortDateRange(e.date,e.endDate);}
     const isBig=e.type==='big';
+    const line=datePart?`${datePart} - ${e.name}`:e.name;
     return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${bg};">
       <tr>
-        <td style="padding:6px 8px;border-bottom:1px solid #ede8db;width:110px;vertical-align:top;">
-          <span style="font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#888888;">${datePart||'&nbsp;'}</span>
-        </td>
-        <td style="padding:6px 8px;border-bottom:1px solid #ede8db;vertical-align:top;">
-          ${isBig?'<span style="font-size:11px;margin-right:3px;">⭐</span>':''}<span style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#1a1a1a;font-weight:${isBig?'700':'400'};">${e.name}</span>${e.note?`<br><span style="font-family:Arial,sans-serif;font-size:10px;color:#999999;font-style:italic;">${e.note}</span>`:''}
+        <td style="padding:5px 10px;border-bottom:1px solid #ede8db;">
+          ${isBig?'<span style="font-size:11px;margin-right:3px;">⭐</span>':''}<span style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#1a1a1a;font-weight:${isBig?'700':'400'};">${line}</span>${e.note?`<span style="font-family:Arial,sans-serif;font-size:10px;color:#999999;font-style:italic;margin-left:6px;">(${e.note})</span>`:''}
         </td>
       </tr>
     </table>`;
   }
 
   function mkVenueBlock(v,vevs){
-    const headerTd=`<td style="border-left:4px solid ${accent};padding:6px 0 6px 12px;background:${accent}18;">
+    const headerTd=`<td style="border-left:4px solid ${accent};padding:7px 0 7px 12px;background:${accent}22;">
       <span style="font-family:Georgia,'Times New Roman',serif;font-size:13px;font-weight:bold;color:${accent};letter-spacing:0.10em;text-transform:uppercase;">${v}</span>
     </td>`;
     let evRows=vevs.map((e,i)=>`<tr><td>${mkEventCell(e,i%2===0?'#ffffff':'#faf7f0')}</td></tr>`).join('');
@@ -1031,8 +1017,8 @@ function buildReport(){
         html+=`<tr>
           <td colspan="2" style="padding:18px 28px 5px 28px;">
             <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-              <td style="border-left:4px solid ${accent};padding:7px 0 7px 14px;background:${accent}18;">
-                <span style="font-family:Georgia,'Times New Roman',serif;font-size:15px;font-weight:bold;color:${accent};letter-spacing:0.12em;text-transform:uppercase;">${v}</span>
+              <td style="border-left:4px solid ${accent};padding:7px 0 7px 14px;background:${accent}22;">
+                <span style="font-family:Georgia,'Times New Roman',serif;font-size:14px;font-weight:bold;color:${accent};letter-spacing:0.12em;text-transform:uppercase;">${v}</span>
                 <span style="font-family:Arial,sans-serif;font-size:10px;color:${accent};opacity:0.6;margin-left:8px;">&nbsp;♦&nbsp;</span>
               </td>
             </tr></table>
@@ -1040,15 +1026,13 @@ function buildReport(){
         vevs.forEach((e,i)=>{
           let datePart='';
           if(e.type==='recurring')datePart='Recurring';
-          else if(e.date){datePart=shortDate(e.date);if(e.endDate)datePart+=' – '+shortDate(e.endDate);}
+          else if(e.date){datePart=shortDateRange(e.date,e.endDate);}
           const bg=i%2===0?'#ffffff':'#faf7f0';const isBig=e.type==='big';
+          const line=datePart?`${datePart} - ${e.name}`:e.name;
           html+=`<tr><td style="padding:0 28px;">
             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${bg};"><tr>
-              <td style="padding:7px 10px;border-bottom:1px solid #ede8db;width:160px;vertical-align:top;">
-                <span style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#888888;">${datePart||'&nbsp;'}</span>
-              </td>
-              <td style="padding:7px 10px;border-bottom:1px solid #ede8db;vertical-align:top;">
-                ${isBig?'<span style="font-size:12px;margin-right:4px;">⭐</span>':''}<span style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1a1a1a;font-weight:${isBig?'700':'400'};">${e.name}</span>${e.note?`<span style="font-family:Arial,sans-serif;font-size:11px;color:#999999;font-style:italic;margin-left:6px;">(${e.note})</span>`:''}
+              <td style="padding:6px 12px;border-bottom:1px solid #ede8db;">
+                ${isBig?'<span style="font-size:12px;margin-right:4px;">⭐</span>':''}<span style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1a1a1a;font-weight:${isBig?'700':'400'};">${line}</span>${e.note?`<span style="font-family:Arial,sans-serif;font-size:11px;color:#999999;font-style:italic;margin-left:6px;">(${e.note})</span>`:''}
               </td>
             </tr></table>
           </td></tr>`;
@@ -1069,6 +1053,12 @@ function buildReport(){
 
   const maxW=twoCol?'860px':'680px';
   const shareUrl = location.href.split('?')[0] + '?view';
+  const tplKey=(document.getElementById('draft-template')||{}).value||'newsletter';
+  const tplData=DRAFT_TEMPLATES[tplKey]||DRAFT_TEMPLATES.newsletter;
+  const emailIntro=tplData.intro?tplData.intro(to):'';
+  const emailOutro=tplData.outro?tplData.outro():'';
+  const introHtml=emailIntro?`<tr><td style="padding:18px 28px 4px 28px;"><p style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#333333;line-height:1.7;margin:0;">${emailIntro.replace(/\n/g,'<br>')}</p></td></tr>`:'';
+  const outroHtml=emailOutro?`<tr><td style="padding:4px 28px 18px 28px;"><p style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#333333;line-height:1.7;margin:0;">${emailOutro.replace(/\n/g,'<br>')}</p></td></tr>`:'';
   const html=`<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fdfaf4;max-width:${maxW};margin:0 auto;font-family:Arial,Helvetica,sans-serif;">
   <tr><td style="background:${accent};padding:30px 28px 22px;">
     <div style="font-family:Georgia,'Times New Roman',serif;font-size:24px;font-weight:bold;color:#ffffff;letter-spacing:0.1em;text-transform:uppercase;line-height:1.2;">${title}</div>
@@ -1077,7 +1067,9 @@ function buildReport(){
   <tr><td style="background:#f0ece0;padding:10px 28px;border-bottom:2px solid ${accent};">
     <span style="font-family:Arial,sans-serif;font-size:11px;color:#666;">TO: <strong style="color:#333;">${to}</strong></span>
   </td></tr>
+  ${introHtml}
   ${bodyHtml}
+  ${outroHtml}
   <tr><td style="background:${accent};padding:20px 28px;">
     <table width="100%" cellpadding="0" cellspacing="0" border="0">
       <tr>
@@ -1128,7 +1120,7 @@ function copyText(){
     vevs.forEach(e=>{
       let d='';
       if(e.type==='recurring')d='Recurring';
-      else if(e.date){d=shortDate(e.date);if(e.endDate)d+=' – '+shortDate(e.endDate);}
+      else if(e.date){d=shortDateRange(e.date,e.endDate);}
       t+=`${d?d+' - ':''}${e.name}\n`;
     });
     t+='\n';
@@ -1224,53 +1216,54 @@ document.getElementById('bulk-venue').addEventListener('change',function(){
 // ── EMAIL DRAFT TEMPLATES ──
 const DRAFT_TEMPLATES = {
   newsletter: {
-    subject: () => {
-      const now = new Date();
-      return `PACE Gaming Events Update — ${now.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`;
-    },
-    body: () => {
-      const to = document.getElementById('report-to').value || 'Team';
-      const shareUrl = location.href.split('?')[0]+'?view';
-      return `Hi ${to},\n\nI hope this message finds you well.\n\nPlease find attached the latest PACE Gaming Events update for your reference. The list has been refreshed with upcoming events across all our venues, and I wanted to make sure you have everything you need to stay informed and prepared.\n\nYou may also view the full interactive list at any time using the link below:\n${shareUrl}\n\nShould you require a fact sheet for any of the listed events, please do not hesitate to reach out and I will be happy to send it over.\n\nThank you, and please feel free to get in touch if you have any questions.\n\nBest regards,\nAnne Joy Therese\nPACE Gaming`;
-    }
+    subject: () => { const n=new Date(); return `PACE Gaming Events Update — ${n.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`; },
+    intro: (to) => `Hi ${to},\n\nPlease see the updated PACE Gaming Events list below for your reference. Let me know if you'd like a fact sheet for any of the listed events.`,
+    outro: () => `Full interactive list: ${location.href.split('?')[0]+'?view'}\n\nBest regards,\nAnne Joy Therese\nPACE Gaming`
   },
   followup: {
-    subject: () => {
-      const now = new Date();
-      return `Follow-Up: PACE Gaming Events Update | ${now.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}`;
-    },
-    body: () => {
-      const to = document.getElementById('report-to').value || 'Team';
-      const shareUrl = location.href.split('?')[0]+'?view';
-      return `Hi ${to},\n\nI hope you are doing well.\n\nI wanted to follow up and share the most recent PACE Gaming Events list for your review. Please find the updated details below, and do take a moment to look through the upcoming events at your convenience.\n\nThe full list is also available here:\n${shareUrl}\n\nIf a fact sheet would be helpful for any of the events, please let me know and I will arrange to send one over promptly.\n\nThank you for your time, and I look forward to hearing from you.\n\nBest regards,\nAnne Joy Therese\nPACE Gaming`;
-    }
+    subject: () => { const n=new Date(); return `Follow-Up: PACE Gaming Events | ${n.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}`; },
+    intro: (to) => `Hi ${to},\n\nJust following up with the latest PACE Gaming Events for your review.`,
+    outro: () => `Happy to send a fact sheet for any event — just let me know.\n\nBest regards,\nAnne Joy Therese\nPACE Gaming`
   },
   highlight: {
-    subject: () => {
-      const now = new Date();
-      return `PACE Gaming — Events Highlights | ${now.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`;
-    },
-    body: () => {
-      const to = document.getElementById('report-to').value || 'Team';
-      const shareUrl = location.href.split('?')[0]+'?view';
-      return `Hi ${to},\n\nI hope this finds you well.\n\nI am pleased to share the latest highlights from our upcoming PACE Gaming Events. Please find the updated events list for your reference, and I encourage you to take a look at what is coming up across our venues.\n\nThe complete events list can be accessed here:\n${shareUrl}\n\nShould you wish to receive a fact sheet for any specific event, please do not hesitate to reach out — I would be glad to assist.\n\nThank you, and please feel free to contact me should you need anything further.\n\nBest regards,\nAnne Joy Therese\nPACE Gaming`;
-    }
+    subject: () => { const n=new Date(); return `PACE Gaming — Events Highlights | ${n.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`; },
+    intro: (to) => `Hi ${to},\n\nSharing the latest PACE Gaming Events highlights for your reference.`,
+    outro: () => `Reach out if you need a fact sheet for any specific event.\n\nBest regards,\nAnne Joy Therese\nPACE Gaming`
   },
   brief: {
     subject: () => `PACE Gaming Events Update`,
-    body: () => {
-      const to = document.getElementById('report-to').value || 'Team';
-      const shareUrl = location.href.split('?')[0]+'?view';
-      return `Hi ${to},\n\nI hope you are having a great day.\n\nPlease find the updated PACE Gaming Events list for your review:\n${shareUrl}\n\nKindly let me know if you need a fact sheet for any of the listed events and I will send it over right away.\n\nThank you.\n\nBest regards,\nAnne Joy Therese\nPACE Gaming`;
-    }
+    intro: (to) => `Hi ${to}, please find the updated events list below.`,
+    outro: () => `Let me know if you need anything.\n\nBest,\nAnne Joy Therese`
+  },
+  vip: {
+    subject: () => { const n=new Date(); return `Exclusive PACE Gaming Events — ${n.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`; },
+    intro: (to) => `Dear ${to},\n\nWe are pleased to present our curated selection of upcoming PACE Gaming events. These are exclusive opportunities we believe would be of great interest to you and your guests.`,
+    outro: () => `We would be delighted to assist with any arrangements. Please do not hesitate to reach out.\n\nWith warm regards,\nAnne Joy Therese\nPACE Gaming`
+  },
+  reminder: {
+    subject: () => { const n=new Date(); return `Reminder: Upcoming PACE Gaming Events | ${n.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`; },
+    intro: (to) => `Hi ${to},\n\nJust a quick reminder of the upcoming PACE Gaming events listed below. Don't miss out — some of these fill up fast!`,
+    outro: () => `Let me know if you'd like to reserve a spot or need more details on any event.\n\nBest regards,\nAnne Joy Therese\nPACE Gaming`
+  },
+  welcome: {
+    subject: () => `Welcome to PACE Gaming Events`,
+    intro: (to) => `Hi ${to},\n\nWelcome! We're excited to share our upcoming events with you. Below is a full overview of what's coming up across our PACE Gaming venues — there's something for everyone.`,
+    outro: () => `We look forward to seeing you at one of our events soon. Feel free to reach out anytime.\n\nWarm regards,\nAnne Joy Therese\nPACE Gaming`
+  },
+  thankyou: {
+    subject: () => `Thank You + Upcoming PACE Gaming Events`,
+    intro: (to) => `Hi ${to},\n\nThank you for your continued support and partnership with PACE Gaming. We truly appreciate it. Please find our upcoming events below — we hope to see you at a few of them!`,
+    outro: () => `Thanks again, and don't hesitate to reach out if you need anything at all.\n\nGratefully,\nAnne Joy Therese\nPACE Gaming`
   }
 };
 
 function applyDraftTemplate(){
   const tpl = (document.getElementById('draft-template')||{}).value || 'newsletter';
   const t = DRAFT_TEMPLATES[tpl] || DRAFT_TEMPLATES.newsletter;
-  document.getElementById('draft-subject').value = t.subject();
-  document.getElementById('draft-body').value = t.body();
+  const subEl = document.getElementById('draft-subject');
+  if(subEl) subEl.value = t.subject();
+  // Rebuild report so intro/outro update in preview
+  buildReport();
 }
 
 function syncDraftPreview(){
@@ -1278,8 +1271,25 @@ function syncDraftPreview(){
 }
 
 function copyDraftText(){
-  const subject = document.getElementById('draft-subject').value;
-  const body = document.getElementById('draft-body').value;
+  const tplKey = (document.getElementById('draft-template')||{}).value || 'newsletter';
+  const t = DRAFT_TEMPLATES[tplKey] || DRAFT_TEMPLATES.newsletter;
+  const to = document.getElementById('report-to').value || 'Team';
+  const subject = t.subject();
+  const intro = t.intro ? t.intro(to) : '';
+  const outro = t.outro ? t.outro() : '';
+  const {evs} = buildReport();
+  // Build plain text event list
+  let list = '';
+  VENUES_ORDER.forEach(v=>{
+    const vevs = evs.filter(e=>e.venue===v); if(!vevs.length) return;
+    list += v + '\n';
+    vevs.forEach(e=>{
+      let d = e.type==='recurring'?'Recurring':e.date?shortDateRange(e.date,e.endDate):'';
+      list += (d?d+' - ':'') + e.name + '\n';
+    });
+    list += '\n';
+  });
+  const body = [intro, list.trimEnd(), outro].filter(Boolean).join('\n\n');
   const text = `Subject: ${subject}\n\n${body}`;
   navigator.clipboard.writeText(text).then(()=>{
     const b = event.target;

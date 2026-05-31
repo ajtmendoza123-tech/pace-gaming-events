@@ -582,7 +582,6 @@ let currentFilter = 'upcoming';
       <button class="btn btn-danger btn-sm" onclick="removePastEvents()" title="Remove all past events">⏪ Remove Past</button>
       <button class="btn btn-outline btn-sm" onclick="openReport()">♦ Report</button>
       <button class="btn btn-ghost btn-sm" onclick="openShare()" style="border-color:rgba(201,168,76,0.3);color:var(--gold-light);">⬡ Share ↗</button>
-      <button class="btn btn-gold btn-sm" onclick="saveSnapshot()" title="Save current events as HTML file">💾 Save</button>
     `;
   }
 })();
@@ -591,10 +590,7 @@ function parseDate(s){
   if(!s)return null;
   const t=s.trim();
   const m=t.match(/^(\d{1,2})\/(\d{1,2})$/);
-  if(m){
-    // Use 2026 as base year for all m/d format dates (data is 2026-based)
-    return new Date(2026,+m[1]-1,+m[2]);
-  }
+  if(m)return new Date(2026,+m[1]-1,+m[2]);
   const i=t.match(/^(\d{4})-(\d{2})-(\d{2})$/);
   if(i)return new Date(+i[1],+i[2]-1,+i[3]);
   return null;
@@ -614,6 +610,41 @@ function shortDateRange(start,end){
   return mStr+'/'+d+' to '+(em+1)+'/'+ed;
 }
 function uid(){return Math.random().toString(36).slice(2);}
+// ── PERSISTENCE ──
+const LS_KEY = 'pace_events_v1';
+
+function getEventsPayload(){
+  return events.map(function(e){return{
+    id:e.id,venue:e.venue,name:e.name,
+    date:e.date?e.date.toISOString().slice(0,10):'',
+    endDate:e.endDate?e.endDate.toISOString().slice(0,10):'',
+    note:e.note||'',type:e.type||'regular'
+  };});
+}
+
+function saveToStorage(){
+  try{localStorage.setItem(LS_KEY,JSON.stringify(getEventsPayload()));}catch(e){}
+}
+
+function loadFromStorage(){
+  try{
+    var d=localStorage.getItem(LS_KEY);
+    if(d){
+      var arr=JSON.parse(d);
+      if(arr&&arr.length){
+        events=arr.map(function(r){return{
+          id:r.id,venue:r.venue,name:r.name,
+          date:r.date?new Date(r.date+'T12:00:00'):null,
+          endDate:r.endDate?new Date(r.endDate+'T12:00:00'):null,
+          note:r.note||'',type:r.type||'regular'
+        };});
+        return true;
+      }
+    }
+  }catch(e){}
+  return false;
+}
+
 
 const raw=[
   {v:'BIG EVENT',n:'FIFA World Cup Final',d:'7/19',t:'big'},
@@ -727,40 +758,25 @@ raw.forEach(r=>events.push({
   date:parseDate(r.d||''),endDate:parseDate(r.de||''),
   note:r.note||'',type:r.t||'regular'
 }));
-
-// Load saved events from embedded data element (populated by Save button)
-(function(){
-  var savedEl = document.getElementById('__events_data__');
-  if(savedEl && savedEl.textContent.trim()){
-    try{
-      var saved = JSON.parse(savedEl.textContent);
-      if(saved && saved.length){
-        events = saved.map(function(r){return{
-          id:r.id, venue:r.venue, name:r.name,
-          date:r.date ? new Date(r.date+'T12:00:00') : null,
-          endDate:r.endDate ? new Date(r.endDate+'T12:00:00') : null,
-          note:r.note||'', type:r.type||'regular'
-        };});
-      }
-    }catch(e){}
-  }
-  // Also check URL-encoded events for view links
+loadFromStorage(); // override defaults with saved events if any
+  // Load from URL ?data= for shared view links
   try{
-    var params = new URLSearchParams(location.search);
-    var encoded = params.get('data');
-    if(encoded){
-      var saved = JSON.parse(decodeURIComponent(encoded));
-      if(saved && saved.length){
-        events = saved.map(function(r){return{
-          id:r.id, venue:r.venue, name:r.name,
-          date:r.date ? new Date(r.date+'T12:00:00') : null,
-          endDate:r.endDate ? new Date(r.endDate+'T12:00:00') : null,
-          note:r.note||'', type:r.type||'regular'
+    var params=new URLSearchParams(location.search);
+    var enc=params.get('data');
+    if(enc){
+      var arr=JSON.parse(decodeURIComponent(enc));
+      if(arr&&arr.length){
+        events=arr.map(function(r){return{
+          id:r.id,venue:r.venue,name:r.name,
+          date:r.date?new Date(r.date+'T12:00:00'):null,
+          endDate:r.endDate?new Date(r.endDate+'T12:00:00'):null,
+          note:r.note||'',type:r.type||'regular'
         };});
       }
     }
   }catch(e){}
-})();
+
+
 
 let selectedIds = new Set();
 let selectMode = false;
@@ -830,10 +846,10 @@ function mkCard(e){
   }
   const checkbox=IS_VIEW?'':` <input type="checkbox" class="card-check" ${selectedIds.has(e.id)?'checked':''} onchange="toggleSelect('${e.id}',this.checked)" onclick="event.stopPropagation()">`;
   const dateBlockHtml=e.type==='recurring'
-    ?`<div class="date-block"><div class="date-month">REC</div><div class="date-day" style="font-size:18px;">🔁</div></div>`
+    ?`<div class="date-block" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;"><div style="font-size:8px;font-weight:700;letter-spacing:0.1em;color:#1a6a3c;text-transform:uppercase;">Recurring</div><div style="font-size:20px;line-height:1;">🔁</div></div>`
     :e.date
       ?`<div class="date-block"><div class="date-month">${mon}</div><div class="date-day">${day}</div>${endLabel?`<div class="date-end" style="font-size:10px;color:#a07820;font-weight:600;letter-spacing:0;">${endLabel}</div>`:''}</div>`
-      :`<div class="date-block"><div class="date-month" style="font-size:8px;margin-top:4px;">DATE</div><div class="date-day" style="font-size:14px;font-weight:700;color:#a07820;letter-spacing:0.05em;">TBD</div></div>`;
+      :`<div class="date-block"></div>`;
   return `<div class="${cls}" id="card-${e.id}">
     ${checkbox}
     ${dateBlockHtml}
@@ -871,14 +887,14 @@ function addEvent(){
     note:document.getElementById('f-note').value.trim(),
     type:document.getElementById('f-type').value});
   ['f-name','f-note','f-date','f-date-end'].forEach(id=>document.getElementById(id).value='');
-  closeAdd();render();
+  closeAdd();render();saveToStorage();
 }
 function markDone(id){
   const e=events.find(x=>x.id===id);if(!e)return;
   const y=new Date();y.setDate(y.getDate()-1);
-  e.date=new Date(y.getFullYear(),y.getMonth(),y.getDate());render();
+  e.date=new Date(y.getFullYear(),y.getMonth(),y.getDate());render();saveToStorage();
 }
-function delEv(id){if(!confirm('Delete this event?'))return;events=events.filter(e=>e.id!==id);selectedIds.delete(id);render();}
+function delEv(id){if(!confirm('Delete this event?'))return;events=events.filter(e=>e.id!==id);selectedIds.delete(id);render();saveToStorage();}
 
 // ── SELECT MODE ──
 function toggleSelectMode(){
@@ -922,7 +938,7 @@ function deleteSelected(){
   if(!selectedIds.size){alert('No events selected.');return;}
   if(!confirm(`Delete ${selectedIds.size} selected event(s)?`))return;
   events=events.filter(e=>!selectedIds.has(e.id));
-  selectedIds.clear();exitSelectMode();
+  selectedIds.clear();exitSelectMode();saveToStorage();
 }
 
 // ── AUTO REMOVE PAST ──
@@ -931,7 +947,7 @@ function removePastEvents(){
   if(!pastCount){alert('No past events to remove.');return;}
   if(!confirm(`Remove all ${pastCount} past event(s) permanently?`))return;
   events=events.filter(e=>!isPast(e));
-  render();
+  render();saveToStorage();
 }
 
 // ── BULK ADD ──
@@ -946,23 +962,16 @@ function parseBulkLine(line){
   // Recurring - Name
   const recM=line.match(/^recurring\s*[-–]\s*(.+)$/i);
   if(recM)return{name:recM[1].trim(),type:'recurring',date:null,endDate:null,note:''};
+  // Natural language recurring: "Every Sunday...", "The month of...", "Daily...", "Each...", "Weekly..."
+  if(/^(every\b|the month of\b|daily\b|weekly\b|each\b)/i.test(line.trim()))
+    return{name:line.trim(),type:'recurring',date:null,endDate:null,note:''};
   // Extract note in parens at end
   let note='';
   const noteM=line.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
   if(noteM){line=noteM[1].trim();note=noteM[2].trim();}
-  // Start - End - Name  (e.g. "5/1 - 5/3 - Event Name")
+  // Start - End - Name
   const rangeM=line.match(/^(\d{1,2}\/\d{1,2})\s*[-–]\s*(\d{1,2}\/\d{1,2})\s*[-–]\s*(.+)$/);
   if(rangeM)return{name:rangeM[3].trim(),type:'regular',date:parseDate(rangeM[1]),endDate:parseDate(rangeM[2]),note};
-  // "m/d to m/d - Name"  (e.g. "10/22 to 10/26 - Culinary Festival")
-  const rangeToFull=line.match(/^(\d{1,2}\/\d{1,2})\s+to\s+(\d{1,2}\/\d{1,2})\s*[-–]\s*(.+)$/i);
-  if(rangeToFull)return{name:rangeToFull[3].trim(),type:'regular',date:parseDate(rangeToFull[1]),endDate:parseDate(rangeToFull[2]),note};
-  // "m/d to d - Name"  (e.g. "10/2 to 3 - $250k Tournament" — same month, end day only)
-  const rangeToDay=line.match(/^(\d{1,2})\/(\d{1,2})\s+to\s+(\d{1,2})\s*[-–]\s*(.+)$/i);
-  if(rangeToDay){
-    const startDate=parseDate(rangeToDay[1]+'/'+rangeToDay[2]);
-    const endDate=parseDate(rangeToDay[1]+'/'+rangeToDay[3]);
-    return{name:rangeToDay[4].trim(),type:'regular',date:startDate,endDate,note};
-  }
   // Date - Name
   const dateM=line.match(/^(\d{1,2}\/\d{1,2})\s*[-–]\s*(.+)$/);
   if(dateM)return{name:dateM[2].trim(),type:'regular',date:parseDate(dateM[1]),endDate:null,note};
@@ -993,7 +1002,7 @@ function confirmBulk(){
     events.push({id:uid(),venue,name:p.name,date:p.date,endDate:p.endDate,note:p.note,type:p.type});
     added++;
   });
-  closeBulk();render();
+  closeBulk();render();saveToStorage();
   // brief toast
   const t=document.createElement('div');
   t.style.cssText='position:fixed;bottom:24px;right:24px;background:#26200e;color:#c9a84c;padding:10px 18px;border-radius:6px;font-size:12px;font-weight:700;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.2);border:1px solid rgba(201,168,76,0.3);';
@@ -1193,11 +1202,11 @@ function copyText(){
 
 // ── SHARE ──
 function openShare(){
-  const payload = getEventsPayload();
-  const encoded = encodeURIComponent(JSON.stringify(payload));
-  const url = location.href.split('?')[0] + '?view&data=' + encoded;
-  document.getElementById('shareUrl').value = url;
-  document.getElementById('openShareLink').href = url;
+  const payload=getEventsPayload();
+  const encoded=encodeURIComponent(JSON.stringify(payload));
+  const url=location.href.split('?')[0]+'?view&data='+encoded;
+  document.getElementById('shareUrl').value=url;
+  document.getElementById('openShareLink').href=url;
   document.getElementById('shareModal').classList.add('open');
 }
 function closeShare(){document.getElementById('shareModal').classList.remove('open');}
@@ -1361,46 +1370,9 @@ function copyDraftText(){
   });
 }
 
-function getEventsPayload(){
-  return events.map(function(e){return{
-    id:e.id, venue:e.venue, name:e.name,
-    date:e.date?e.date.toISOString().slice(0,10):'',
-    endDate:e.endDate?e.endDate.toISOString().slice(0,10):'',
-    note:e.note||'', type:e.type||'regular'
-  };});
-}
-
-function saveSnapshot(){
-  // Store current events in a hidden JSON element embedded in the page
-  var el = document.getElementById('__events_data__');
-  if(!el){
-    el = document.createElement('script');
-    el.id = '__events_data__';
-    el.type = 'application/json';
-    document.head.appendChild(el);
-  }
-  el.textContent = JSON.stringify(getEventsPayload());
-
-  var src = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-  var blob = new Blob([src], {type:'text/html'});
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'pace-events-' + new Date().toISOString().slice(0,10) + '.html';
-  a.click();
-  URL.revokeObjectURL(a.href);
-
-  document.querySelectorAll('button').forEach(function(b){
-    if(b.textContent.trim().indexOf('Save') !== -1 && b.textContent.trim().length < 15){
-      var orig = b.textContent;
-      b.textContent = '\u2713 Saved!';
-      setTimeout(function(){ b.textContent = orig; }, 2000);
-    }
-  });
-}
-
 function downloadReport(){
   const {html,title} = buildReport();
-  const fullHtml = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+title+'</title></head><body style="margin:0;padding:20px;background:#e8e4dc;">'+html+'</body></html>';
+  const fullHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title></head><body style="margin:0;padding:20px;background:#e8e4dc;">${html}</body></html>`;
   const blob = new Blob([fullHtml], {type:'text/html'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);

@@ -82,6 +82,10 @@
 .bulk-row.is-dup{background:#fff8e0;border-left:3px solid #d4a830;color:#7a5800;}
 .bulk-row.is-dup .dup-badge{display:inline-block;background:#d4a830;color:#fff;font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:1px 5px;border-radius:3px;margin-left:5px;vertical-align:middle;}
 .event-card.is-dup-highlight{border-color:#d4a830!important;background:#fffbee!important;box-shadow:0 0 0 2px rgba(212,168,48,0.25)!important;}
+/* Persistent dup card style */
+.event-card.is-dup-card{border-left:3px solid #c8960a!important;background:#fffdf2!important;}
+[data-theme="dark"] .event-card.is-dup-card{background:#1e1c08!important;border-left-color:#c8960a!important;}
+.badge-dup{background:rgba(200,150,10,0.13);color:#7a5a00;border:1px solid rgba(200,150,10,0.35);}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{
   background:var(--body-bg);
@@ -696,7 +700,7 @@ function getEventsPayload(){
     id:e.id,venue:e.venue,name:e.name,
     date:e.date?e.date.toISOString().slice(0,10):'',
     endDate:e.endDate?e.endDate.toISOString().slice(0,10):'',
-    note:e.note||'',type:e.type||'regular'
+    note:e.note||'',type:e.type||'regular',isDup:e.isDup||false
   };});
 }
 
@@ -716,7 +720,7 @@ function loadFromStorage(){
         events=arr.map(function(r){
           var d=r.date?new Date(r.date+'T12:00:00'):null;
           var de=r.endDate?new Date(r.endDate+'T12:00:00'):d;
-          return{id:r.id,venue:r.venue,name:r.name,date:d,endDate:de,note:r.note||'',type:r.type||'regular'};
+          return{id:r.id,venue:r.venue,name:r.name,date:d,endDate:de,note:r.note||'',type:r.type||'regular',isDup:r.isDup||false};
         });
         return true;
       }
@@ -904,6 +908,7 @@ function mkCard(e){
   const past=isPast(e),tod=isToday(e),soon=isSoon(e)&&!past;
   let cls='event-card';
   if(past)cls+=' is-past';if(tod)cls+=' is-today';if(soon)cls+=' is-soon';
+  if(e.isDup)cls+=' is-dup-card';
   if(selectedIds.has(e.id))cls+=' selected';
   const hasRange=e.date&&e.endDate;
   const crossMonth=hasRange&&e.date.getMonth()!==e.endDate.getMonth();
@@ -914,6 +919,7 @@ function mkCard(e){
     endLabel=crossMonth?'→'+(e.endDate.getMonth()+1)+'/'+e.endDate.getDate():'to '+e.endDate.getDate();
   }
   let badges='';
+  if(e.isDup)badges+='<span class="badge badge-dup">⚠ Possible Duplicate</span>';
   if(e.type==='big')badges+='<span class="badge badge-big">⭐ Big</span>';
   if(e.type==='recurring')badges+='<span class="badge badge-rec">🔁 Recurring</span>';
   if(tod)badges+='<span class="badge badge-today">TODAY</span>';
@@ -921,6 +927,7 @@ function mkCard(e){
   let actions='';
   if(!IS_VIEW){
     actions=`<div class="event-actions">
+      ${e.isDup?`<button class="btn btn-sm" style="font-size:10px;background:transparent;border:1px solid rgba(180,140,0,0.4);color:#b08800;border-radius:4px;padding:4px 10px;cursor:pointer;" onclick="clearDupFlag('${e.id}')">✓ Clear Flag</button>`:''}
       ${!past?`<button class="btn btn-ghost btn-sm" onclick="markDone('${e.id}')">Mark Done</button>`:''}
       <button class="btn btn-danger btn-sm" onclick="delEv('${e.id}')">Delete</button>
     </div>`;
@@ -929,7 +936,7 @@ function mkCard(e){
   const dateBlockHtml=e.type==='recurring'
     ?`<div class="date-block" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;"><div style="font-size:8px;font-weight:700;letter-spacing:0.1em;color:#1a6a3c;text-transform:uppercase;">Recurring</div><div style="font-size:20px;line-height:1;">🔁</div></div>`
     :e.date
-      ?`<div class="date-block"><div class="date-month">${mon}</div><div class="date-day">${day}</div>${endLabel?`<div class="date-end" style="font-size:10px;color:#a07820;font-weight:600;letter-spacing:0;">${endLabel}</div>`:''}</div>`
+      ?`<div class="date-block"><div class="date-month">${mon}</div><div class="date-day">${day}</div>${endLabel?`<div class="date-end" style="font-size:10px;color:var(--gold);font-weight:600;letter-spacing:0;">${endLabel}</div>`:''}</div>`
       :`<div class="date-block"></div>`;
   return `<div class="${cls}" id="card-${e.id}">
     ${checkbox}
@@ -965,14 +972,28 @@ function addEvent(){
   const _d=parseDate(document.getElementById('f-date').value);
   const _de=parseDate(document.getElementById('f-date-end').value)||_d;
   const _venue=document.getElementById('f-venue').value;
-  const _dup=events.find(e=>e.name.trim().toLowerCase()===name.toLowerCase()&&e.venue===_venue);
-  if(_dup&&!confirm('⚠️ "'+name+'" at '+_venue+' already exists. Add anyway?'))return;
-  events.push({id:uid(),venue:_venue,name,
-    date:_d,endDate:_de,
+  // Duplicate = same venue + name + start date
+  const _dup=events.find(e=>{
+    const nameMatch=e.name.trim().toLowerCase()===name.toLowerCase();
+    const venueMatch=e.venue===_venue;
+    const dateMatch=(!e.date&&!_d)||(e.date&&_d&&e.date.toDateString()===_d.toDateString());
+    return nameMatch&&venueMatch&&dateMatch;
+  });
+  const isDupFlag=!!_dup;
+  if(_dup&&!confirm('⚠️ "'+name+'" at '+_venue+' on the same date already exists.\n\nAdd anyway? It will be flagged as a possible duplicate.'))return;
+  const newEv={id:uid(),venue:_venue,name,date:_d,endDate:_de,
     note:document.getElementById('f-note').value.trim(),
-    type:document.getElementById('f-type').value});
+    type:document.getElementById('f-type').value,isDup:isDupFlag};
+  events.push(newEv);
   ['f-name','f-note','f-date','f-date-end'].forEach(id=>document.getElementById(id).value='');
   closeAdd();render();saveToStorage();
+  // Pulse-highlight if it was a dup
+  if(isDupFlag){
+    setTimeout(()=>{
+      const card=document.getElementById('card-'+newEv.id);
+      if(card){card.classList.add('is-dup-highlight');setTimeout(()=>card.classList.remove('is-dup-highlight'),7000);}
+    },120);
+  }
 }
 function markDone(id){
   const e=events.find(x=>x.id===id);if(!e)return;
@@ -980,6 +1001,7 @@ function markDone(id){
   e.date=new Date(y.getFullYear(),y.getMonth(),y.getDate());render();saveToStorage();
 }
 function delEv(id){if(!confirm('Delete this event?'))return;events=events.filter(e=>e.id!==id);selectedIds.delete(id);render();saveToStorage();}
+function clearDupFlag(id){const e=events.find(x=>x.id===id);if(e){e.isDup=false;render();saveToStorage();}}
 
 // ── SELECT MODE ──
 function toggleSelectMode(){
@@ -1098,10 +1120,16 @@ function previewBulk(){
   lines.forEach(line=>{
     const p=parseBulkLine(line);
     if(!p){html+=`<div class="bulk-row error">⚠ Skipped: ${line}</div>`;return;}
-    const isDup=!!events.find(e=>e.name.trim().toLowerCase()===p.name.trim().toLowerCase()&&e.venue===venue);
     const dateStr=p.type==='recurring'?'Recurring':p.date?shortDate(p.date)+(p.endDate&&p.endDate.getTime()!==p.date.getTime()?' – '+shortDate(p.endDate):''):'No date';
+    // Duplicate = same venue + same name (case-insensitive) + same start date
+    const isDup=!!events.find(e=>{
+      const nameMatch=e.name.trim().toLowerCase()===p.name.trim().toLowerCase();
+      const venueMatch=e.venue===venue;
+      const dateMatch=(!e.date&&!p.date)||(e.date&&p.date&&e.date.toDateString()===p.date.toDateString());
+      return nameMatch&&venueMatch&&dateMatch;
+    });
     if(isDup){
-      html+=`<div class="bulk-row is-dup">⚠ <strong>${p.name}</strong> <span class="dup-badge">duplicate</span> <span style="color:#8a7a60;font-size:11px;margin-left:4px;">${dateStr}</span></div>`;
+      html+=`<div class="bulk-row is-dup">⚠ <strong>${p.name}</strong> <span class="dup-badge">duplicate</span> <span style="font-size:11px;margin-left:4px;opacity:0.7;">${dateStr} — will be added &amp; flagged</span></div>`;
     } else {
       html+=`<div class="bulk-row">✓ <strong>${p.name}</strong> <span style="color:var(--muted);font-size:11px;">${dateStr}${p.note?' · '+p.note:''}</span></div>`;
     }
@@ -1113,40 +1141,42 @@ function confirmBulk(){
   const lines=document.getElementById('bulkText').value.split('\n').filter(l=>l.trim());
   if(!lines.length){alert('Please enter at least one event.');return;}
   let added=0;
-  const dupes=[];
-  const dupIds=[];
+  const dupNames=[];
+  const newDupIds=[];
   lines.forEach(line=>{
     const p=parseBulkLine(line);
     if(!p||!p.name)return;
-    const existing=events.find(e=>e.name.trim().toLowerCase()===p.name.trim().toLowerCase()&&e.venue===venue);
-    if(existing){
-      dupes.push(p.name);
-      dupIds.push(existing.id);
-      return; // skip adding duplicate — just flag it
-    }
-    events.push({id:uid(),venue,name:p.name,date:p.date,endDate:p.endDate||p.date,note:p.note,type:p.type});
+    // Duplicate = same venue + name + start date
+    const existing=events.find(e=>{
+      const nameMatch=e.name.trim().toLowerCase()===p.name.trim().toLowerCase();
+      const venueMatch=e.venue===venue;
+      const dateMatch=(!e.date&&!p.date)||(e.date&&p.date&&e.date.toDateString()===p.date.toDateString());
+      return nameMatch&&venueMatch&&dateMatch;
+    });
+    const newId=uid();
+    // Always add — duplicates get a isDup flag so they're visually marked
+    events.push({id:newId,venue,name:p.name,date:p.date,endDate:p.endDate||p.date,note:p.note,type:p.type,isDup:!!existing});
     added++;
+    if(existing){dupNames.push(p.name);newDupIds.push(newId);}
   });
   closeBulk();render();saveToStorage();
-  // Highlight duplicates in list
-  if(dupIds.length){
-    dupIds.forEach(id=>{
-      const card=document.getElementById('card-'+id);
-      if(card){
-        card.classList.add('is-dup-highlight');
-        setTimeout(()=>card.classList.remove('is-dup-highlight'),6000);
-      }
-    });
-    // Show informational popup for duplicates
-    const names=dupes.slice(0,5).join('\n• ');
-    const more=dupes.length>5?`\n…and ${dupes.length-5} more`:'';
-    alert(`ℹ️ ${dupes.length} duplicate(s) already exist and were skipped — they're highlighted in yellow on the list:\n• ${names}${more}`);
+  // Briefly pulse-highlight the newly added duplicates
+  if(newDupIds.length){
+    setTimeout(()=>{
+      newDupIds.forEach(id=>{
+        const card=document.getElementById('card-'+id);
+        if(card){card.classList.add('is-dup-highlight');setTimeout(()=>card.classList.remove('is-dup-highlight'),7000);}
+      });
+    },120);
+    const names=dupNames.slice(0,5).join('\n• ');
+    const more=dupNames.length>5?`\n…and ${dupNames.length-5} more`:'';
+    alert(`ℹ️ ${dupNames.length} possible duplicate(s) were added but flagged in yellow — same name & date already exists:\n• ${names}${more}\n\nCheck your list and delete if not needed.`);
   }
   if(added>0){
     const t=document.createElement('div');
     t.style.cssText='position:fixed;bottom:24px;right:24px;background:#26200e;color:#c9a84c;padding:10px 18px;border-radius:6px;font-size:13px;font-weight:700;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.2);border:1px solid rgba(201,168,76,0.3);';
-    t.textContent=`✓ ${added} event(s) added`;
-    document.body.appendChild(t);setTimeout(()=>t.remove(),2800);
+    t.textContent=`✓ ${added} event(s) added${dupNames.length?' ('+dupNames.length+' flagged)':''}`;
+    document.body.appendChild(t);setTimeout(()=>t.remove(),3000);
   }
 }
 

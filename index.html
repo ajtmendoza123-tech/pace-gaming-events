@@ -577,7 +577,7 @@ select option{background:var(--card-bg);color:var(--text);}
       </div>
       <div class="form-group">
         <label class="form-label">Include Past</label>
-        <select id="report-past" onchange="buildReport()"><option value="no">No</option><option value="yes">Yes</option></select>
+        <select id="report-past" onchange="buildReport();if(arrangePanelOpen)renderArrangePanel();"><option value="no">No</option><option value="yes">Yes</option></select>
       </div>
       <div class="form-group">
         <label class="form-label">Accent Color</label>
@@ -621,6 +621,8 @@ select option{background:var(--card-bg);color:var(--text);}
         <option value="thankyou">Thank You</option>
       </select>
       <div style="flex:1;"></div>
+      <button class="btn btn-ghost btn-sm" onclick="resetReportOrder()" style="font-size:10px;color:#8a7a60;" title="Reset venue and event order to default">↺ Reset Order</button>
+      <button class="btn btn-outline btn-sm" id="arrangeToggleBtn" onclick="toggleArrangePanel()" style="border-color:rgba(120,80,200,0.35);color:#7040b0;">⠿ Arrange Order</button>
       <span style="font-size:9px;color:#8a7a60;font-style:italic;">Greeting &amp; sign-off appear inside the report preview below</span>
     </div>
     <!-- Hidden fields kept for copyDraftText -->
@@ -628,6 +630,13 @@ select option{background:var(--card-bg);color:var(--text);}
     <textarea id="draft-body" style="display:none;"></textarea>
     <!-- Preview -->
     <div style="display:flex;flex:1;overflow:hidden;min-height:0;height:calc(92vh - 260px);">
+      <div id="arrangePanel" style="display:none;width:320px;flex-shrink:0;border-right:1px solid rgba(160,120,32,0.15);overflow-y:auto;background:#fbf9f4;">
+        <div style="padding:10px 14px;background:#f2eeff;border-bottom:2px solid rgba(120,80,200,0.18);position:sticky;top:0;z-index:2;">
+          <div style="font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#7040b0;margin-bottom:3px;">⠿ Arrange Order</div>
+          <div style="font-size:10px;color:#7a6e96;line-height:1.5;">Drag venues to reorder or move between sections. Drag events to reorder within a venue.</div>
+        </div>
+        <div id="arrangeSections" style="padding:10px 10px 20px;"></div>
+      </div>
       <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
         <div style="padding:6px 16px;background:#f0ece0;border-bottom:1px solid rgba(160,120,32,0.1);display:flex;align-items:center;gap:16px;">
           <span style="font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#8a7a60;">Preview</span>
@@ -655,7 +664,7 @@ select option{background:var(--card-bg);color:var(--text);}
 <div class="modal-overlay" id="addVenueModal">
   <div class="modal" style="width:420px;max-height:60vh;">
     <div class="modal-header">
-      <div class="modal-title">＋ Add New Venue</div>
+      <div class="modal-title" id="addVenueModalTitle">＋ Add New Venue</div>
       <button class="btn btn-ghost btn-sm" onclick="closeAddVenueModal()">✕ Close</button>
     </div>
     <div class="modal-body" style="padding:22px;">
@@ -678,11 +687,11 @@ select option{background:var(--card-bg);color:var(--text);}
           </select>
         </div>
       </div>
-      <p style="font-size:11px;color:#8a7a60;line-height:1.6;">The new venue will appear in the sidebar, event form, and report — and events can be added to it right away.</p>
+      <p style="font-size:11px;color:#8a7a60;line-height:1.6;" id="addVenueModalHint">The new venue will appear in the sidebar, event form, and report — and events can be added to it right away.</p>
     </div>
-    <div class="modal-footer">
+    <div class="modal-footer" id="addVenueModalFooter">
       <button class="btn btn-ghost btn-sm" onclick="closeAddVenueModal()">Cancel</button>
-      <button class="btn btn-gold btn-sm" onclick="confirmAddVenue()">✓ Create Venue</button>
+      <button class="btn btn-gold btn-sm" onclick="confirmAddVenue()" id="addVenueConfirmBtn">✓ Create Venue</button>
     </div>
   </div>
 </div>
@@ -1239,6 +1248,199 @@ function shadeHex(hex,amt){
   r=Math.max(0,Math.min(255,r));g=Math.max(0,Math.min(255,g));b=Math.max(0,Math.min(255,b));
   return '#'+(r<<16|g<<8|b).toString(16).padStart(6,'0');
 }
+
+// ── REPORT ARRANGE ORDER ──
+// reportOrder.sections: {pace:[venueNames...], lv:[...], other:[...]} — custom venue order/grouping for the report
+// reportOrder.eventOrder: {venueName: [eventIds in custom order]} — custom event order within a venue (only set once user drags)
+let reportOrder = null;
+let arrangePanelOpen = false;
+
+const DEFAULT_PACE_PROPS=['BAHA MAR','HARD ROCK PUNTA CANA','HARD ROCK HOLLYWOOD','MOHEGAN SUN','MONTE CARLO','RITZ CARLTON'];
+const DEFAULT_LV_PROPS=['ALLEGIANT STADIUM','DURANGO','MGM GRAND','RED ROCK','SUNSET STATION','T-MOBILE ARENA','VIRGIN LAS VEGAS','WYNN LAS VEGAS'];
+const DEFAULT_OTHER_PROPS=['BIG EVENT','CRUISE','DRAFTKINGS'];
+
+function getDefaultReportSections(){
+  const customList=typeof customVenues!=='undefined'?customVenues:[];
+  const customPace=customList.filter(cv=>cv.group==='pace').map(cv=>cv.name);
+  const customLv=customList.filter(cv=>cv.group==='lv').map(cv=>cv.name);
+  const customOther=customList.filter(cv=>cv.group==='other'||cv.group==='custom'||!cv.group).map(cv=>cv.name);
+  return {
+    pace:[...DEFAULT_PACE_PROPS,...customPace],
+    lv:[...DEFAULT_LV_PROPS,...customLv],
+    other:[...DEFAULT_OTHER_PROPS,...customOther]
+  };
+}
+
+function ensureReportOrder(){
+  if(!reportOrder){
+    reportOrder={sections:getDefaultReportSections(),eventOrder:{}};
+    return;
+  }
+  // Reconcile: add any venues that exist now but aren't tracked yet (newly created venues,
+  // or venues that existed before the Arrange panel was first opened)
+  const known=new Set([...reportOrder.sections.pace,...reportOrder.sections.lv,...reportOrder.sections.other]);
+  const defaults=getDefaultReportSections();
+  ['pace','lv','other'].forEach(grp=>{
+    defaults[grp].forEach(v=>{
+      if(!known.has(v)){reportOrder.sections[grp].push(v);known.add(v);}
+    });
+  });
+  // Remove venues that no longer exist (deleted custom venues)
+  const stillExists=v=>VENUES_ORDER.includes(v);
+  ['pace','lv','other'].forEach(grp=>{
+    reportOrder.sections[grp]=reportOrder.sections[grp].filter(stillExists);
+  });
+}
+
+function resetReportOrder(){
+  if(!confirm('Reset venue and event order back to default?'))return;
+  reportOrder={sections:getDefaultReportSections(),eventOrder:{}};
+  renderArrangePanel();
+  buildReport();
+}
+
+function toggleArrangePanel(){
+  arrangePanelOpen=!arrangePanelOpen;
+  document.getElementById('arrangePanel').style.display=arrangePanelOpen?'block':'none';
+  document.getElementById('arrangeToggleBtn').style.background=arrangePanelOpen?'rgba(120,80,200,0.12)':'';
+  if(arrangePanelOpen){
+    ensureReportOrder();
+    renderArrangePanel();
+  }
+}
+
+const ARRANGE_SECTION_LABELS={pace:'PACE Properties',lv:'Las Vegas',other:'Other'};
+
+function renderArrangePanel(){
+  ensureReportOrder();
+  const wrap=document.getElementById('arrangeSections');
+  const showPast=document.getElementById('report-past')?.value==='yes';
+  let evs=showPast?events:events.filter(e=>!isPast(e));
+
+  let html='';
+  ['pace','lv','other'].forEach(grp=>{
+    html+=`<div class="arrange-section" data-grp="${grp}" style="margin-bottom:16px;">
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#a07820;padding:6px 4px;border-bottom:2px solid rgba(160,120,32,0.25);margin-bottom:6px;">${ARRANGE_SECTION_LABELS[grp]}</div>
+      <div class="arrange-venue-list" data-grp="${grp}" style="min-height:30px;">`;
+    reportOrder.sections[grp].forEach(v=>{
+      const vevs=evs.filter(e=>e.venue===v);
+      const order=reportOrder.eventOrder[v];
+      const orderedEvs=order
+        ? order.map(id=>vevs.find(e=>e.id===id)).filter(Boolean).concat(vevs.filter(e=>!order.includes(e.id)))
+        : vevs;
+      html+=`<div class="arrange-venue" draggable="true" data-venue="${v.replace(/"/g,'&quot;')}" style="background:#fff;border:1px solid rgba(160,120,32,0.18);border-radius:5px;margin-bottom:6px;cursor:grab;">
+        <div class="arrange-venue-header" style="padding:7px 9px;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#1a1612;">
+          <span style="opacity:0.4;font-size:11px;">⠿</span>
+          <span style="flex:1;">${v.charAt(0)+v.slice(1).toLowerCase()}</span>
+          <span style="font-size:10px;color:#8a7a60;background:#f2ede4;border-radius:8px;padding:1px 6px;">${orderedEvs.length}</span>
+        </div>
+        ${orderedEvs.length?`<div class="arrange-event-list" data-venue="${v.replace(/"/g,'&quot;')}" style="border-top:1px solid #f0ece0;padding:4px 6px 6px;">
+          ${orderedEvs.map(e=>`<div class="arrange-event" draggable="true" data-event-id="${e.id}" data-venue="${v.replace(/"/g,'&quot;')}" style="font-size:11px;color:#5a4e3a;padding:4px 6px;border-radius:3px;cursor:grab;display:flex;align-items:center;gap:5px;">
+            <span style="opacity:0.35;font-size:10px;">⠿</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${e.name}</span>
+          </div>`).join('')}
+        </div>`:''}
+      </div>`;
+    });
+    html+=`</div></div>`;
+  });
+  wrap.innerHTML=html;
+  wireArrangeDragDrop();
+}
+
+function wireArrangeDragDrop(){
+  const wrap=document.getElementById('arrangeSections');
+
+  // Venue cards: draggable between/within .arrange-venue-list containers
+  let draggedVenue=null;
+  wrap.querySelectorAll('.arrange-venue').forEach(card=>{
+    card.addEventListener('dragstart',ev=>{
+      // Avoid hijacking drags that start on a nested event row
+      if(ev.target.closest('.arrange-event')){ev.preventDefault();return;}
+      draggedVenue=card.dataset.venue;
+      card.style.opacity='0.4';
+      ev.dataTransfer.effectAllowed='move';
+      ev.dataTransfer.setData('text/plain',draggedVenue);
+    });
+    card.addEventListener('dragend',()=>{card.style.opacity='1';draggedVenue=null;});
+  });
+  wrap.querySelectorAll('.arrange-venue-list').forEach(list=>{
+    list.addEventListener('dragover',ev=>{
+      if(!draggedVenue)return;
+      ev.preventDefault();
+      ev.dataTransfer.dropEffect='move';
+      const after=getDragAfterElement(list,ev.clientY,'.arrange-venue');
+      const dragged=wrap.querySelector(`.arrange-venue[data-venue="${cssEscape(draggedVenue)}"]`);
+      if(!dragged)return;
+      if(after==null)list.appendChild(dragged);else list.insertBefore(dragged,after);
+    });
+    list.addEventListener('drop',ev=>{
+      if(!draggedVenue)return;
+      ev.preventDefault();
+      commitArrangeOrderFromDOM();
+      buildReport();
+    });
+  });
+
+  // Event rows: draggable within an .arrange-event-list (same venue only)
+  let draggedEvent=null,draggedEventVenue=null;
+  wrap.querySelectorAll('.arrange-event').forEach(row=>{
+    row.addEventListener('dragstart',ev=>{
+      ev.stopPropagation();
+      draggedEvent=row.dataset.eventId;
+      draggedEventVenue=row.dataset.venue;
+      row.style.opacity='0.4';
+      ev.dataTransfer.effectAllowed='move';
+      ev.dataTransfer.setData('text/plain','event:'+draggedEvent);
+    });
+    row.addEventListener('dragend',()=>{row.style.opacity='1';draggedEvent=null;});
+  });
+  wrap.querySelectorAll('.arrange-event-list').forEach(list=>{
+    list.addEventListener('dragover',ev=>{
+      if(!draggedEvent||list.dataset.venue!==draggedEventVenue)return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      ev.dataTransfer.dropEffect='move';
+      const after=getDragAfterElement(list,ev.clientY,'.arrange-event');
+      const dragged=list.querySelector(`.arrange-event[data-event-id="${draggedEvent}"]`);
+      if(!dragged)return;
+      if(after==null)list.appendChild(dragged);else list.insertBefore(dragged,after);
+    });
+    list.addEventListener('drop',ev=>{
+      if(!draggedEvent||list.dataset.venue!==draggedEventVenue)return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      commitArrangeOrderFromDOM();
+      buildReport();
+    });
+  });
+}
+
+function cssEscape(s){return s.replace(/(["\\])/g,'\\$1');}
+
+function getDragAfterElement(container,y,selector){
+  const els=[...container.querySelectorAll(selector+':not([style*="opacity: 0.4"])')];
+  return els.reduce((closest,el)=>{
+    const box=el.getBoundingClientRect();
+    const offset=y-box.top-box.height/2;
+    if(offset<0&&offset>closest.offset)return{offset,element:el};
+    return closest;
+  },{offset:-Infinity,element:null}).element;
+}
+
+function commitArrangeOrderFromDOM(){
+  ensureReportOrder();
+  const wrap=document.getElementById('arrangeSections');
+  ['pace','lv','other'].forEach(grp=>{
+    const list=wrap.querySelector(`.arrange-venue-list[data-grp="${grp}"]`);
+    if(!list)return;
+    reportOrder.sections[grp]=[...list.querySelectorAll('.arrange-venue')].map(c=>c.dataset.venue);
+  });
+  wrap.querySelectorAll('.arrange-event-list').forEach(list=>{
+    const v=list.dataset.venue;
+    reportOrder.eventOrder[v]=[...list.querySelectorAll('.arrange-event')].map(r=>r.dataset.eventId);
+  });
+}
+
 function buildReport(){
   const title=document.getElementById('report-title').value;
   const to=document.getElementById('report-to').value;
@@ -1252,14 +1454,10 @@ function buildReport(){
   let evs=showPast?events:events.filter(e=>!isPast(e));
   evs=[...evs].sort((a,b)=>{if(!a.date&&!b.date)return 0;if(!a.date)return 1;if(!b.date)return-1;return a.date-b.date;});
 
-  const customList=typeof customVenues!=='undefined'?customVenues:[];
-  const customPace=customList.filter(cv=>cv.group==='pace').map(cv=>cv.name);
-  const customLv=customList.filter(cv=>cv.group==='lv').map(cv=>cv.name);
-  const customOther=customList.filter(cv=>cv.group==='other'||cv.group==='custom'||!cv.group).map(cv=>cv.name);
-
-  const PACE_PROPS=['BAHA MAR','HARD ROCK PUNTA CANA','HARD ROCK HOLLYWOOD','MOHEGAN SUN','MONTE CARLO','RITZ CARLTON',...customPace];
-  const LV_PROPS=['ALLEGIANT STADIUM','DURANGO','MGM GRAND','RED ROCK','SUNSET STATION','T-MOBILE ARENA','VIRGIN LAS VEGAS','WYNN LAS VEGAS',...customLv];
-  const OTHER_PROPS=['BIG EVENT','CRUISE','DRAFTKINGS',...customOther];
+  ensureReportOrder();
+  const PACE_PROPS=reportOrder.sections.pace;
+  const LV_PROPS=reportOrder.sections.lv;
+  const OTHER_PROPS=reportOrder.sections.other;
 
   const FONT_SERIF="Georgia,'Times New Roman',serif";
   const FONT_SANS="Arial,Helvetica,sans-serif";
@@ -1308,10 +1506,19 @@ function buildReport(){
     </td></tr>`;
   }
 
+  function applyEventOrder(v,vevs){
+    const order=reportOrder.eventOrder[v];
+    if(!order||!order.length)return vevs;
+    const byId=new Map(vevs.map(e=>[e.id,e]));
+    const ordered=order.map(id=>byId.get(id)).filter(Boolean);
+    const leftover=vevs.filter(e=>!order.includes(e.id));
+    return [...ordered,...leftover];
+  }
+
   function buildGroup(groupVenues){
     const venueBlocks=[];
     groupVenues.forEach(v=>{
-      const vevs=evs.filter(e=>e.venue===v);
+      const vevs=applyEventOrder(v,evs.filter(e=>e.venue===v));
       if(!vevs.length)return;
       venueBlocks.push({v,vevs});
     });
@@ -1398,6 +1605,9 @@ function buildReport(){
 function openReport(){
   if(IS_VIEW)return;
   document.getElementById('reportModal').classList.add('open');
+  arrangePanelOpen=false;
+  document.getElementById('arrangePanel').style.display='none';
+  document.getElementById('arrangeToggleBtn').style.background='';
   buildReport();
   applyDraftTemplate();
 }
@@ -1463,21 +1673,80 @@ render();
 
 // ── CUSTOM VENUES ──
 let customVenues = [];
+let editingVenueName = null; // null = create mode, else editing this venue's original name
 
 function openAddVenueModal(){
+  editingVenueName = null;
+  document.getElementById('addVenueModalTitle').textContent='＋ Add New Venue';
+  document.getElementById('addVenueModalHint').textContent='The new venue will appear in the sidebar, event form, and report — and events can be added to it right away.';
+  document.getElementById('addVenueConfirmBtn').textContent='✓ Create Venue';
+  document.getElementById('addVenueModalFooter').querySelector('.btn-danger')?.remove();
   document.getElementById('addVenueModal').classList.add('open');
   document.getElementById('newVenueNameInput').value='';
+  document.getElementById('newVenueNameInput').disabled=false;
   document.getElementById('newVenueEmojiInput').value='🏢';
   document.getElementById('newVenueGroupSelect').value='custom';
   setTimeout(()=>document.getElementById('newVenueNameInput').focus(),80);
 }
-function closeAddVenueModal(){document.getElementById('addVenueModal').classList.remove('open');}
+function openEditVenueModal(name){
+  const cv=customVenues.find(c=>c.name===name);
+  if(!cv)return;
+  editingVenueName=name;
+  document.getElementById('addVenueModalTitle').textContent='✎ Edit Venue';
+  document.getElementById('addVenueModalHint').textContent='Changes apply across the sidebar, event form, and report.';
+  document.getElementById('addVenueConfirmBtn').textContent='✓ Save Changes';
+  document.getElementById('addVenueModal').classList.add('open');
+  document.getElementById('newVenueNameInput').value=cv.name;
+  document.getElementById('newVenueNameInput').disabled=false;
+  document.getElementById('newVenueEmojiInput').value=cv.emoji;
+  document.getElementById('newVenueGroupSelect').value=cv.group||'custom';
+  // Add a delete button to footer if not already present
+  const footer=document.getElementById('addVenueModalFooter');
+  if(!footer.querySelector('.btn-danger')){
+    const delBtn=document.createElement('button');
+    delBtn.className='btn btn-danger btn-sm';
+    delBtn.textContent='🗑 Delete Venue';
+    delBtn.style.marginRight='auto';
+    delBtn.onclick=()=>deleteCustomVenue(name);
+    footer.insertBefore(delBtn,footer.firstChild);
+  }
+  setTimeout(()=>document.getElementById('newVenueNameInput').focus(),80);
+}
+function closeAddVenueModal(){
+  document.getElementById('addVenueModal').classList.remove('open');
+  document.getElementById('addVenueModalFooter').querySelector('.btn-danger')?.remove();
+  editingVenueName=null;
+}
 
 function confirmAddVenue(){
   const name = document.getElementById('newVenueNameInput').value.trim().toUpperCase();
   const emoji = document.getElementById('newVenueEmojiInput').value.trim() || '🏢';
   const group = document.getElementById('newVenueGroupSelect').value;
   if(!name){alert('Please enter a venue name.');return;}
+
+  if(editingVenueName){
+    // EDIT MODE
+    const cv=customVenues.find(c=>c.name===editingVenueName);
+    if(!cv)return;
+    if(name!==editingVenueName && VENUES_ORDER.includes(name)){alert('A venue with this name already exists.');return;}
+    const oldName=editingVenueName;
+    cv.name=name;cv.emoji=emoji;cv.group=group;
+    if(name!==oldName){
+      // rename across VENUES_ORDER and all events
+      const idx=VENUES_ORDER.indexOf(oldName);
+      if(idx>-1)VENUES_ORDER[idx]=name;
+      events.forEach(e=>{if(e.venue===oldName)e.venue=name;});
+      if(currentVenue===oldName)currentVenue=name;
+      saveToStorage();
+    }
+    rebuildCustomVenueSidebar();
+    refreshVenueDropdowns();
+    closeAddVenueModal();
+    render();
+    return;
+  }
+
+  // CREATE MODE
   if(VENUES_ORDER.includes(name)){alert('This venue already exists.');return;}
   customVenues.push({name, emoji, group});
   VENUES_ORDER.push(name);
@@ -1487,17 +1756,59 @@ function confirmAddVenue(){
   render();
 }
 
+function deleteCustomVenue(name){
+  const cv=customVenues.find(c=>c.name===name);
+  if(!cv)return;
+  const evCount=events.filter(e=>e.venue===name).length;
+  const msg=evCount>0
+    ? `Delete "${name}"? This will also delete ${evCount} event${evCount!==1?'s':''} at this venue. This cannot be undone.`
+    : `Delete "${name}"? This cannot be undone.`;
+  if(!confirm(msg))return;
+  customVenues=customVenues.filter(c=>c.name!==name);
+  VENUES_ORDER=VENUES_ORDER.filter(v=>v!==name);
+  events=events.filter(e=>e.venue!==name);
+  if(currentVenue===name)currentVenue='ALL';
+  saveToStorage();
+  rebuildCustomVenueSidebar();
+  refreshVenueDropdowns();
+  closeAddVenueModal();
+  render();
+}
+
+function rebuildCustomVenueSidebar(){
+  const customSection = document.getElementById('customVenueSection');
+  const btns = document.getElementById('customVenueButtons');
+  btns.innerHTML='';
+  customVenues.forEach(cv=>addVenueToUI(cv.name,cv.emoji,cv.group));
+  customSection.style.display = customVenues.length ? 'block' : 'none';
+  if(currentVenue==='ALL'||!VENUES_ORDER.includes(currentVenue)){
+    // keep ALL highlighted / re-render handles count refresh
+  }
+}
+
 function addVenueToUI(name, emoji, group){
   // Add to sidebar custom section
   const customSection = document.getElementById('customVenueSection');
   customSection.style.display='block';
   const btns = document.getElementById('customVenueButtons');
+  const row = document.createElement('div');
+  row.style.cssText='display:flex;align-items:center;gap:2px;';
   const btn = document.createElement('button');
   btn.className='venue-btn';
   btn.id='venue-'+name;
+  btn.style.flex='1';
   btn.innerHTML=`${emoji} ${name.charAt(0)+name.slice(1).toLowerCase()} <span class="venue-count" id="count-${name}">0</span>`;
   btn.onclick=()=>filterVenue(name);
-  btns.appendChild(btn);
+  const editBtn=document.createElement('button');
+  editBtn.title='Edit venue';
+  editBtn.textContent='✎';
+  editBtn.style.cssText='background:transparent;border:none;color:var(--sidebar-muted);cursor:pointer;font-size:12px;padding:4px 6px;opacity:0.6;';
+  editBtn.onmouseenter=()=>editBtn.style.opacity='1';
+  editBtn.onmouseleave=()=>editBtn.style.opacity='0.6';
+  editBtn.onclick=(ev)=>{ev.stopPropagation();openEditVenueModal(name);};
+  row.appendChild(btn);
+  row.appendChild(editBtn);
+  btns.appendChild(row);
 }
 
 function refreshVenueDropdowns(){

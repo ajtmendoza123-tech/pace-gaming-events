@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PACE Property Events</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
   --deep:#ffffff;--surface:#f8f6f2;--surface2:#f2ede4;--surface3:#ece6d8;
@@ -67,6 +67,46 @@
   --header-bg:#140608;--card-bg:#ffffff;--card-border:rgba(110,26,40,0.13);
   --main-bg:#faf4f5;--stat-bg:#ffffff;--toolbar-bg:#ffffff;--body-bg:#f4eaec;
 }
+/* Sage — soft muted green + warm linen, calm and easy on the eyes */
+[data-theme="sage"]{
+  --deep:#ffffff;--surface:#f5f7f2;--surface2:#eaf0e4;--surface3:#dfe9d6;
+  --gold:#5c7a52;--gold-light:#719166;--gold-bright:#7da06e;--gold-dim:#516e48;--gold-glow:rgba(92,122,82,0.07);
+  --text:#212a1e;--text-dim:#3c4836;--muted:#74866c;
+  --border:rgba(92,122,82,0.16);--border-bright:rgba(92,122,82,0.32);
+  --sidebar-bg:#222c1f;--sidebar-text:#d6e2cc;--sidebar-muted:#697a60;--sidebar-active:#9bbb8a;
+  --header-bg:#1a2217;--card-bg:#ffffff;--card-border:rgba(92,122,82,0.14);
+  --main-bg:#f5f7f2;--stat-bg:#ffffff;--toolbar-bg:#ffffff;--body-bg:#eef3e8;
+}
+/* Lavender — dusty purple + soft cream, gentle and relaxed */
+[data-theme="lavender"]{
+  --deep:#ffffff;--surface:#f7f5fa;--surface2:#ede8f4;--surface3:#e2dbee;
+  --gold:#6e5a96;--gold-light:#8270ac;--gold-bright:#9483bc;--gold-dim:#5e4c82;--gold-glow:rgba(110,90,150,0.07);
+  --text:#221c30;--text-dim:#3e3454;--muted:#7a6e96;
+  --border:rgba(110,90,150,0.16);--border-bright:rgba(110,90,150,0.32);
+  --sidebar-bg:#241e34;--sidebar-text:#dcd4ec;--sidebar-muted:#6c628a;--sidebar-active:#ab9bd2;
+  --header-bg:#1c1729;--card-bg:#ffffff;--card-border:rgba(110,90,150,0.14);
+  --main-bg:#f7f5fa;--stat-bg:#ffffff;--toolbar-bg:#ffffff;--body-bg:#f0ecf6;
+}
+/* Terracotta — warm clay + soft sand, inviting and grounded */
+[data-theme="terracotta"]{
+  --deep:#ffffff;--surface:#faf4ee;--surface2:#f4e6d8;--surface3:#edd8c2;
+  --gold:#b5603a;--gold-light:#c97a4e;--gold-bright:#dd9362;--gold-dim:#9c5230;--gold-glow:rgba(181,96,58,0.08);
+  --text:#2c1c12;--text-dim:#4e3424;--muted:#8a6a54;
+  --border:rgba(181,96,58,0.18);--border-bright:rgba(181,96,58,0.36);
+  --sidebar-bg:#2a1810;--sidebar-text:#ecd8c4;--sidebar-muted:#8a6850;--sidebar-active:#e8a374;
+  --header-bg:#20120c;--card-bg:#ffffff;--card-border:rgba(181,96,58,0.15);
+  --main-bg:#faf4ee;--stat-bg:#ffffff;--toolbar-bg:#ffffff;--body-bg:#f6ece0;
+}
+/* Mist — soft blue-gray + cloud white, the gentlest on the eyes */
+[data-theme="mist"]{
+  --deep:#ffffff;--surface:#f5f7f9;--surface2:#e9eef2;--surface3:#dde5ec;
+  --gold:#4a6478;--gold-light:#5e7a90;--gold-bright:#7494ac;--gold-dim:#3e5468;--gold-glow:rgba(74,100,120,0.06);
+  --text:#1c262e;--text-dim:#384654;--muted:#6e8294;
+  --border:rgba(74,100,120,0.15);--border-bright:rgba(74,100,120,0.3);
+  --sidebar-bg:#1c2630;--sidebar-text:#cdd9e2;--sidebar-muted:#5e7080;--sidebar-active:#8cb0c8;
+  --header-bg:#161e26;--card-bg:#ffffff;--card-border:rgba(74,100,120,0.13);
+  --main-bg:#f5f7f9;--stat-bg:#ffffff;--toolbar-bg:#ffffff;--body-bg:#eef2f5;
+}
 /* Theme switcher pill */
 .theme-switcher{display:flex;align-items:center;gap:5px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:3px 6px;}
 .theme-dot{width:18px;height:18px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all 0.15s;position:relative;}
@@ -78,6 +118,10 @@
 .theme-dot[data-t="forest"]{background:linear-gradient(135deg,#0d1810,#4a8058);}
 .theme-dot[data-t="sapphire"]{background:linear-gradient(135deg,#080e20,#3468c8);}
 .theme-dot[data-t="wine"]{background:linear-gradient(135deg,#140608,#b83050);}
+.theme-dot[data-t="sage"]{background:linear-gradient(135deg,#1a2217,#9bbb8a);}
+.theme-dot[data-t="lavender"]{background:linear-gradient(135deg,#1c1729,#ab9bd2);}
+.theme-dot[data-t="terracotta"]{background:linear-gradient(135deg,#20120c,#e8a374);}
+.theme-dot[data-t="mist"]{background:linear-gradient(135deg,#161e26,#8cb0c8);}
 /* Duplicate highlight */
 .bulk-row.is-dup{background:#fff8e0;border-left:3px solid #d4a830;color:#7a5800;}
 .bulk-row.is-dup .dup-badge{display:inline-block;background:#d4a830;color:#fff;font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:1px 5px;border-radius:3px;margin-left:5px;vertical-align:middle;}
@@ -92,7 +136,7 @@ body{
   background-image:
     radial-gradient(ellipse at 10% 0%,var(--gold-glow) 0%,transparent 50%),
     radial-gradient(ellipse at 90% 100%,rgba(160,120,32,0.04) 0%,transparent 50%);
-  color:var(--text);font-family:'Inter',system-ui,sans-serif;font-size:15px;min-height:100vh;
+  color:var(--text);font-family:'Inter',system-ui,sans-serif;font-size:15.5px;line-height:1.5;min-height:100vh;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
   transition:background 0.25s,color 0.25s;
 }
 /* subtle watermark */
@@ -113,7 +157,7 @@ header{
 .logo-wrap{display:flex;align-items:center;gap:14px;}
 .logo-suits{font-size:18px;opacity:0.8;letter-spacing:4px;color:#c9a84c;}
 .logo-suits .red{color:#d05050;}
-.logo-text{font-family:'Cormorant Garamond',Georgia,serif;font-size:23px;font-weight:900;letter-spacing:0.14em;
+.logo-text{font-family:'Lora',Georgia,serif;font-size:23px;font-weight:900;letter-spacing:0.14em;
   background:linear-gradient(135deg,#c9a84c 0%,#f5df8a 50%,#c9a84c 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .logo-sub{font-size:9px;font-weight:600;letter-spacing:0.25em;color:rgba(201,168,76,0.5);text-transform:uppercase;margin-top:1px;}
@@ -155,11 +199,11 @@ header{
   box-shadow:0 1px 4px rgba(0,0,0,0.06);transition:background 0.25s;}
 .stat{flex:1;text-align:center;padding:12px 8px;border-right:1px solid var(--border);}
 .stat:last-child{border-right:none;}
-.stat-num{font-family:'Cormorant Garamond',Georgia,serif;font-size:26px;font-weight:700;color:var(--gold);line-height:1;}
+.stat-num{font-family:'Lora',Georgia,serif;font-size:26px;font-weight:700;color:var(--gold);line-height:1;}
 .stat-label{font-size:10px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:3px;}
 .toolbar{padding:13px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;
   background:var(--toolbar-bg);flex-shrink:0;box-shadow:0 1px 3px rgba(0,0,0,0.04);transition:background 0.25s;}
-.toolbar-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:20px;font-weight:700;color:var(--text);flex:1;}
+.toolbar-title{font-family:'Lora',Georgia,serif;font-size:20px;font-weight:700;color:var(--text);flex:1;}
 .filter-pills{display:flex;gap:5px;}
 .pill{font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:5px 14px;
   border-radius:3px;cursor:pointer;border:1px solid var(--border);transition:all 0.12s;
@@ -183,13 +227,13 @@ header{
 .event-card.is-soon{border-color:var(--border-bright);}
 .date-block{text-align:center;padding-top:2px;}
 .date-month{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;}
-.date-day{font-family:'Cormorant Garamond',Georgia,serif;font-size:30px;font-weight:700;line-height:1.1;color:var(--gold);}
+.date-day{font-family:'Lora',Georgia,serif;font-size:30px;font-weight:700;line-height:1.1;color:var(--gold);}
 .date-end{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
 .event-info{min-width:0;}
-.event-name{font-weight:700;font-size:15px;color:var(--text);margin-bottom:3px;
+.event-name{font-weight:700;font-size:15.5px;color:var(--text);margin-bottom:3px;line-height:1.35;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.event-venue-label{font-size:12px;color:var(--muted);}
-.event-note{font-size:12px;color:var(--gold);margin-top:3px;font-style:italic;}
+.event-venue-label{font-size:12.5px;color:var(--muted);}
+.event-note{font-size:12.5px;color:var(--gold);margin-top:3px;font-style:italic;}
 .event-badges{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;}
 .badge{font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:2px 7px;border-radius:3px;}
 .badge-big{background:rgba(160,120,32,0.12);color:var(--gold);border:1px solid rgba(160,120,32,0.25);}
@@ -199,13 +243,13 @@ header{
 .event-actions{display:flex;flex-direction:column;gap:4px;align-items:flex-end;opacity:0;transition:opacity 0.15s;}
 .event-card:hover .event-actions{opacity:1;}
 .done-stamp{position:absolute;top:50%;right:14px;transform:translateY(-50%);
-  font-family:'Cormorant Garamond',Georgia,serif;font-size:10px;letter-spacing:0.12em;
+  font-family:'Lora',Georgia,serif;font-size:10px;letter-spacing:0.12em;
   color:rgba(180,60,60,0.3);pointer-events:none;font-style:italic;}
 /* ADD FORM */
 .add-form{background:var(--card-bg);border:1px solid var(--border);border-radius:6px;
   padding:18px;margin-bottom:18px;display:none;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
 .add-form.open{display:block;}
-.add-form-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:15px;font-weight:700;
+.add-form-title{font-family:'Lora',Georgia,serif;font-size:15px;font-weight:700;
   color:var(--gold);margin-bottom:14px;letter-spacing:0.05em;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
 .form-row-3{grid-template-columns:1fr 1fr 1fr;}
@@ -236,7 +280,7 @@ select option{background:var(--card-bg);color:var(--text);}
 .modal-header{padding:18px 22px 14px;border-bottom:1px solid var(--border);
   display:flex;align-items:center;justify-content:space-between;
   background:linear-gradient(180deg,var(--sidebar-bg),var(--sidebar-bg));}
-.modal-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:21px;font-weight:700;
+.modal-title{font-family:'Lora',Georgia,serif;font-size:21px;font-weight:700;
   letter-spacing:0.06em;color:var(--sidebar-active);}
 .modal-body{flex:1;overflow-y:auto;padding:20px 22px;background:var(--card-bg);}
 .modal-footer{padding:14px 22px;border-top:1px solid var(--border);
@@ -292,6 +336,10 @@ select option{background:var(--card-bg);color:var(--text);}
     <div class="theme-dot" data-t="forest" onclick="setTheme('forest')" title="Forest"></div>
     <div class="theme-dot" data-t="sapphire" onclick="setTheme('sapphire')" title="Sapphire"></div>
     <div class="theme-dot" data-t="wine" onclick="setTheme('wine')" title="Wine"></div>
+    <div class="theme-dot" data-t="sage" onclick="setTheme('sage')" title="Sage"></div>
+    <div class="theme-dot" data-t="lavender" onclick="setTheme('lavender')" title="Lavender"></div>
+    <div class="theme-dot" data-t="terracotta" onclick="setTheme('terracotta')" title="Terracotta"></div>
+    <div class="theme-dot" data-t="mist" onclick="setTheme('mist')" title="Mist"></div>
   </div>
 </header>
 
@@ -688,6 +736,7 @@ function shortDateRange(start,end){
   const mStr=(m+1);
   if(!end)return mStr+'/'+d;
   const em=end.getMonth(),ed=end.getDate();
+  if(em===m&&ed===d)return mStr+'/'+d;
   if(em===m)return mStr+'/'+d+' to '+ed;
   return mStr+'/'+d+' to '+(em+1)+'/'+ed;
 }
@@ -910,7 +959,7 @@ function mkCard(e){
   if(past)cls+=' is-past';if(tod)cls+=' is-today';if(soon)cls+=' is-soon';
   if(e.isDup)cls+=' is-dup-card';
   if(selectedIds.has(e.id))cls+=' selected';
-  const hasRange=e.date&&e.endDate;
+  const hasRange=e.date&&e.endDate&&e.date.getTime()!==e.endDate.getTime();
   const crossMonth=hasRange&&e.date.getMonth()!==e.endDate.getMonth();
   const mon=e.date?e.date.toLocaleDateString('en-US',{month:'short'}).toUpperCase():'';
   const day=e.date?e.date.getDate().toString():'';
@@ -1215,7 +1264,7 @@ function buildReport(){
 
   function mkVenueBlock(v,vevs){
     const headerTd=`<td style="padding:10px 14px 10px 16px;background:${accent};border-left:5px solid ${accent}ee;">
-      <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;font-weight:700;color:#ffffff;letter-spacing:0.08em;text-transform:uppercase;line-height:1.2;">${v}</div>
+      <div style="font-family:'Lora',Georgia,serif;font-size:18px;font-weight:700;color:#ffffff;letter-spacing:0.08em;text-transform:uppercase;line-height:1.2;">${v}</div>
       <div style="font-family:'Inter',Arial,sans-serif;font-size:10px;color:rgba(255,255,255,0.6);margin-top:2px;letter-spacing:0.1em;text-transform:uppercase;">${vevs.length} event${vevs.length!==1?'s':''}</div>
     </td>`;
     let evRows=vevs.map((e,i)=>`<tr><td>${mkEventCell(e,i%2===0?'#ffffff':'#faf7f0')}</td></tr>`).join('');
@@ -1258,7 +1307,7 @@ function buildReport(){
           <td colspan="2" style="padding:16px 28px 0 28px;">
             <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
               <td style="background:${accent};padding:12px 20px 12px 20px;border-left:6px solid ${accent}cc;">
-                <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:22px;font-weight:700;color:#ffffff;letter-spacing:0.09em;text-transform:uppercase;line-height:1.2;">${v}</div>
+                <div style="font-family:'Lora',Georgia,serif;font-size:22px;font-weight:700;color:#ffffff;letter-spacing:0.09em;text-transform:uppercase;line-height:1.2;">${v}</div>
                 <div style="font-family:'Inter',Arial,sans-serif;font-size:10px;color:rgba(255,255,255,0.6);margin-top:3px;letter-spacing:0.12em;text-transform:uppercase;">${vevs.length} event${vevs.length!==1?'s':''}</div>
               </td>
             </tr></table>
@@ -1301,7 +1350,7 @@ function buildReport(){
   const outroHtml=emailOutro?`<tr><td style="padding:4px 28px 18px 28px;"><p style="font-family:'Inter',Arial,sans-serif;font-size:13px;color:#333333;line-height:1.7;margin:0;">${emailOutro.replace(/\n/g,'<br>')}</p></td></tr>`:'';
   const html=`<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fdfaf4;max-width:${maxW};margin:0 auto;font-family:'Inter',Arial,sans-serif;">
   <tr><td style="background:${accent};padding:30px 28px 22px;">
-    <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:24px;font-weight:bold;color:#ffffff;letter-spacing:0.1em;text-transform:uppercase;line-height:1.2;">${title}</div>
+    <div style="font-family:'Lora',Georgia,serif;font-size:24px;font-weight:bold;color:#ffffff;letter-spacing:0.1em;text-transform:uppercase;line-height:1.2;">${title}</div>
     <div style="font-family:'Inter',Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.65);margin-top:8px;letter-spacing:0.05em;">${dateStr}</div>
   </td></tr>
   <tr><td style="background:#f0ece0;padding:10px 28px;border-bottom:2px solid ${accent};">
@@ -1314,7 +1363,7 @@ function buildReport(){
     <table width="100%" cellpadding="0" cellspacing="0" border="0">
       <tr>
         <td style="vertical-align:top;">
-          <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:10px;color:rgba(255,255,255,0.6);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:4px;">PACE Events Newsletter</div>
+          <div style="font-family:'Lora',Georgia,serif;font-size:10px;color:rgba(255,255,255,0.6);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:4px;">PACE Events Newsletter</div>
           <div style="font-family:'Inter',Arial,sans-serif;font-size:10px;color:rgba(255,255,255,0.5);font-style:italic;">Report prepared by Anne Joy for Pace Gaming Team</div>
         </td>
         <td style="text-align:right;vertical-align:top;">

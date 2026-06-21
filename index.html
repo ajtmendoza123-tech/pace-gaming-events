@@ -1230,6 +1230,15 @@ function confirmBulk(){
 }
 
 // ── REPORT ──
+function shadeHex(hex,amt){
+  // amt negative = darker, positive = lighter. Returns solid hex (no alpha) — Outlook-safe.
+  let c=hex.replace('#','');
+  if(c.length===3)c=c.split('').map(x=>x+x).join('');
+  const num=parseInt(c,16);
+  let r=(num>>16)+amt,g=((num>>8)&0xff)+amt,b=(num&0xff)+amt;
+  r=Math.max(0,Math.min(255,r));g=Math.max(0,Math.min(255,g));b=Math.max(0,Math.min(255,b));
+  return '#'+(r<<16|g<<8|b).toString(16).padStart(6,'0');
+}
 function buildReport(){
   const title=document.getElementById('report-title').value;
   const to=document.getElementById('report-to').value;
@@ -1243,9 +1252,19 @@ function buildReport(){
   let evs=showPast?events:events.filter(e=>!isPast(e));
   evs=[...evs].sort((a,b)=>{if(!a.date&&!b.date)return 0;if(!a.date)return 1;if(!b.date)return-1;return a.date-b.date;});
 
-  const PACE_PROPS=['BAHA MAR','HARD ROCK PUNTA CANA','HARD ROCK HOLLYWOOD','MOHEGAN SUN','MONTE CARLO','RITZ CARLTON'];
-  const LV_PROPS=['ALLEGIANT STADIUM','DURANGO','MGM GRAND','RED ROCK','SUNSET STATION','T-MOBILE ARENA','VIRGIN LAS VEGAS','WYNN LAS VEGAS'];
-  const OTHER_PROPS=['BIG EVENT','CRUISE','DRAFTKINGS',...(typeof customVenues!=='undefined'?customVenues.map(cv=>cv.name):[])];
+  const customList=typeof customVenues!=='undefined'?customVenues:[];
+  const customPace=customList.filter(cv=>cv.group==='pace').map(cv=>cv.name);
+  const customLv=customList.filter(cv=>cv.group==='lv').map(cv=>cv.name);
+  const customOther=customList.filter(cv=>cv.group==='other'||cv.group==='custom'||!cv.group).map(cv=>cv.name);
+
+  const PACE_PROPS=['BAHA MAR','HARD ROCK PUNTA CANA','HARD ROCK HOLLYWOOD','MOHEGAN SUN','MONTE CARLO','RITZ CARLTON',...customPace];
+  const LV_PROPS=['ALLEGIANT STADIUM','DURANGO','MGM GRAND','RED ROCK','SUNSET STATION','T-MOBILE ARENA','VIRGIN LAS VEGAS','WYNN LAS VEGAS',...customLv];
+  const OTHER_PROPS=['BIG EVENT','CRUISE','DRAFTKINGS',...customOther];
+
+  const FONT_SERIF="Georgia,'Times New Roman',serif";
+  const FONT_SANS="Arial,Helvetica,sans-serif";
+  const accentDark=shadeHex(accent,-28);
+  const accentMid=shadeHex(accent,-14);
 
   function mkEventCell(e,bg){
     let datePart='';
@@ -1253,31 +1272,39 @@ function buildReport(){
     else if(e.date){datePart=shortDateRange(e.date,e.endDate);}
     const isBig=e.type==='big';
     const line=datePart?`${datePart} — ${e.name}`:e.name;
-    return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${bg};">
+    return `<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${bg}" style="background:${bg};mso-table-lspace:0pt;mso-table-rspace:0pt;">
       <tr>
-        <td style="padding:6px 12px;border-bottom:1px solid #ede8db;">
-          ${isBig?'<span style="font-size:12px;margin-right:4px;">⭐</span>':''}<span style="font-family:'Inter',Arial,sans-serif;font-size:13px;color:#1a1a1a;font-weight:${isBig?'600':'400'};line-height:1.4;">${line}</span>${e.note?`<span style="font-family:'Inter',Arial,sans-serif;font-size:11px;color:#999999;font-style:italic;margin-left:6px;">(${e.note})</span>`:''}
+        <td style="padding:8px 14px;border-bottom:1px solid #e8e2d4;">
+          ${isBig?'<span style="font-size:12px;margin-right:4px;">&#11088;</span>':''}<span style="font-family:${FONT_SANS};font-size:13px;color:#1a1a1a;font-weight:${isBig?'bold':'normal'};line-height:1.5;">${line}</span>${e.note?`<span style="font-family:${FONT_SANS};font-size:11px;color:#888888;font-style:italic;margin-left:6px;">(${e.note})</span>`:''}
+        </td>
+      </tr>
+    </table>`;
+  }
+
+  function mkVenueHeaderTable(v,vevs,fontSize){
+    return `<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${accent}" style="background:${accent};mso-table-lspace:0pt;mso-table-rspace:0pt;border-left:5px solid ${accentDark};">
+      <tr>
+        <td style="padding:11px 16px;">
+          <div style="font-family:${FONT_SERIF};font-size:${fontSize}px;font-weight:bold;color:#ffffff;letter-spacing:1px;text-transform:uppercase;line-height:1.3;">${v}</div>
+          <div style="font-family:${FONT_SANS};font-size:10px;color:#ffffff;opacity:0.75;margin-top:3px;letter-spacing:1px;text-transform:uppercase;">${vevs.length} event${vevs.length!==1?'s':''}</div>
         </td>
       </tr>
     </table>`;
   }
 
   function mkVenueBlock(v,vevs){
-    const headerTd=`<td style="padding:10px 14px 10px 16px;background:${accent};border-left:5px solid ${accent}ee;">
-      <div style="font-family:'Lora',Georgia,serif;font-size:18px;font-weight:700;color:#ffffff;letter-spacing:0.08em;text-transform:uppercase;line-height:1.2;">${v}</div>
-      <div style="font-family:'Inter',Arial,sans-serif;font-size:10px;color:rgba(255,255,255,0.6);margin-top:2px;letter-spacing:0.1em;text-transform:uppercase;">${vevs.length} event${vevs.length!==1?'s':''}</div>
-    </td>`;
+    const headerHtml=mkVenueHeaderTable(v,vevs,17);
     let evRows=vevs.map((e,i)=>`<tr><td>${mkEventCell(e,i%2===0?'#ffffff':'#faf7f0')}</td></tr>`).join('');
-    return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:8px;">
-      <tr><td style="padding:8px 0 0 0;"><table width="100%" cellpadding="0" cellspacing="0"><tr>${headerTd}</tr></table></td></tr>
+    return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:10px;mso-table-lspace:0pt;mso-table-rspace:0pt;">
+      <tr><td style="padding:8px 0 0 0;">${headerHtml}</td></tr>
       ${evRows}
-      <tr><td style="padding:2px 0 8px;"><div style="height:1px;background:#ddd;"></div></td></tr>
+      <tr><td style="padding:3px 0 8px;"><div style="height:1px;line-height:1px;font-size:1px;background:#dddddd;">&nbsp;</div></td></tr>
     </table>`;
   }
 
-  function mkSectionHeader(label,accent){
-    return `<tr><td style="padding:24px 20px 8px 20px;">
-      <div style="font-family:'Inter',Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:${accent};border-bottom:3px solid ${accent};padding-bottom:7px;opacity:0.75;">— ${label} —</div>
+  function mkSectionHeader(label,accentColor){
+    return `<tr><td style="padding:26px 22px 9px 22px;">
+      <div style="font-family:${FONT_SANS};font-size:11px;font-weight:bold;letter-spacing:3px;text-transform:uppercase;color:${accentColor};border-bottom:3px solid ${accentColor};padding-bottom:8px;">— ${label} —</div>
     </td></tr>`;
   }
 
@@ -1294,39 +1321,16 @@ function buildReport(){
       for(let i=0;i<venueBlocks.length;i+=2){
         const left=venueBlocks[i];const right=venueBlocks[i+1];
         html+=`<tr><td style="padding:0 20px;">
-          <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-            <td width="49%" style="vertical-align:top;padding-right:8px;">${mkVenueBlock(left.v,left.vevs,true)}</td>
-            <td width="2%"></td>
-            ${right?`<td width="49%" style="vertical-align:top;padding-left:8px;">${mkVenueBlock(right.v,right.vevs,true)}</td>`:`<td width="49%"></td>`}
+          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="mso-table-lspace:0pt;mso-table-rspace:0pt;"><tr>
+            <td width="49%" valign="top" style="padding-right:8px;">${mkVenueBlock(left.v,left.vevs)}</td>
+            <td width="2%">&nbsp;</td>
+            ${right?`<td width="49%" valign="top" style="padding-left:8px;">${mkVenueBlock(right.v,right.vevs)}</td>`:`<td width="49%">&nbsp;</td>`}
           </tr></table>
         </td></tr>`;
       }
     } else {
       venueBlocks.forEach(({v,vevs})=>{
-        html+=`<tr>
-          <td colspan="2" style="padding:16px 28px 0 28px;">
-            <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-              <td style="background:${accent};padding:12px 20px 12px 20px;border-left:6px solid ${accent}cc;">
-                <div style="font-family:'Lora',Georgia,serif;font-size:22px;font-weight:700;color:#ffffff;letter-spacing:0.09em;text-transform:uppercase;line-height:1.2;">${v}</div>
-                <div style="font-family:'Inter',Arial,sans-serif;font-size:10px;color:rgba(255,255,255,0.6);margin-top:3px;letter-spacing:0.12em;text-transform:uppercase;">${vevs.length} event${vevs.length!==1?'s':''}</div>
-              </td>
-            </tr></table>
-          </td></tr>`;
-        vevs.forEach((e,i)=>{
-          let datePart='';
-          if(e.type==='recurring')datePart='Recurring';
-          else if(e.date){datePart=shortDateRange(e.date,e.endDate);}
-          const bg=i%2===0?'#ffffff':'#faf7f0';const isBig=e.type==='big';
-          const line=datePart?`${datePart} — ${e.name}`:e.name;
-          html+=`<tr><td style="padding:0 28px;">
-            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${bg};"><tr>
-              <td style="padding:7px 14px;border-bottom:1px solid #ede8db;">
-                ${isBig?'<span style="font-size:12px;margin-right:4px;">⭐</span>':''}<span style="font-family:'Inter',Arial,sans-serif;font-size:13px;color:#1a1a1a;font-weight:${isBig?'600':'400'};line-height:1.45;">${line}</span>${e.note?`<span style="font-family:'Inter',Arial,sans-serif;font-size:11px;color:#999999;font-style:italic;margin-left:6px;">(${e.note})</span>`:''}
-              </td>
-            </tr></table>
-          </td></tr>`;
-        });
-        html+='<tr><td colspan="2" style="padding:4px 28px 0;"><div style="height:1px;background:#ddd;"></div></td></tr>';
+        html+=`<tr><td style="padding:0 28px;">${mkVenueBlock(v,vevs)}</td></tr>`;
       });
     }
     return html;
@@ -1340,39 +1344,45 @@ function buildReport(){
   if(lvHtml)bodyHtml+=mkSectionHeader('Las Vegas',accent)+lvHtml;
   if(otherHtml)bodyHtml+=mkSectionHeader('Other',accent)+otherHtml;
 
-  const maxW=twoCol?'860px':'680px';
+  const maxW=twoCol?860:680;
   const shareUrl = location.href.split('?')[0] + '?view';
   const tplKey=(document.getElementById('draft-template')||{}).value||'newsletter';
   const tplData=DRAFT_TEMPLATES[tplKey]||DRAFT_TEMPLATES.newsletter;
   const emailIntro=tplData.intro?tplData.intro(to):'';
   const emailOutro=tplData.outro?tplData.outro():'';
-  const introHtml=emailIntro?`<tr><td style="padding:18px 28px 4px 28px;"><p style="font-family:'Inter',Arial,sans-serif;font-size:13px;color:#333333;line-height:1.7;margin:0;">${emailIntro.replace(/\n/g,'<br>')}</p></td></tr>`:'';
-  const outroHtml=emailOutro?`<tr><td style="padding:4px 28px 18px 28px;"><p style="font-family:'Inter',Arial,sans-serif;font-size:13px;color:#333333;line-height:1.7;margin:0;">${emailOutro.replace(/\n/g,'<br>')}</p></td></tr>`:'';
-  const html=`<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#fdfaf4;max-width:${maxW};margin:0 auto;font-family:'Inter',Arial,sans-serif;">
-  <tr><td style="background:${accent};padding:30px 28px 22px;">
-    <div style="font-family:'Lora',Georgia,serif;font-size:24px;font-weight:bold;color:#ffffff;letter-spacing:0.1em;text-transform:uppercase;line-height:1.2;">${title}</div>
-    <div style="font-family:'Inter',Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.65);margin-top:8px;letter-spacing:0.05em;">${dateStr}</div>
+  const introHtml=emailIntro?`<tr><td style="padding:18px 28px 4px 28px;"><p style="font-family:${FONT_SANS};font-size:13px;color:#333333;line-height:1.7;margin:0;">${emailIntro.replace(/\n/g,'<br>')}</p></td></tr>`:'';
+  const outroHtml=emailOutro?`<tr><td style="padding:4px 28px 18px 28px;"><p style="font-family:${FONT_SANS};font-size:13px;color:#333333;line-height:1.7;margin:0;">${emailOutro.replace(/\n/g,'<br>')}</p></td></tr>`:'';
+  const html=`<!--[if mso]>
+<table role="presentation" width="${maxW}" align="center" cellpadding="0" cellspacing="0" border="0"><tr><td>
+<![endif]-->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#fdfaf4" style="background:#fdfaf4;max-width:${maxW}px;margin:0 auto;font-family:${FONT_SANS};mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;">
+  <tr><td bgcolor="${accent}" style="background:${accent};padding:30px 28px 22px;">
+    <div style="font-family:${FONT_SERIF};font-size:24px;font-weight:bold;color:#ffffff;letter-spacing:2px;text-transform:uppercase;line-height:1.3;">${title}</div>
+    <div style="font-family:${FONT_SANS};font-size:11px;color:#ffffff;opacity:0.8;margin-top:8px;letter-spacing:0.5px;">${dateStr}</div>
   </td></tr>
-  <tr><td style="background:#f0ece0;padding:10px 28px;border-bottom:2px solid ${accent};">
-    <span style="font-family:'Inter',Arial,sans-serif;font-size:11px;color:#666;">TO: <strong style="color:#333;">${to}</strong></span>
+  <tr><td bgcolor="#f0ece0" style="background:#f0ece0;padding:10px 28px;border-bottom:2px solid ${accent};">
+    <span style="font-family:${FONT_SANS};font-size:11px;color:#666666;">TO: <strong style="color:#333333;">${to}</strong></span>
   </td></tr>
   ${introHtml}
   ${bodyHtml}
   ${outroHtml}
-  <tr><td style="background:${accent};padding:20px 28px;">
-    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr><td bgcolor="${accentDark}" style="background:${accentDark};padding:20px 28px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="mso-table-lspace:0pt;mso-table-rspace:0pt;">
       <tr>
-        <td style="vertical-align:top;">
-          <div style="font-family:'Lora',Georgia,serif;font-size:10px;color:rgba(255,255,255,0.6);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:4px;">PACE Events Newsletter</div>
-          <div style="font-family:'Inter',Arial,sans-serif;font-size:10px;color:rgba(255,255,255,0.5);font-style:italic;">Report prepared by Anne Joy for Pace Gaming Team</div>
+        <td valign="top" style="font-family:${FONT_SERIF};">
+          <div style="font-family:${FONT_SERIF};font-size:10px;color:#ffffff;opacity:0.75;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;">PACE Events Newsletter</div>
+          <div style="font-family:${FONT_SANS};font-size:10px;color:#ffffff;opacity:0.6;font-style:italic;">Report prepared by Anne Joy for Pace Gaming Team</div>
         </td>
-        <td style="text-align:right;vertical-align:top;">
-          <a href="${shareUrl}" target="_blank" style="display:inline-block;font-family:'Inter',Arial,sans-serif;font-size:10px;color:rgba(255,255,255,0.85);text-decoration:none;border:1px solid rgba(255,255,255,0.35);border-radius:3px;padding:5px 12px;letter-spacing:0.08em;text-transform:uppercase;">⬡ Share View-Only Link — click here</a>
+        <td align="right" valign="top">
+          <a href="${shareUrl}" target="_blank" style="display:inline-block;font-family:${FONT_SANS};font-size:10px;color:#ffffff;text-decoration:none;border:1px solid #ffffff;padding:6px 12px;letter-spacing:1px;text-transform:uppercase;">View-Only Link &#8594;</a>
         </td>
       </tr>
     </table>
   </td></tr>
-</table>`;
+</table>
+<!--[if mso]>
+</td></tr></table>
+<![endif]-->`;
 
   document.getElementById('reportContent').innerHTML=html;
   // update stats
@@ -1603,7 +1613,20 @@ function copyDraftText(){
 
 function downloadReport(){
   const {html,title} = buildReport();
-  const fullHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title></head><body style="margin:0;padding:20px;background:#e8e4dc;">${html}</body></html>`;
+  const fullHtml = `<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>${title}</title>
+<!--[if mso]>
+<noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
+<![endif]-->
+<style>body{margin:0;padding:20px;background:#e8e4dc;}table{border-collapse:collapse;}</style>
+</head>
+<body style="margin:0;padding:20px;background:#e8e4dc;">${html}</body>
+</html>`;
   const blob = new Blob([fullHtml], {type:'text/html'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);

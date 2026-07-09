@@ -432,6 +432,14 @@ body.view-only .admin-only{display:none!important;}
 .featured-venue{font-size:11px;color:var(--muted);}
 .badge-fact{background:rgba(20,70,110,.10);color:#14476b;border:1px solid rgba(20,70,110,.22);}
 .badge-tbd{background:rgba(90,90,90,.10);color:#555;border:1px solid rgba(90,90,90,.20);}
+
+.inline-check{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-dim);line-height:1.5;padding:8px 10px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer;}
+.inline-check input{width:auto;accent-color:var(--gold);}
+.priority-helper{font-size:10px;color:var(--muted);line-height:1.45;margin-top:5px;}
+.event-card.is-priority-card{border-left:4px solid var(--gold)!important;background:linear-gradient(135deg,#fffdf6 0%,var(--card-bg) 72%)!important;}
+.badge-priority{background:rgba(160,120,32,.13);color:var(--gold);border:1px solid rgba(160,120,32,.32);}
+.featured-actions{position:absolute;right:9px;bottom:9px;opacity:0;transition:opacity .15s;}
+.featured-card:hover .featured-actions{opacity:1;}
 .event-name{white-space:normal;}
 .event-card{grid-template-columns:88px minmax(0,1fr) auto;}
 .event-note{display:inline-block;padding:2px 7px;border-radius:999px;background:rgba(160,120,32,.08);border:1px solid rgba(160,120,32,.14);}
@@ -551,6 +559,8 @@ body.view-only .admin-only{display:none!important;}
       <span class="bulk-bar-label"><span id="bulkCount">0</span> event(s) selected</span>
       <button class="btn btn-ghost btn-sm" onclick="selectAll()">Select All</button>
       <button class="btn btn-ghost btn-sm" onclick="deselectAll()">Deselect All</button>
+      <button class="btn btn-outline btn-sm" onclick="setSelectedPriority(true)">⭐ Add Priority</button>
+      <button class="btn btn-ghost btn-sm" onclick="setSelectedPriority(false)">Remove Priority</button>
       <button class="btn btn-danger btn-sm" onclick="deleteSelected()">🗑 Delete Selected</button>
       <button class="btn btn-ghost btn-sm" onclick="exitSelectMode()" style="margin-left:auto;">✕ Cancel</button>
     </div>
@@ -601,6 +611,10 @@ body.view-only .admin-only{display:none!important;}
             <select id="f-type">
               <option value="regular">Regular</option><option value="big">Big Event ⭐</option><option value="recurring">Recurring 🔁</option>
             </select>
+          </div>
+          <div class="form-group"><label class="form-label">Priority Highlight</label>
+            <label class="inline-check"><input type="checkbox" id="f-priority"> Show in Priority Highlights</label>
+            <div class="priority-helper">Use this for events Dave/Kyle should review first.</div>
           </div>
         </div>
         <div class="form-actions">
@@ -653,6 +667,10 @@ body.view-only .admin-only{display:none!important;}
             <optgroup label="Custom" id="bulk-venue-custom-group" style="display:none;"></optgroup>
             <option value="__NEW__">＋ Add New Venue…</option>
           </select>
+        </div>
+        <div class="form-group" style="margin-bottom:10px;">
+          <label class="form-label">Priority Highlight</label>
+          <label class="inline-check"><input type="checkbox" id="bulk-priority"> Add all pasted events to Priority Highlights</label>
         </div>
         <div class="form-group">
           <label class="form-label">Paste Events (one per line)</label>
@@ -850,6 +868,7 @@ body.view-only .admin-only{display:none!important;}
             <span style="font-size:11px;color:#a07820;"><b id="rstat-upcoming">0</b> <span style="color:#8a7a60;font-size:10px;">Upcoming</span></span>
             <span style="font-size:11px;color:#c05050;"><b id="rstat-big">0</b> <span style="color:#8a7a60;font-size:10px;">Big</span></span>
             <span style="font-size:11px;color:#1a6a3c;"><b id="rstat-recurring">0</b> <span style="color:#8a7a60;font-size:10px;">Recurring</span></span>
+            <span style="font-size:11px;color:#a07820;"><b id="rstat-priority">0</b> <span style="color:#8a7a60;font-size:10px;">Priority</span></span>
           </div>
         </div>
         <div class="email-preview-wrap" id="reportContent" style="flex:1;overflow-y:auto;background:#e8e4dc;padding:16px;max-height:none;border-radius:0;border:none;"></div>
@@ -900,7 +919,69 @@ body.view-only .admin-only{display:none!important;}
       <button class="btn btn-gold btn-sm" onclick="confirmAddVenue()" id="addVenueConfirmBtn">✓ Create Venue</button>
     </div>
   </div>
+
 </div>
+
+<!-- Edit Event Modal -->
+<div class="modal-overlay" id="editEventModal">
+  <div class="modal" style="width:620px;max-height:82vh;">
+    <div class="modal-header">
+      <div class="modal-title">✎ Edit Event</div>
+      <button class="btn btn-ghost btn-sm" onclick="closeEditEventModal()">✕ Close</button>
+    </div>
+    <div class="modal-body" style="padding:22px;">
+      <input type="hidden" id="edit-event-id">
+      <div class="form-row form-row-3">
+        <div class="form-group">
+          <label class="form-label">Venue</label>
+          <select id="edit-venue" onchange="updateEditPreview()"></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Start Date</label>
+          <input type="date" id="edit-date" oninput="updateEditPreview()">
+        </div>
+        <div class="form-group">
+          <label class="form-label">End Date</label>
+          <input type="date" id="edit-date-end" oninput="updateEditPreview()">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Event Name</label>
+          <input type="text" id="edit-name" placeholder="Event name" oninput="updateEditPreview()">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Type</label>
+          <select id="edit-type" onchange="updateEditPreview()">
+            <option value="regular">Regular</option>
+            <option value="big">Big Event ⭐</option>
+            <option value="recurring">Recurring 🔁</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:14px;">
+        <label class="form-label">Note</label>
+        <input type="text" id="edit-note" placeholder="Optional note / fact sheet" oninput="updateEditPreview()">
+      </div>
+      <div class="form-group" style="margin-bottom:14px;">
+        <label class="form-label">Priority Highlight</label>
+        <label class="inline-check"><input type="checkbox" id="edit-priority" onchange="updateEditPreview()"> Show this event in Priority Highlights</label>
+        <div class="priority-helper">Turn this off when you want the event removed from the Priority Highlights box/report.</div>
+      </div>
+      <div style="border:1px solid var(--border);background:var(--surface);border-radius:6px;padding:12px 14px;margin-top:8px;">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;">WhatsApp Preview</div>
+        <div id="edit-preview-line" style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text);line-height:1.6;word-break:break-word;">Date - Event</div>
+      </div>
+      <p style="font-size:11px;color:var(--muted);line-height:1.6;margin-top:10px;">Tip: leave End Date blank if it is a one-day event. Multi-day events will copy as “10/22 to 26 - Event Name”.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger btn-sm" onclick="deleteEditedEvent()" style="margin-right:auto;">Delete Event</button>
+      <button class="btn btn-ghost btn-sm" onclick="copyEditedEventLine()">Copy Line</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeEditEventModal()">Cancel</button>
+      <button class="btn btn-gold btn-sm" onclick="saveEditedEvent()">✓ Save Changes</button>
+    </div>
+  </div>
+
 
 <script>
 const IS_VIEW = new URLSearchParams(location.search).has('view');
@@ -978,7 +1059,7 @@ function formatVenueName(v){
 }
 function matchesSearch(e){
   if(!searchTerm)return true;
-  const hay=[e.name,e.venue,formatVenueName(e.venue),e.note,e.type].join(' ').toLowerCase();
+  const hay=[e.name,e.venue,formatVenueName(e.venue),e.note,e.type,isPriority(e)?'priority highlight':''].join(' ').toLowerCase();
   return hay.includes(searchTerm);
 }
 function setSearch(v){searchTerm=(v||'').trim().toLowerCase();render();}
@@ -990,13 +1071,33 @@ function eventDateLabel(e){
 function eventLineText(e){
   return eventDateLabel(e)+' - '+e.name;
 }
+function shouldDefaultPriority(e){
+  return !!(e&&(e.type==='big'||/fact sheet/i.test(e.note||'')));
+}
+function isPriority(e){return !!(e&&e.priority);}
 function getPriorityScore(e){
-  let score=0;
+  let score=isPriority(e)?1000:0;
   if(e.type==='big')score+=100;
   if(/fact sheet/i.test(e.note||''))score+=60;
   if(isSoon(e)&&!isPast(e))score+=40;
   if(!e.date)score-=20;
   return score;
+}
+function getPriorityEvents(evs){
+  return (evs||events).filter(e=>!isPast(e)&&isPriority(e))
+    .sort((a,b)=>getPriorityScore(b)-getPriorityScore(a)||(a.date||new Date(2999,0,1))-(b.date||new Date(2999,0,1)));
+}
+function setPriority(id,value){
+  const e=events.find(x=>x.id===id);if(!e)return;
+  e.priority=!!value;
+  render();saveToStorage();
+}
+function togglePriority(id,ev){
+  if(ev&&ev.stopPropagation)ev.stopPropagation();
+  const e=events.find(x=>x.id===id);if(!e)return;
+  e.priority=!isPriority(e);
+  render();saveToStorage();
+  if(ev&&ev.target)flashButton(ev.target,e.priority?'✓ Added':'✓ Removed');
 }
 
 // ── PERSISTENCE ──
@@ -1007,7 +1108,7 @@ function getEventsPayload(){
     id:e.id,venue:e.venue,name:e.name,
     date:e.date?e.date.toISOString().slice(0,10):'',
     endDate:e.endDate?e.endDate.toISOString().slice(0,10):'',
-    note:e.note||'',type:e.type||'regular',isDup:e.isDup||false
+    note:e.note||'',type:e.type||'regular',isDup:e.isDup||false,priority:!!e.priority
   };});
 }
 
@@ -1027,7 +1128,9 @@ function loadFromStorage(){
         events=arr.map(function(r){
           var d=r.date?new Date(r.date+'T12:00:00'):null;
           var de=r.endDate?new Date(r.endDate+'T12:00:00'):d;
-          return{id:r.id,venue:r.venue,name:normalizeEventName(r.name),date:d,endDate:de,note:normalizeNote(r.note||''),type:r.type||'regular',isDup:r.isDup||false};
+          const loaded={id:r.id,venue:r.venue,name:normalizeEventName(r.name),date:d,endDate:de,note:normalizeNote(r.note||''),type:r.type||'regular',isDup:r.isDup||false};
+          loaded.priority=typeof r.priority==='boolean'?r.priority:shouldDefaultPriority(loaded);
+          return loaded;
         });
         return true;
       }
@@ -1152,7 +1255,9 @@ function loadDefaultEvents(){
   raw.forEach(r=>{
     const d=parseDate(r.d||'');
     const de=parseDate(r.de||'')||d; // if no end date, use start date so range block always shows
-    events.push({id:uid(),venue:r.v,name:normalizeEventName(r.n),date:d,endDate:de,note:normalizeNote(r.note||''),type:r.t||'regular'});
+    const ev={id:uid(),venue:r.v,name:normalizeEventName(r.n),date:d,endDate:de,note:normalizeNote(r.note||''),type:r.t||'regular'};
+    ev.priority=!!r.priority||shouldDefaultPriority(ev);
+    events.push(ev);
   });
 }
 if(!loadFromStorage()){
@@ -1209,14 +1314,11 @@ function render(){
 
 function mkFeaturedSection(){
   if(currentVenue!=='ALL'||currentFilter!=='upcoming'||searchTerm)return'';
-  const featured=events
-    .filter(e=>!isPast(e)&&(e.type==='big'||/fact sheet/i.test(e.note||'')||isSoon(e)))
-    .sort((a,b)=>getPriorityScore(b)-getPriorityScore(a)||(a.date||new Date(2999,0,1))-(b.date||new Date(2999,0,1)))
-    .slice(0,6);
+  const featured=getPriorityEvents(events).slice(0,6);
   if(!featured.length)return'';
   return `<section class="featured-panel">
     <div class="featured-head">
-      <div><div class="featured-title">Priority Highlights</div><div class="featured-sub">Big events, fact sheets, and near-term items to review first.</div></div>
+      <div><div class="featured-title">Priority Highlights</div><div class="featured-sub">Manually selected events only. Use Add Priority / Remove Priority to control this list.</div></div>
       <div style="font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;">${featured.length} highlighted</div>
     </div>
     <div class="featured-grid">${featured.map(mkFeaturedCard).join('')}</div>
@@ -1230,6 +1332,7 @@ function mkFeaturedCard(e){
     <div class="featured-date">${date}</div>
     <div class="featured-name">${e.type==='big'?'⭐ ':''}${e.name}</div>
     <div class="featured-venue">${formatVenueName(e.venue)}${note}</div>
+    ${!IS_VIEW?`<div class="featured-actions"><button class="btn btn-ghost btn-sm" onclick="togglePriority('${e.id}',event)">Remove</button></div>`:''}
   </div>`;
 }
 
@@ -1238,6 +1341,7 @@ function mkCard(e){
   let cls='event-card';
   if(past)cls+=' is-past';if(tod)cls+=' is-today';if(soon)cls+=' is-soon';
   if(e.isDup)cls+=' is-dup-card';
+  if(isPriority(e)&&!past)cls+=' is-priority-card';
   if(selectedIds.has(e.id))cls+=' selected';
   const hasRange=e.date&&e.endDate&&e.date.getTime()!==e.endDate.getTime();
   const crossMonth=hasRange&&e.date.getMonth()!==e.endDate.getMonth();
@@ -1249,6 +1353,7 @@ function mkCard(e){
   }
   let badges='';
   if(e.isDup)badges+='<span class="badge badge-dup">⚠ Possible Duplicate</span>';
+  if(isPriority(e)&&!past)badges+='<span class="badge badge-priority">⭐ Priority</span>';
   if(e.type==='big')badges+='<span class="badge badge-big">⭐ Big</span>';
   if(/fact sheet/i.test(e.note||''))badges+='<span class="badge badge-fact">📄 Fact Sheet</span>';
   if(!e.date&&e.type!=='recurring')badges+='<span class="badge badge-tbd">Date TBD</span>';
@@ -1258,6 +1363,9 @@ function mkCard(e){
   let actions='';
   if(!IS_VIEW){
     actions=`<div class="event-actions">
+      <button class="btn btn-outline btn-sm" onclick="openEditEvent('${e.id}')">Edit</button>
+      <button class="btn btn-ghost btn-sm" onclick="togglePriority('${e.id}',event)">${isPriority(e)?'Remove Priority':'Add Priority'}</button>
+      <button class="btn btn-ghost btn-sm" onclick="copyEventLine('${e.id}',event)">Copy Line</button>
       ${e.isDup?`<button class="btn btn-sm" style="font-size:10px;background:transparent;border:1px solid rgba(180,140,0,0.4);color:#b08800;border-radius:4px;padding:4px 10px;cursor:pointer;" onclick="clearDupFlag('${e.id}')">✓ Clear Flag</button>`:''}
       ${!past?`<button class="btn btn-ghost btn-sm" onclick="markDone('${e.id}')">Mark Done</button>`:''}
       <button class="btn btn-danger btn-sm" onclick="delEv('${e.id}')">Delete</button>
@@ -1314,9 +1422,11 @@ function addEvent(){
   if(_dup&&!confirm('⚠️ "'+name+'" at '+formatVenueName(_venue)+' on the same date already exists.\n\nAdd anyway? It will be flagged as a possible duplicate.'))return;
   const newEv={id:uid(),venue:_venue,name,date:_d,endDate:_de,
     note:normalizeNote(document.getElementById('f-note').value.trim()),
-    type:document.getElementById('f-type').value,isDup:isDupFlag};
+    type:document.getElementById('f-type').value,isDup:isDupFlag,
+    priority:document.getElementById('f-priority')?document.getElementById('f-priority').checked:false};
   events.push(newEv);
   ['f-name','f-note','f-date','f-date-end'].forEach(id=>document.getElementById(id).value='');
+  const fp=document.getElementById('f-priority'); if(fp)fp.checked=false;
   closeAdd();render();saveToStorage();
   // Pulse-highlight if it was a dup
   if(isDupFlag){
@@ -1332,7 +1442,119 @@ function markDone(id){
   e.date=new Date(y.getFullYear(),y.getMonth(),y.getDate());render();saveToStorage();
 }
 function delEv(id){if(!confirm('Delete this event?'))return;events=events.filter(e=>e.id!==id);selectedIds.delete(id);render();saveToStorage();}
-function clearDupFlag(id){const e=events.find(x=>x.id===id);if(e){e.isDup=false;render();saveToStorage();}}
+function dateToInputValue(d){
+  if(!d)return'';
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,'0');
+  const day=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+function buildEventVenueOptions(selected){
+  const groups = [
+    ['PACE Properties', DEFAULT_PACE_PROPS],
+    ['Las Vegas', DEFAULT_LV_PROPS],
+    ['Other / Seasonal', DEFAULT_OTHER_PROPS]
+  ];
+  const tracked = new Set(groups.flatMap(g=>g[1]));
+  const customList = typeof customVenues!=='undefined' ? customVenues : [];
+  const extras = VENUES_ORDER.filter(v=>!tracked.has(v));
+  customList.forEach(cv=>{ if(!extras.includes(cv.name)&&!tracked.has(cv.name)) extras.push(cv.name); });
+  let html='';
+  groups.forEach(([label,vals])=>{
+    html+=`<optgroup label="${label}">`;
+    vals.forEach(v=>{html+=`<option value="${v}" ${v===selected?'selected':''}>${formatVenueName(v)}</option>`;});
+    html+='</optgroup>';
+  });
+  if(extras.length){
+    html+='<optgroup label="Custom Venues">';
+    extras.forEach(v=>{html+=`<option value="${v}" ${v===selected?'selected':''}>${formatVenueName(v)}</option>`;});
+    html+='</optgroup>';
+  }
+  return html;
+}
+function openEditEvent(id){
+  if(IS_VIEW)return;
+  const e=events.find(x=>x.id===id);if(!e)return;
+  document.getElementById('edit-event-id').value=e.id;
+  document.getElementById('edit-venue').innerHTML=buildEventVenueOptions(e.venue);
+  document.getElementById('edit-venue').value=e.venue;
+  document.getElementById('edit-date').value=dateToInputValue(e.date);
+  document.getElementById('edit-date-end').value=e.endDate&&e.date&&e.endDate.getTime()!==e.date.getTime()?dateToInputValue(e.endDate):'';
+  document.getElementById('edit-name').value=e.name||'';
+  document.getElementById('edit-note').value=e.note||'';
+  document.getElementById('edit-type').value=e.type||'regular';
+  const ep=document.getElementById('edit-priority'); if(ep)ep.checked=isPriority(e);
+  updateEditPreview();
+  document.getElementById('editEventModal').classList.add('open');
+  setTimeout(()=>document.getElementById('edit-name').focus(),80);
+}
+function closeEditEventModal(){document.getElementById('editEventModal').classList.remove('open');}
+function getEditEventDraft(){
+  const d=parseDate(document.getElementById('edit-date').value);
+  const de=parseDate(document.getElementById('edit-date-end').value)||d;
+  return {
+    id:document.getElementById('edit-event-id').value,
+    venue:document.getElementById('edit-venue').value,
+    name:normalizeEventName(document.getElementById('edit-name').value.trim()),
+    date:d,
+    endDate:de,
+    note:normalizeNote(document.getElementById('edit-note').value.trim()),
+    type:document.getElementById('edit-type').value||'regular',
+    priority:document.getElementById('edit-priority')?document.getElementById('edit-priority').checked:false
+  };
+}
+function updateEditPreview(){
+  const draft=getEditEventDraft();
+  const line=eventLineText(draft);
+  const el=document.getElementById('edit-preview-line');
+  if(el)el.textContent=line.replace(' - ',' - ') || 'Date - Event';
+}
+function saveEditedEvent(){
+  const draft=getEditEventDraft();
+  const e=events.find(x=>x.id===draft.id);if(!e)return;
+  if(!draft.name){alert('Please enter an event name.');return;}
+  const dup=events.find(x=>{
+    if(x.id===draft.id)return false;
+    const nameMatch=(x.name||'').trim().toLowerCase()===draft.name.toLowerCase();
+    const venueMatch=x.venue===draft.venue;
+    const dateMatch=(!x.date&&!draft.date)||(x.date&&draft.date&&x.date.toDateString()===draft.date.toDateString());
+    return nameMatch&&venueMatch&&dateMatch;
+  });
+  if(dup&&!confirm('⚠️ Another event with the same venue, name, and start date already exists.\n\nSave anyway and flag it as a possible duplicate?'))return;
+  e.venue=draft.venue;
+  e.name=draft.name;
+  e.date=draft.date;
+  e.endDate=draft.endDate;
+  e.note=draft.note;
+  e.type=draft.type;
+  e.priority=!!draft.priority;
+  e.isDup=!!dup;
+  closeEditEventModal();
+  render();
+  saveToStorage();
+  setTimeout(()=>{
+    const card=document.getElementById('card-'+e.id);
+    if(card){card.classList.add('is-dup-highlight');setTimeout(()=>card.classList.remove('is-dup-highlight'),3500);}
+  },120);
+}
+function deleteEditedEvent(){
+  const id=document.getElementById('edit-event-id').value;
+  const e=events.find(x=>x.id===id);if(!e)return;
+  if(!confirm('Delete this event?'))return;
+  events=events.filter(x=>x.id!==id);
+  selectedIds.delete(id);
+  closeEditEventModal();
+  render();
+  saveToStorage();
+}
+function copyEventLine(id,ev){
+  const e=events.find(x=>x.id===id);if(!e)return;
+  navigator.clipboard.writeText(eventLineText(e)).then(()=>flashButton(ev&&ev.target?ev.target:null));
+}
+function copyEditedEventLine(){
+  const line=eventLineText(getEditEventDraft());
+  navigator.clipboard.writeText(line).then(()=>flashButton(event.target));
+}
 
 // ── SELECT MODE ──
 function toggleSelectMode(){
@@ -1369,6 +1591,11 @@ function selectAll(){
   render();updateBulkCount();
 }
 function deselectAll(){selectedIds.clear();render();updateBulkCount();}
+function setSelectedPriority(value){
+  if(!selectedIds.size){alert('No events selected.');return;}
+  events.forEach(e=>{if(selectedIds.has(e.id))e.priority=!!value;});
+  saveToStorage();render();updateBulkCount();
+}
 function updateBulkCount(){
   const el=document.getElementById('bulkCount');
   if(el)el.textContent=selectedIds.size;
@@ -1393,6 +1620,7 @@ function removePastEvents(){
 function openBulk(){
   document.getElementById('bulkModal').classList.add('open');
   document.getElementById('bulkText').value='';
+  const bp=document.getElementById('bulk-priority'); if(bp)bp.checked=false;
   document.getElementById('bulkPreview').style.display='none';
 }
 function closeBulk(){document.getElementById('bulkModal').classList.remove('open');}
@@ -1445,6 +1673,7 @@ function parseBulkLine(line){
 }
 function previewBulk(){
   const venue=document.getElementById('bulk-venue').value;
+  const bulkPriority=document.getElementById('bulk-priority')?document.getElementById('bulk-priority').checked:false;
   const lines=document.getElementById('bulkText').value.split('\n').filter(l=>l.trim());
   const preview=document.getElementById('bulkPreview');
   if(!lines.length){preview.style.display='none';return;}
@@ -1470,6 +1699,7 @@ function previewBulk(){
 }
 function confirmBulk(){
   const venue=document.getElementById('bulk-venue').value;
+  const bulkPriority=document.getElementById('bulk-priority')?document.getElementById('bulk-priority').checked:false;
   const lines=document.getElementById('bulkText').value.split('\n').filter(l=>l.trim());
   if(!lines.length){alert('Please enter at least one event.');return;}
   let added=0;
@@ -1487,7 +1717,9 @@ function confirmBulk(){
     });
     const newId=uid();
     // Always add — duplicates get a isDup flag so they're visually marked
-    events.push({id:newId,venue,name:p.name,date:p.date,endDate:p.endDate||p.date,note:p.note,type:p.type,isDup:!!existing});
+    const addedEvent={id:newId,venue,name:p.name,date:p.date,endDate:p.endDate||p.date,note:p.note,type:p.type,isDup:!!existing};
+    addedEvent.priority=bulkPriority||shouldDefaultPriority(addedEvent);
+    events.push(addedEvent);
     added++;
     if(existing){dupNames.push(p.name);newDupIds.push(newId);}
   });
@@ -1739,7 +1971,7 @@ function buildReport(){
   if(reportFocus==='next30')evs=events.filter(e=>withinDays(e,30));
   if(reportFocus==='next60')evs=events.filter(e=>withinDays(e,60));
   if(reportFocus==='next90')evs=events.filter(e=>withinDays(e,90));
-  if(reportFocus==='priority')evs=events.filter(e=>!isPast(e)&&(e.type==='big'||hasFactSheet(e)||isSoon(e)||(!e.date&&e.type!=='recurring')));
+  if(reportFocus==='priority')evs=getPriorityEvents(events);
   if(reportFocus==='factsheet')evs=events.filter(e=>!isPast(e)&&hasFactSheet(e));
   if(reportFocus==='tbd')evs=events.filter(e=>!isPast(e)&&!e.date&&e.type!=='recurring');
   if(reportFocus==='completed')evs=events.filter(e=>isPast(e));
@@ -1910,7 +2142,7 @@ function buildReport(){
       ${metricCard('Dates TBD',tbdCount,'needs follow-up')}
     </tr></table>
   </td></tr>`;
-  const priorityItems=evs.filter(e=>!isPast(e)&&(e.type==='big'||noteHasFact(e)||isSoon(e)||(!e.date&&e.type!=='recurring'))).sort((a,b)=>getPriorityScore(b)-getPriorityScore(a)||(a.date||new Date(2999,0,1))-(b.date||new Date(2999,0,1))).slice(0,6);
+  const priorityItems=getPriorityEvents(evs).slice(0,6);
   const priorityRows=priorityItems.map((e,i)=>{
     return `<tr>
       <td valign="top" style="padding:8px 8px;border-top:${i?'1px solid #eadfca':'0'};font-family:${FONT_SANS};font-size:12px;color:#222222;line-height:1.55;">
@@ -1922,7 +2154,7 @@ function buildReport(){
     <table role="presentation" width="100%" bgcolor="#fffaf0" style="background:#fffaf0;border:1px solid #e7d7aa;border-left:6px solid ${accent};border-collapse:collapse;">
       <tr><td style="padding:12px 16px 2px 16px;">
         <div style="font-family:${FONT_SANS};font-size:10px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;color:${accent};">Priority Highlights</div>
-        <div style="font-family:${FONT_SANS};font-size:11px;color:#777777;margin-top:4px;">Clean event lines only — ready to copy into WhatsApp or email.</div>
+        <div style="font-family:${FONT_SANS};font-size:11px;color:#777777;margin-top:4px;">Manually selected priority events only — ready to copy into WhatsApp or email.</div>
       </td></tr>
       <tr><td style="padding:4px 16px 12px 16px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${priorityRows}</table></td></tr>
     </table>
@@ -1977,9 +2209,11 @@ function buildReport(){
   const upEl=document.getElementById('rstat-upcoming');
   const bgEl=document.getElementById('rstat-big');
   const rcEl=document.getElementById('rstat-recurring');
+  const prEl=document.getElementById('rstat-priority');
   if(upEl) upEl.textContent=evs.filter(e=>!isPast(e)).length;
   if(bgEl) bgEl.textContent=evs.filter(e=>e.type==='big').length;
   if(rcEl) rcEl.textContent=evs.filter(e=>e.type==='recurring').length;
+  if(prEl) prEl.textContent=getPriorityEvents(evs).length;
   return {html,title,dateStr,to,evs};
 }
 
@@ -2060,8 +2294,7 @@ function copySubjectLine(){
 }
 function copyPriorityText(){
   const {evs,title,dateStr,to}=buildReport();
-  const priority=evs.filter(e=>!isPast(e)&&(e.type==='big'||/fact sheet/i.test(e.note||'')||isSoon(e)||(!e.date&&e.type!=='recurring')))
-    .sort((a,b)=>getPriorityScore(b)-getPriorityScore(a)||((a.date||new Date(2999,0,1))-(b.date||new Date(2999,0,1))));
+  const priority=getPriorityEvents(evs);
   const text=priority.length
     ? buildWhatsAppText(priority, `${title} — PRIORITY HIGHLIGHTS`, dateStr, to)
     : `No priority events found for the current report view.`;

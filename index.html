@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PACE Property Events</title>
+<title>PACE Gaming Events Update</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -107,9 +107,91 @@
   --header-bg:#161e26;--card-bg:#ffffff;--card-border:rgba(74,100,120,0.13);
   --main-bg:#f5f7f9;--stat-bg:#ffffff;--toolbar-bg:#ffffff;--body-bg:#eef2f5;
 }
+
+/* Champagne — light luxury with soft gold */
+[data-theme="champagne"]{
+  --deep:#ffffff;--surface:#fbf7ee;--surface2:#f1e7d2;--surface3:#e6d6b8;
+  --gold:#9a6a18;--gold-light:#c8942c;--gold-bright:#e5b64a;--gold-dim:#8a5c12;--gold-glow:rgba(154,106,24,0.08);
+  --text:#231a0d;--text-dim:#5a4526;--muted:#8a7758;
+  --border:rgba(154,106,24,0.16);--border-bright:rgba(154,106,24,0.34);
+  --sidebar-bg:#20180c;--sidebar-text:#e8d9b8;--sidebar-muted:#8a7350;--sidebar-active:#e1b955;
+  --header-bg:#171008;--card-bg:#ffffff;--card-border:rgba(154,106,24,0.14);
+  --main-bg:#fbf7ee;--stat-bg:#ffffff;--toolbar-bg:#ffffff;--body-bg:#f4ecdc;
+}
+/* Emerald — casino green + crisp ivory */
+[data-theme="emerald"]{
+  --deep:#ffffff;--surface:#f1f8f4;--surface2:#dff0e6;--surface3:#cce5d6;
+  --gold:#0f6b3f;--gold-light:#168a52;--gold-bright:#22a96b;--gold-dim:#0c5733;--gold-glow:rgba(15,107,63,0.08);
+  --text:#0d2418;--text-dim:#234d36;--muted:#5c7f6c;
+  --border:rgba(15,107,63,0.16);--border-bright:rgba(15,107,63,0.34);
+  --sidebar-bg:#092017;--sidebar-text:#cae6d6;--sidebar-muted:#5d856e;--sidebar-active:#39c982;
+  --header-bg:#071910;--card-bg:#ffffff;--card-border:rgba(15,107,63,0.14);
+  --main-bg:#f1f8f4;--stat-bg:#ffffff;--toolbar-bg:#ffffff;--body-bg:#e8f3ed;
+}
+/* Ocean — deep resort blue */
+[data-theme="ocean"]{
+  --deep:#ffffff;--surface:#f0f7fb;--surface2:#dff0f7;--surface3:#cbe5ef;
+  --gold:#075f7a;--gold-light:#0d7fa3;--gold-bright:#1ca3cc;--gold-dim:#064f65;--gold-glow:rgba(7,95,122,0.08);
+  --text:#071f2a;--text-dim:#244d5e;--muted:#5f7f8c;
+  --border:rgba(7,95,122,0.16);--border-bright:rgba(7,95,122,0.34);
+  --sidebar-bg:#061d29;--sidebar-text:#cce4ed;--sidebar-muted:#5e7f8b;--sidebar-active:#45bfe8;
+  --header-bg:#041722;--card-bg:#ffffff;--card-border:rgba(7,95,122,0.14);
+  --main-bg:#f0f7fb;--stat-bg:#ffffff;--toolbar-bg:#ffffff;--body-bg:#e6f1f7;
+}
+/* Royal — bold purple + clean white */
+[data-theme="royal"]{
+  --deep:#ffffff;--surface:#f6f2fb;--surface2:#eadff7;--surface3:#dcccf0;
+  --gold:#44207a;--gold-light:#6130a7;--gold-bright:#8046d3;--gold-dim:#361764;--gold-glow:rgba(68,32,122,0.08);
+  --text:#1c0f30;--text-dim:#43265f;--muted:#735c8f;
+  --border:rgba(68,32,122,0.16);--border-bright:rgba(68,32,122,0.34);
+  --sidebar-bg:#1b0e2d;--sidebar-text:#ddcdef;--sidebar-muted:#765d93;--sidebar-active:#aa78ef;
+  --header-bg:#140a23;--card-bg:#ffffff;--card-border:rgba(68,32,122,0.14);
+  --main-bg:#f6f2fb;--stat-bg:#ffffff;--toolbar-bg:#ffffff;--body-bg:#eee7f6;
+}
+/* Rosewood — rich pink-red hospitality */
+[data-theme="rosewood"]{
+  --deep:#ffffff;--surface:#fbf3f5;--surface2:#f3e0e6;--surface3:#e8cbd5;
+  --gold:#8a2346;--gold-light:#ad315c;--gold-bright:#cf4475;--gold-dim:#741b39;--gold-glow:rgba(138,35,70,0.08);
+  --text:#2a0e18;--text-dim:#572839;--muted:#875d6d;
+  --border:rgba(138,35,70,0.16);--border-bright:rgba(138,35,70,0.34);
+  --sidebar-bg:#261019;--sidebar-text:#edd1da;--sidebar-muted:#865568;--sidebar-active:#e4789c;
+  --header-bg:#1b0a11;--card-bg:#ffffff;--card-border:rgba(138,35,70,0.14);
+  --main-bg:#fbf3f5;--stat-bg:#ffffff;--toolbar-bg:#ffffff;--body-bg:#f4e7eb;
+}
+/* Copper — warm luxury with stronger contrast */
+[data-theme="copper"]{
+  --deep:#ffffff;--surface:#fbf3ec;--surface2:#f0dfcf;--surface3:#e4c9b0;
+  --gold:#965025;--gold-light:#b66532;--gold-bright:#d27f45;--gold-dim:#7c3f1b;--gold-glow:rgba(150,80,37,0.08);
+  --text:#28160b;--text-dim:#57331d;--muted:#835f47;
+  --border:rgba(150,80,37,0.17);--border-bright:rgba(150,80,37,0.35);
+  --sidebar-bg:#251409;--sidebar-text:#edd6c2;--sidebar-muted:#855f45;--sidebar-active:#e09359;
+  --header-bg:#1b0d05;--card-bg:#ffffff;--card-border:rgba(150,80,37,0.14);
+  --main-bg:#fbf3ec;--stat-bg:#ffffff;--toolbar-bg:#ffffff;--body-bg:#f2e5d8;
+}
+/* Graphite — polished dark neutral */
+[data-theme="graphite"]{
+  --deep:#111318;--surface:#1b1f27;--surface2:#252b35;--surface3:#303846;
+  --gold:#9aa6b2;--gold-light:#b9c4cf;--gold-bright:#d2dbe3;--gold-dim:#7f8a96;--gold-glow:rgba(154,166,178,0.10);
+  --text:#f4f6f8;--text-dim:#c7ced6;--muted:#8a95a0;
+  --border:rgba(154,166,178,0.18);--border-bright:rgba(154,166,178,0.36);
+  --sidebar-bg:#0d1015;--sidebar-text:#d3d8df;--sidebar-muted:#777f8a;--sidebar-active:#c5d1dc;
+  --header-bg:#080a0f;--card-bg:#181d25;--card-border:rgba(154,166,178,0.16);
+  --main-bg:#12161d;--stat-bg:#181d25;--toolbar-bg:#151a22;--body-bg:#12161d;
+}
+/* Ice — very light blue with soft contrast */
+[data-theme="ice"]{
+  --deep:#ffffff;--surface:#f7fbff;--surface2:#e8f3fb;--surface3:#d8eaf6;
+  --gold:#577c9a;--gold-light:#6e9cbe;--gold-bright:#8bbce0;--gold-dim:#496b85;--gold-glow:rgba(87,124,154,0.06);
+  --text:#182632;--text-dim:#3d5162;--muted:#718796;
+  --border:rgba(87,124,154,0.15);--border-bright:rgba(87,124,154,0.3);
+  --sidebar-bg:#172532;--sidebar-text:#d3e4ee;--sidebar-muted:#68808e;--sidebar-active:#9cc8e4;
+  --header-bg:#101c28;--card-bg:#ffffff;--card-border:rgba(87,124,154,0.13);
+  --main-bg:#f7fbff;--stat-bg:#ffffff;--toolbar-bg:#ffffff;--body-bg:#eef6fb;
+}
+
 /* Theme switcher pill */
-.theme-switcher{display:flex;align-items:center;gap:5px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:3px 6px;}
-.theme-dot{width:18px;height:18px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all 0.15s;position:relative;}
+.theme-switcher{display:flex;align-items:center;justify-content:flex-end;gap:5px;flex-wrap:wrap;max-width:430px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:4px 7px;}
+.theme-dot{width:17px;height:17px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all 0.15s;position:relative;}
 .theme-dot:hover{transform:scale(1.2);}
 .theme-dot.active{border-color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,0.4);}
 .theme-dot[data-t="gold"]{background:linear-gradient(135deg,#9e7220,#e8c050);}
@@ -122,6 +204,14 @@
 .theme-dot[data-t="lavender"]{background:linear-gradient(135deg,#1c1729,#ab9bd2);}
 .theme-dot[data-t="terracotta"]{background:linear-gradient(135deg,#20120c,#e8a374);}
 .theme-dot[data-t="mist"]{background:linear-gradient(135deg,#161e26,#8cb0c8);}
+.theme-dot[data-t="ice"]{background:linear-gradient(135deg,#101c28,#8bbce0);}
+.theme-dot[data-t="graphite"]{background:linear-gradient(135deg,#080a0f,#d2dbe3);}
+.theme-dot[data-t="copper"]{background:linear-gradient(135deg,#251409,#d27f45);}
+.theme-dot[data-t="rosewood"]{background:linear-gradient(135deg,#261019,#cf4475);}
+.theme-dot[data-t="royal"]{background:linear-gradient(135deg,#1b0e2d,#8046d3);}
+.theme-dot[data-t="ocean"]{background:linear-gradient(135deg,#061d29,#1ca3cc);}
+.theme-dot[data-t="emerald"]{background:linear-gradient(135deg,#092017,#22a96b);}
+.theme-dot[data-t="champagne"]{background:linear-gradient(135deg,#20180c,#e1b955);}
 /* Duplicate highlight */
 .bulk-row.is-dup{background:#fff8e0;border-left:3px solid #d4a830;color:#7a5800;}
 .bulk-row.is-dup .dup-badge{display:inline-block;background:#d4a830;color:#fff;font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:1px 5px;border-radius:3px;margin-left:5px;vertical-align:middle;}
@@ -316,6 +406,37 @@ select option{background:var(--card-bg);color:var(--text);}
 .report-tab-btn.active{background:rgba(201,168,76,0.18);border-color:#c9a84c;color:#c9a84c;}
 .report-tab-panel{display:flex;flex-direction:column;}
 .draft-wrap{font-family:'Inter',system-ui,sans-serif;font-size:13px;color:#1a1612;line-height:1.8;padding:20px 24px;}
+
+/* ── TEAM NEWSLETTER POLISH ── */
+body.view-only .theme-switcher,
+body.view-only .admin-only{display:none!important;}
+.newsletter-hero{margin:18px 24px 0;padding:22px 24px;border:1px solid var(--border);border-radius:12px;background:linear-gradient(135deg,#ffffff 0%,var(--surface) 58%,var(--surface2) 100%);display:flex;align-items:center;justify-content:space-between;gap:22px;box-shadow:0 10px 28px rgba(80,58,20,0.08);}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.newsletter-hero h1{font-family:'Lora',Georgia,serif;font-size:28px;line-height:1.12;color:var(--text);margin:0 0 7px;}
+.newsletter-hero p{font-size:13px;color:var(--text-dim);max-width:700px;margin:0;line-height:1.65;}
+.hero-meta{min-width:220px;border-left:3px solid var(--gold);padding:10px 0 10px 16px;background:rgba(255,255,255,.42);border-radius:0 8px 8px 0;}
+.hero-meta span{display:block;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+.hero-meta strong{display:block;font-family:'Lora',Georgia,serif;font-size:16px;color:var(--gold);margin:2px 0 9px;}
+.search-wrap{display:flex;align-items:center;gap:7px;min-width:280px;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:6px 11px;color:var(--muted);}
+.search-wrap input{border:0!important;background:transparent!important;box-shadow:none!important;padding:0!important;font-size:13px;color:var(--text);}
+.search-wrap input::placeholder{color:var(--muted);}
+.featured-panel{margin:0 0 18px;padding:16px;border:1px solid var(--border);border-radius:12px;background:linear-gradient(135deg,#fffdf7 0%,#ffffff 100%);box-shadow:0 8px 24px rgba(80,58,20,0.06);}
+.featured-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:12px;}
+.featured-title{font-family:'Lora',Georgia,serif;font-size:18px;font-weight:700;color:var(--text);}
+.featured-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.featured-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;}
+.featured-card{border:1px solid rgba(160,120,32,.18);border-radius:9px;background:#fff;padding:12px 13px;min-height:108px;position:relative;overflow:hidden;}
+.featured-card:before{content:'';position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));}
+.featured-date{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.featured-name{font-size:13px;font-weight:750;line-height:1.35;color:var(--text);margin-bottom:6px;}
+.featured-venue{font-size:11px;color:var(--muted);}
+.badge-fact{background:rgba(20,70,110,.10);color:#14476b;border:1px solid rgba(20,70,110,.22);}
+.badge-tbd{background:rgba(90,90,90,.10);color:#555;border:1px solid rgba(90,90,90,.20);}
+.event-name{white-space:normal;}
+.event-card{grid-template-columns:88px minmax(0,1fr) auto;}
+.event-note{display:inline-block;padding:2px 7px;border-radius:999px;background:rgba(160,120,32,.08);border:1px solid rgba(160,120,32,.14);}
+@media (max-width:980px){.newsletter-hero{flex-direction:column;align-items:flex-start}.hero-meta{width:100%;border-left:0;border-top:3px solid var(--gold);padding:12px 0 0}.toolbar{flex-wrap:wrap}.toolbar-title{flex-basis:100%}.search-wrap{min-width:100%;}.featured-grid{grid-template-columns:1fr}.event-card{grid-template-columns:66px 1fr}.header-actions{flex-wrap:wrap}.logo-suits{display:none}}
+
 </style>
 </head>
 <body>
@@ -340,6 +461,14 @@ select option{background:var(--card-bg);color:var(--text);}
     <div class="theme-dot" data-t="lavender" onclick="setTheme('lavender')" title="Lavender"></div>
     <div class="theme-dot" data-t="terracotta" onclick="setTheme('terracotta')" title="Terracotta"></div>
     <div class="theme-dot" data-t="mist" onclick="setTheme('mist')" title="Mist"></div>
+    <div class="theme-dot" data-t="champagne" onclick="setTheme('champagne')" title="Champagne"></div>
+    <div class="theme-dot" data-t="emerald" onclick="setTheme('emerald')" title="Emerald"></div>
+    <div class="theme-dot" data-t="ocean" onclick="setTheme('ocean')" title="Ocean"></div>
+    <div class="theme-dot" data-t="royal" onclick="setTheme('royal')" title="Royal"></div>
+    <div class="theme-dot" data-t="rosewood" onclick="setTheme('rosewood')" title="Rosewood"></div>
+    <div class="theme-dot" data-t="copper" onclick="setTheme('copper')" title="Copper"></div>
+    <div class="theme-dot" data-t="graphite" onclick="setTheme('graphite')" title="Graphite"></div>
+    <div class="theme-dot" data-t="ice" onclick="setTheme('ice')" title="Ice"></div>
   </div>
 </header>
 
@@ -352,6 +481,7 @@ select option{background:var(--card-bg);color:var(--text);}
     <div class="sidebar-section">
       <div class="sidebar-label">PACE Properties</div>
       <button class="venue-btn" onclick="filterVenue('BAHA MAR')" id="venue-BAHA MAR">🏖 Baha Mar <span class="venue-count" id="count-BAHA MAR">0</span></button>
+      <button class="venue-btn" onclick="filterVenue('CASINO ROYALE')" id="venue-CASINO ROYALE">👑 Casino Royale <span class="venue-count" id="count-CASINO ROYALE">0</span></button>
       <button class="venue-btn" onclick="filterVenue('HARD ROCK PUNTA CANA')" id="venue-HARD ROCK PUNTA CANA">🎸 HR Punta Cana <span class="venue-count" id="count-HARD ROCK PUNTA CANA">0</span></button>
       <button class="venue-btn" onclick="filterVenue('HARD ROCK HOLLYWOOD')" id="venue-HARD ROCK HOLLYWOOD">🎸 HR Hollywood <span class="venue-count" id="count-HARD ROCK HOLLYWOOD">0</span></button>
       <button class="venue-btn" onclick="filterVenue('MOHEGAN SUN')" id="venue-MOHEGAN SUN">☀ Mohegan Sun CT <span class="venue-count" id="count-MOHEGAN SUN">0</span></button>
@@ -362,6 +492,7 @@ select option{background:var(--card-bg);color:var(--text);}
       <div class="sidebar-label">Las Vegas</div>
       <button class="venue-btn" onclick="filterVenue('ALLEGIANT STADIUM')" id="venue-ALLEGIANT STADIUM">🏟 Allegiant Stadium <span class="venue-count" id="count-ALLEGIANT STADIUM">0</span></button>
       <button class="venue-btn" onclick="filterVenue('DURANGO')" id="venue-DURANGO">🎰 Durango <span class="venue-count" id="count-DURANGO">0</span></button>
+      <button class="venue-btn" onclick="filterVenue('GREEN VALLEY')" id="venue-GREEN VALLEY">🌿 Green Valley <span class="venue-count" id="count-GREEN VALLEY">0</span></button>
       <button class="venue-btn" onclick="filterVenue('MGM GRAND')" id="venue-MGM GRAND">💎 MGM Grand <span class="venue-count" id="count-MGM GRAND">0</span></button>
       <button class="venue-btn" onclick="filterVenue('RED ROCK')" id="venue-RED ROCK">🏔 Red Rock <span class="venue-count" id="count-RED ROCK">0</span></button>
       <button class="venue-btn" onclick="filterVenue('SUNSET STATION')" id="venue-SUNSET STATION">🌅 Sunset Station <span class="venue-count" id="count-SUNSET STATION">0</span></button>
@@ -379,7 +510,7 @@ select option{background:var(--card-bg);color:var(--text);}
       <div class="sidebar-label">Custom Venues</div>
       <div id="customVenueButtons"></div>
     </div>
-    <div class="sidebar-section">
+    <div class="sidebar-section admin-only">
       <div style="padding:6px 16px 6px;">
         <button class="btn btn-ghost btn-sm" onclick="openAddVenueModal()" style="width:100%;text-align:left;font-size:11px;">＋ Add New Venue</button>
       </div>
@@ -387,6 +518,19 @@ select option{background:var(--card-bg);color:var(--text);}
   </aside>
 
   <main class="main">
+    <section class="newsletter-hero">
+      <div>
+        <div class="hero-eyebrow">PACE Gaming Team Newsletter</div>
+        <h1>Property Events Dashboard</h1>
+        <p>Use this view to track upcoming property events, VIP opportunities, fact sheets, recurring promotions, and seasonal items that still need dates.</p>
+      </div>
+      <div class="hero-meta">
+        <span>Last Updated</span>
+        <strong id="lastUpdatedLabel">July 10, 2026</strong>
+        <span>Prepared For</span>
+        <strong>PACE Gaming Team</strong>
+      </div>
+    </section>
     <div class="stats-bar">
       <div class="stat"><div class="stat-num" id="stat-total">0</div><div class="stat-label">Total</div></div>
       <div class="stat"><div class="stat-num" id="stat-upcoming">0</div><div class="stat-label">Upcoming</div></div>
@@ -395,10 +539,11 @@ select option{background:var(--card-bg);color:var(--text);}
     </div>
     <div class="toolbar">
       <div class="toolbar-title" id="toolbarTitle">All Venues</div>
+      <div class="search-wrap"><span>🔎</span><input id="eventSearch" type="search" placeholder="Search event, venue, note..." oninput="setSearch(this.value)"></div>
       <div class="filter-pills">
         <div class="pill" onclick="setFilter('all',this)">All</div>
         <div class="pill active" onclick="setFilter('upcoming',this)">Upcoming</div>
-        <div class="pill past-pill" onclick="setFilter('past',this)">Past</div>
+        <div class="pill past-pill" onclick="setFilter('past',this)">Completed</div>
       </div>
     </div>
     <!-- BULK ACTION BAR -->
@@ -417,6 +562,7 @@ select option{background:var(--card-bg);color:var(--text);}
             <select id="f-venue">
               <optgroup label="PACE Properties">
                 <option value="BAHA MAR">Baha Mar</option>
+                <option value="CASINO ROYALE">Casino Royale</option>
                 <option value="HARD ROCK PUNTA CANA">HR Punta Cana</option>
                 <option value="HARD ROCK HOLLYWOOD">HR Hollywood</option>
                 <option value="MOHEGAN SUN">Mohegan Sun CT</option>
@@ -426,6 +572,7 @@ select option{background:var(--card-bg);color:var(--text);}
               <optgroup label="Las Vegas">
                 <option value="ALLEGIANT STADIUM">Allegiant Stadium</option>
                 <option value="DURANGO">Durango</option>
+                <option value="GREEN VALLEY">Green Valley</option>
                 <option value="MGM GRAND">MGM Grand</option>
                 <option value="RED ROCK">Red Rock</option>
                 <option value="SUNSET STATION">Sunset Station</option>
@@ -447,7 +594,7 @@ select option{background:var(--card-bg);color:var(--text);}
         </div>
         <div class="form-row">
           <div class="form-group"><label class="form-label">Event Name</label><input type="text" id="f-name" placeholder="e.g. $100K Slot Tournament"></div>
-          <div class="form-group"><label class="form-label">Note (optional)</label><input type="text" id="f-note" placeholder="e.g. Fact Sheet available"></div>
+          <div class="form-group"><label class="form-label">Note (optional)</label><input type="text" id="f-note" placeholder="e.g. Fact Sheet Available"></div>
         </div>
         <div class="form-row form-row-3">
           <div class="form-group"><label class="form-label">Type</label>
@@ -480,6 +627,7 @@ select option{background:var(--card-bg);color:var(--text);}
           <select id="bulk-venue">
             <optgroup label="PACE Properties">
               <option value="BAHA MAR">Baha Mar</option>
+              <option value="CASINO ROYALE">Casino Royale</option>
               <option value="HARD ROCK PUNTA CANA">HR Punta Cana</option>
               <option value="HARD ROCK HOLLYWOOD">HR Hollywood</option>
               <option value="MOHEGAN SUN">Mohegan Sun CT</option>
@@ -489,6 +637,7 @@ select option{background:var(--card-bg);color:var(--text);}
             <optgroup label="Las Vegas">
               <option value="ALLEGIANT STADIUM">Allegiant Stadium</option>
               <option value="DURANGO">Durango</option>
+              <option value="GREEN VALLEY">Green Valley</option>
               <option value="MGM GRAND">MGM Grand</option>
               <option value="RED ROCK">Red Rock</option>
               <option value="SUNSET STATION">Sunset Station</option>
@@ -507,7 +656,7 @@ select option{background:var(--card-bg);color:var(--text);}
         </div>
         <div class="form-group">
           <label class="form-label">Paste Events (one per line)</label>
-          <textarea class="bulk-textarea" id="bulkText" placeholder="5/15 - Jazz Night&#10;6/1 - 6/3 - Summer Slot Tournament (Fact Sheet available)&#10;7/4 - Independence Day Show&#10;Recurring - Weekly Poker Night" oninput="previewBulk()"></textarea>
+          <textarea class="bulk-textarea" id="bulkText" placeholder="5/15 - Jazz Night&#10;6/1 - 6/3 - Summer Slot Tournament (Fact Sheet Available)&#10;7/4 - Independence Day Show&#10;Recurring - Weekly Poker Night" oninput="previewBulk()"></textarea>
           <div class="bulk-hint">
             Formats accepted:<br>
             &bull; <strong>Date - Event Name</strong> → e.g. <code>5/15 - Jazz Night</code><br>
@@ -582,28 +731,64 @@ select option{background:var(--card-bg);color:var(--text);}
       <div class="form-group">
         <label class="form-label">Accent Color</label>
         <select id="report-color" onchange="buildReport()">
-          <option value="#14386b">Navy Blue</option>
-          <option value="#8a6a1a">Casino Gold</option>
-          <option value="#6b1414">Casino Red</option>
-          <option value="#14476b">Deep Blue</option>
-          <option value="#2a1460">Royal Purple</option>
-          <option value="#1a4a2e">Emerald</option>
-          <option value="#1a3a4a">Midnight Teal</option>
-          <option value="#3a1a4a">Deep Violet</option>
-          <option value="#4a2a0a">Bourbon Brown</option>
-          <option value="#1a1a1a">Noir Black</option>
-          <option value="#5a1a2a">Crimson Rose</option>
-          <option value="#0a3a3a">Dark Jade</option>
-          <option value="#2a3a1a">Forest Green</option>
-          <option value="#3a3a0a">Antique Olive</option>
-          <option value="#4a1a1a">Mahogany</option>
+          <optgroup label="Executive / Clean">
+            <option value="#14386b">Navy Blue</option>
+            <option value="#1a1a1a">Noir Black</option>
+            <option value="#3a4a5e">Slate Gray</option>
+            <option value="#4a6478">Mist Blue Gray</option>
+            <option value="#0f2742">Executive Midnight</option>
+          </optgroup>
+          <optgroup label="Casino / Luxury">
+            <option value="#8a6a1a">Casino Gold</option>
+            <option value="#a07820">Classic Gold</option>
+            <option value="#6b1414">Casino Red</option>
+            <option value="#4a1a1a">Mahogany</option>
+            <option value="#4a2a0a">Bourbon Brown</option>
+            <option value="#965025">Copper</option>
+            <option value="#b5603a">Terracotta</option>
+            <option value="#7a5a12">Antique Brass</option>
+          </optgroup>
+          <optgroup label="Resort / Property">
+            <option value="#1a4a2e">Emerald</option>
+            <option value="#0f6b3f">Casino Green</option>
+            <option value="#2a3a1a">Forest Green</option>
+            <option value="#5c7a52">Sage Green</option>
+            <option value="#0a3a3a">Dark Jade</option>
+            <option value="#075f7a">Ocean Teal</option>
+            <option value="#14476b">Deep Blue</option>
+            <option value="#3468c8">Sapphire Blue</option>
+          </optgroup>
+          <optgroup label="Bold / VIP">
+            <option value="#2a1460">Royal Purple</option>
+            <option value="#6e5a96">Lavender Purple</option>
+            <option value="#3a1a4a">Deep Violet</option>
+            <option value="#5a1a2a">Crimson Rose</option>
+            <option value="#8a2346">Rosewood</option>
+            <option value="#922438">Burgundy</option>
+            <option value="#3a3a0a">Antique Olive</option>
+          </optgroup>
         </select>
       </div>
       <div class="form-group">
-        <label class="form-label">Layout</label>
+        <label class="form-label">Event Layout</label>
         <select id="report-layout" onchange="buildReport()">
-          <option value="1col">1 Column</option>
-          <option value="2col" selected>2 Columns</option>
+          <option value="1col">Stacked / Email Safe</option>
+          <option value="2col" selected>2 Columns / Compact</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Report Focus</label>
+        <select id="report-focus" onchange="buildReport();if(arrangePanelOpen)renderArrangePanel();">
+          <option value="upcoming" selected>All Upcoming</option>
+          <option value="thismonth">This Month</option>
+          <option value="next7">Next 7 Days</option>
+          <option value="next30">Next 30 Days</option>
+          <option value="next60">Next 60 Days</option>
+          <option value="next90">Next 90 Days</option>
+          <option value="priority">Priority Only</option>
+          <option value="factsheet">Fact Sheets Only</option>
+          <option value="tbd">Date TBD Only</option>
+          <option value="completed">Completed Only</option>
         </select>
       </div>
     </div>
@@ -611,16 +796,37 @@ select option{background:var(--card-bg);color:var(--text);}
     <div style="background:#f2eeff;border-bottom:2px solid rgba(120,80,200,0.18);padding:8px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
       <span style="font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#7040b0;">✉ Email Template</span>
       <select id="draft-template" onchange="applyDraftTemplate()" style="border-color:rgba(120,80,200,0.25);background:#fff;font-size:12px;padding:5px 8px;border-radius:4px;color:#1a1612;">
-        <option value="newsletter">Newsletter</option>
-        <option value="followup">Follow-Up</option>
-        <option value="highlight">Highlights</option>
-        <option value="brief">Brief</option>
-        <option value="vip">VIP Invite</option>
-        <option value="reminder">Reminder</option>
-        <option value="welcome">Welcome / Intro</option>
-        <option value="thankyou">Thank You</option>
+        <optgroup label="Internal Team">
+          <option value="newsletter">Team Newsletter</option>
+          <option value="executive">Executive Summary</option>
+          <option value="weekly">Weekly Planning</option>
+          <option value="monthlyPlanning">Monthly Planning</option>
+          <option value="approval">Review / Approval Needed</option>
+          <option value="brief">Quick Brief</option>
+        </optgroup>
+        <optgroup label="Follow-Up">
+          <option value="followup">General Follow-Up</option>
+          <option value="next7">Next 7 Days Push</option>
+          <option value="factSheet">Fact Sheet Request</option>
+          <option value="tbdFollowup">Date TBD Follow-Up</option>
+          <option value="recap">Completed Event Recap</option>
+        </optgroup>
+        <optgroup label="Client / VIP">
+          <option value="highlight">Event Highlights</option>
+          <option value="vip">VIP Invite</option>
+          <option value="clientInvite">Client Invitation</option>
+          <option value="hostOutreach">Host Outreach</option>
+          <option value="propertySpotlight">Property Spotlight</option>
+          <option value="concierge">Concierge Style</option>
+          <option value="reminder">Reminder</option>
+          <option value="welcome">Welcome / Intro</option>
+          <option value="thankyou">Thank You</option>
+        </optgroup>
       </select>
       <div style="flex:1;"></div>
+      <button class="btn btn-ghost btn-sm" onclick="copySubjectLine()" style="font-size:10px;color:#7040b0;border-color:rgba(120,80,200,0.25);" title="Copy only the subject line from the selected template">Copy Subject</button>
+      <button class="btn btn-ghost btn-sm" onclick="copyPriorityText()" style="font-size:10px;color:#7040b0;border-color:rgba(120,80,200,0.25);" title="Copy only priority events in WhatsApp format">Copy Priority</button>
+      <button class="btn btn-ghost btn-sm" onclick="downloadPlainText()" style="font-size:10px;color:#7040b0;border-color:rgba(120,80,200,0.25);" title="Download the current report as a plain text file">Download TXT</button>
       <button class="btn btn-ghost btn-sm" onclick="resetReportOrder()" style="font-size:10px;color:#8a7a60;" title="Reset venue and event order to default">↺ Reset Order</button>
       <button class="btn btn-outline btn-sm" id="arrangeToggleBtn" onclick="toggleArrangePanel()" style="border-color:rgba(120,80,200,0.35);color:#7040b0;">⠿ Arrange Order</button>
       <span style="font-size:9px;color:#8a7a60;font-style:italic;">Greeting &amp; sign-off appear inside the report preview below</span>
@@ -653,8 +859,8 @@ select option{background:var(--card-bg);color:var(--text);}
     <div class="modal-footer">
       <button class="btn btn-ghost btn-sm" onclick="closeReport()">Close</button>
       <button class="btn btn-outline btn-sm" onclick="copyHtml()">Copy HTML</button>
-      <button class="btn btn-outline btn-sm" onclick="copyText()">Copy Plain Text</button>
-      <button class="btn btn-sm" onclick="copyDraftText()" style="background:linear-gradient(135deg,#5a28b0,#7c44d4);color:#fff;border:none;padding:8px 16px;font-size:11px;border-radius:4px;cursor:pointer;font-family:'Inter',system-ui,sans-serif;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;">☰ Copy Email Draft</button>
+      <button class="btn btn-outline btn-sm" onclick="copyText()">📋 Copy WhatsApp Format</button>
+      <button class="btn btn-sm" onclick="copyDraftText()" style="background:linear-gradient(135deg,#5a28b0,#7c44d4);color:#fff;border:none;padding:8px 16px;font-size:11px;border-radius:4px;cursor:pointer;font-family:'Inter',system-ui,sans-serif;font-weight:700;letter-spacing:0.07em;text-transform:uppercase;">☰ Copy Email for Gmail</button>
       <button class="btn btn-gold btn-sm" onclick="downloadReport()">⬇ Download Report</button>
     </div>
   </div>
@@ -698,16 +904,19 @@ select option{background:var(--card-bg);color:var(--text);}
 
 <script>
 const IS_VIEW = new URLSearchParams(location.search).has('view');
+const NEWSLETTER_LAST_UPDATED = 'July 10, 2026';
+if(IS_VIEW) document.body.classList.add('view-only');
 
 let VENUES_ORDER = [
   'BAHA MAR','CASINO ROYALE','HARD ROCK PUNTA CANA','HARD ROCK HOLLYWOOD','MOHEGAN SUN','MONTE CARLO','RITZ CARLTON',
-  'ALLEGIANT STADIUM','DURANGO','MGM GRAND','RED ROCK','SUNSET STATION','T-MOBILE ARENA','VIRGIN LAS VEGAS','WYNN LAS VEGAS',
+  'ALLEGIANT STADIUM','DURANGO','GREEN VALLEY','MGM GRAND','RED ROCK','SUNSET STATION','T-MOBILE ARENA','VIRGIN LAS VEGAS','WYNN LAS VEGAS',
   'BIG EVENT','CRUISE','DRAFTKINGS'
 ];
 
 let events = [];
 let currentVenue = 'ALL';
 let currentFilter = 'upcoming';
+let searchTerm = '';
 
 (function setupHeader(){
   const wrap = document.getElementById('headerActions');
@@ -715,12 +924,12 @@ let currentFilter = 'upcoming';
     wrap.innerHTML = '<span class="view-badge">♦ View Only</span>';
   } else {
     wrap.innerHTML = `
-      <button class="btn btn-ghost btn-sm" onclick="toggleAdd()">♣ Add Event</button>
-      <button class="btn btn-ghost btn-sm" onclick="openBulk()">⊞ Bulk Add</button>
-      <button class="btn btn-ghost btn-sm" onclick="toggleSelectMode()" id="selectModeBtn">☑ Select</button>
-      <button class="btn btn-danger btn-sm" onclick="removePastEvents()" title="Remove all past events">⏪ Remove Past</button>
-      <button class="btn btn-outline btn-sm" onclick="openReport()">♦ Report</button>
-      <button class="btn btn-ghost btn-sm" onclick="openShare()" style="border-color:rgba(201,168,76,0.3);color:var(--gold-light);">⬡ Share ↗</button>
+      <button class="btn btn-ghost btn-sm" onclick="toggleAdd()">＋ Add Event</button>
+      <button class="btn btn-ghost btn-sm" onclick="openBulk()">⊞ Add Multiple</button>
+      <button class="btn btn-ghost btn-sm" onclick="toggleSelectMode()" id="selectModeBtn">☑ Select Items</button>
+      <button class="btn btn-danger btn-sm" onclick="removePastEvents()" title="Archive completed events">⏪ Archive Past</button>
+      <button class="btn btn-outline btn-sm" onclick="openReport()">♦ Generate Report</button>
+      <button class="btn btn-ghost btn-sm" onclick="openShare()" style="border-color:rgba(201,168,76,0.3);color:var(--gold-light);">⬡ View-Only Link</button>
     `;
   }
 })();
@@ -750,8 +959,48 @@ function shortDateRange(start,end){
   return mStr+'/'+d+' to '+(em+1)+'/'+ed;
 }
 function uid(){return Math.random().toString(36).slice(2);}
+function normalizeEventName(n){
+  return (n||'')
+    .replace(/\$([0-9]+)\s*k\b/gi,function(_,num){return '$'+num+'K';})
+    .replace(/May Weather\s+VS\.?/i,'Mayweather vs.')
+    .replace(/\bVS\.?\b/g,'vs.')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+function normalizeNote(n){
+  return (n||'').replace(/fact sheet available/i,'Fact Sheet Available').trim();
+}
+function formatVenueName(v){
+  const map={
+    'BAHA MAR':'Baha Mar','CASINO ROYALE':'Casino Royale','HARD ROCK PUNTA CANA':'Hard Rock Punta Cana','HARD ROCK HOLLYWOOD':'Hard Rock Hollywood','MOHEGAN SUN':'Mohegan Sun CT','MONTE CARLO':'Monte Carlo','RITZ CARLTON':'Ritz Carlton','ALLEGIANT STADIUM':'Allegiant Stadium','DURANGO':'Durango','GREEN VALLEY':'Green Valley','MGM GRAND':'MGM Grand','RED ROCK':'Red Rock','SUNSET STATION':'Sunset Station','T-MOBILE ARENA':'T-Mobile Arena','VIRGIN LAS VEGAS':'Virgin Las Vegas','WYNN LAS VEGAS':'Wynn Las Vegas','BIG EVENT':'Big Events','CRUISE':'Cruise','DRAFTKINGS':'DraftKings'
+  };
+  return map[v]||v.charAt(0)+v.slice(1).toLowerCase();
+}
+function matchesSearch(e){
+  if(!searchTerm)return true;
+  const hay=[e.name,e.venue,formatVenueName(e.venue),e.note,e.type].join(' ').toLowerCase();
+  return hay.includes(searchTerm);
+}
+function setSearch(v){searchTerm=(v||'').trim().toLowerCase();render();}
+function eventDateLabel(e){
+  if(e.type==='recurring')return 'Recurring';
+  if(e.date)return shortDateRange(e.date,e.endDate);
+  return 'Date TBD';
+}
+function eventLineText(e){
+  return eventDateLabel(e)+' - '+e.name;
+}
+function getPriorityScore(e){
+  let score=0;
+  if(e.type==='big')score+=100;
+  if(/fact sheet/i.test(e.note||''))score+=60;
+  if(isSoon(e)&&!isPast(e))score+=40;
+  if(!e.date)score-=20;
+  return score;
+}
+
 // ── PERSISTENCE ──
-const LS_KEY = 'pace_events_v3';
+const LS_KEY = 'pace_events_v4';
 
 function getEventsPayload(){
   return events.map(function(e){return{
@@ -778,7 +1027,7 @@ function loadFromStorage(){
         events=arr.map(function(r){
           var d=r.date?new Date(r.date+'T12:00:00'):null;
           var de=r.endDate?new Date(r.endDate+'T12:00:00'):d;
-          return{id:r.id,venue:r.venue,name:r.name,date:d,endDate:de,note:r.note||'',type:r.type||'regular',isDup:r.isDup||false};
+          return{id:r.id,venue:r.venue,name:normalizeEventName(r.name),date:d,endDate:de,note:normalizeNote(r.note||''),type:r.type||'regular',isDup:r.isDup||false};
         });
         return true;
       }
@@ -790,14 +1039,14 @@ function loadFromStorage(){
 
 const raw=[
   {v:'BIG EVENT',n:'FIFA World Cup Final',d:'7/19',t:'big'},
-  {v:'BIG EVENT',n:'The Rematch: May Weather VS. Manny Pacquiao @ Sphere Las Vegas',d:'9/19',t:'big'},
+  {v:'BIG EVENT',n:'The Rematch: Mayweather vs. Manny Pacquiao @ Sphere Las Vegas',d:'9/19',t:'big'},
   {v:'BAHA MAR',n:'$100,000 Cinco de Mayo Slot Tournament',d:'5/9'},
   {v:'BAHA MAR',n:'$100,000 Spring Spin-tacular Slot Tournament',d:'5/16'},
   {v:'BAHA MAR',n:'French Montana',d:'7/10'},
-  {v:'BAHA MAR',n:'$100k Summer Splash Slot Tournament',d:'7/25'},
-  {v:'BAHA MAR',n:'$250k Poker Tournament',d:'8/15',note:'Fact sheet available'},
-  {v:'BAHA MAR',n:'$100k Slot Tournament',d:'9/12'},
-  {v:'BAHA MAR',n:'$250k Blackjack Tournament',d:'10/2',de:'10/3'},
+  {v:'BAHA MAR',n:'$100K Summer Splash Slot Tournament',d:'7/25'},
+  {v:'BAHA MAR',n:'$250K Poker Tournament',d:'8/15',note:'Fact Sheet Available'},
+  {v:'BAHA MAR',n:'$100K Slot Tournament',d:'9/12'},
+  {v:'BAHA MAR',n:'$250K Blackjack Tournament',d:'10/2',de:'10/3'},
   {v:'BAHA MAR',n:'Culinary & Arts Festival',d:'10/22',de:'10/26'},
   {v:'BAHA MAR',n:"3rd Annual Skin's Golf Event",d:'11/6',de:'11/7'},
   {v:'BAHA MAR',n:'Wahoo Fishing Tournament',d:'11/12',de:'11/15'},
@@ -813,7 +1062,7 @@ const raw=[
   {v:'CASINO ROYALE',n:'Spin Royale – Spring Trials ($20K Prize Pool)',d:'5/7',de:'5/9'},
   {v:'CASINO ROYALE',n:'Spin Royale – Grand Finals ($20K Prize Pool)',d:'11/5',de:'11/7'},
   {v:'CASINO ROYALE',n:"Winner's Circle ($5K – both tournament players)",d:'11/7'},
-  {v:'HARD ROCK PUNTA CANA',n:'Memorial Day Weekend $300K Blackjack Tournament',d:'5/21',de:'5/24',note:'Fact Sheet available'},
+  {v:'HARD ROCK PUNTA CANA',n:'Memorial Day Weekend $300K Blackjack Tournament',d:'5/21',de:'5/24',note:'Fact Sheet Available'},
   {v:'HARD ROCK HOLLYWOOD',n:'Every Sunday – $100K Head to Head Blackjack Challenge',t:'recurring'},
   {v:'HARD ROCK HOLLYWOOD',n:'Mon & Wed – $1.8M Roaring Jaguar & Free Play Drawings Bonus Entries',t:'recurring'},
   {v:'HARD ROCK HOLLYWOOD',n:'Every Saturday 3–6pm – $1.8M Roaring Jaguar & Free Play Drawings',t:'recurring'},
@@ -898,26 +1147,20 @@ const raw=[
   {v:'DRAFTKINGS',n:'World Cup Suites (4 tickets per suite, each state)',note:'All states where games are played'},
   {v:'DRAFTKINGS',n:'NBA Finals'},
 ];
-raw.forEach(r=>{
-  const d=parseDate(r.d||'');
-  const de=parseDate(r.de||'')||d; // if no end date, use start date so range block always shows
-  events.push({id:uid(),venue:r.v,name:r.n,date:d,endDate:de,note:r.note||'',type:r.t||'regular'});
-});
-// Clear stale cache so updated default events always load fresh
-localStorage.removeItem(LS_KEY);
-// loadFromStorage(); // disabled — always use latest default data
-// Auto-remove past events on load
-(function(){
-  var t=new Date();t=new Date(t.getFullYear(),t.getMonth(),t.getDate());
-  var before=events.length;
-  events=events.filter(function(e){
-    if(e.type==='recurring')return true; // never remove recurring
-    var d=e.endDate||e.date;
-    return !d||d>=t;
+function loadDefaultEvents(){
+  events=[];
+  raw.forEach(r=>{
+    const d=parseDate(r.d||'');
+    const de=parseDate(r.de||'')||d; // if no end date, use start date so range block always shows
+    events.push({id:uid(),venue:r.v,name:normalizeEventName(r.n),date:d,endDate:de,note:normalizeNote(r.note||''),type:r.t||'regular'});
   });
-  if(events.length<before)saveToStorage();
-})();
-  // View-only mode uses hardcoded default events — no URL data needed
+}
+if(!loadFromStorage()){
+  loadDefaultEvents();
+  saveToStorage();
+}
+// Completed events are kept for reference. Use “Archive Past” when the team wants to remove them manually.
+// View-only mode uses the saved/default events and hides admin controls.
 
 
 
@@ -930,6 +1173,7 @@ function render(){
   if(currentVenue!=='ALL')fl=fl.filter(e=>e.venue===currentVenue);
   if(currentFilter==='upcoming')fl=fl.filter(e=>!isPast(e));
   if(currentFilter==='past')fl=fl.filter(e=>isPast(e));
+  if(searchTerm)fl=fl.filter(matchesSearch);
   fl.sort((a,b)=>{if(!a.date&&!b.date)return 0;if(!a.date)return 1;if(!b.date)return-1;return a.date-b.date;});
 
   const pool=currentVenue==='ALL'?events:events.filter(e=>e.venue===currentVenue);
@@ -938,6 +1182,7 @@ function render(){
   document.getElementById('stat-past').textContent=pool.filter(e=>isPast(e)).length;
   const mo=t.getMonth(),yr=t.getFullYear();
   document.getElementById('stat-month').textContent=pool.filter(e=>e.date&&e.date.getMonth()===mo&&e.date.getFullYear()===yr).length;
+  const lu=document.getElementById('lastUpdatedLabel'); if(lu)lu.textContent=NEWSLETTER_LAST_UPDATED;
 
   VENUES_ORDER.forEach(v=>{
     const el=document.getElementById('count-'+v);
@@ -946,20 +1191,46 @@ function render(){
   document.getElementById('count-ALL').textContent=events.filter(e=>!isPast(e)).length;
 
   const el=document.getElementById('eventsList');
-  if(!fl.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">♠</div><div>No events found</div></div>';return;}
+  if(!fl.length){el.innerHTML='<div class="empty-state"><div class="empty-icon">♠</div><div>No events found'+(searchTerm?' for your search':'')+'</div></div>';return;}
 
   if(currentVenue==='ALL'){
     const bv={};fl.forEach(e=>{if(!bv[e.venue])bv[e.venue]=[];bv[e.venue].push(e);});
-    let h='';
+    let h=mkFeaturedSection();
     VENUES_ORDER.forEach(v=>{
       if(!bv[v]||!bv[v].length)return;
-      h+=`<div class="group-label" style="background:rgba(160,120,32,0.10);border-radius:4px;padding:7px 10px 7px 12px;margin-bottom:6px;"><span>${v}</span><span>${bv[v].length}</span></div>`;
+      h+=`<div class="group-label" style="background:rgba(160,120,32,0.10);border-radius:6px;padding:8px 11px 8px 12px;margin-bottom:7px;"><span>${formatVenueName(v)}</span><span>${bv[v].length}</span></div>`;
       bv[v].forEach(e=>h+=mkCard(e));
     });
     el.innerHTML=h;
   } else {
     el.innerHTML=fl.map(mkCard).join('');
   }
+}
+
+function mkFeaturedSection(){
+  if(currentVenue!=='ALL'||currentFilter!=='upcoming'||searchTerm)return'';
+  const featured=events
+    .filter(e=>!isPast(e)&&(e.type==='big'||/fact sheet/i.test(e.note||'')||isSoon(e)))
+    .sort((a,b)=>getPriorityScore(b)-getPriorityScore(a)||(a.date||new Date(2999,0,1))-(b.date||new Date(2999,0,1)))
+    .slice(0,6);
+  if(!featured.length)return'';
+  return `<section class="featured-panel">
+    <div class="featured-head">
+      <div><div class="featured-title">Priority Highlights</div><div class="featured-sub">Big events, fact sheets, and near-term items to review first.</div></div>
+      <div style="font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;">${featured.length} highlighted</div>
+    </div>
+    <div class="featured-grid">${featured.map(mkFeaturedCard).join('')}</div>
+  </section>`;
+}
+
+function mkFeaturedCard(e){
+  const date=eventDateLabel(e);
+  const note=/fact sheet/i.test(e.note||'')?' · Fact Sheet':'';
+  return `<div class="featured-card">
+    <div class="featured-date">${date}</div>
+    <div class="featured-name">${e.type==='big'?'⭐ ':''}${e.name}</div>
+    <div class="featured-venue">${formatVenueName(e.venue)}${note}</div>
+  </div>`;
 }
 
 function mkCard(e){
@@ -979,6 +1250,8 @@ function mkCard(e){
   let badges='';
   if(e.isDup)badges+='<span class="badge badge-dup">⚠ Possible Duplicate</span>';
   if(e.type==='big')badges+='<span class="badge badge-big">⭐ Big</span>';
+  if(/fact sheet/i.test(e.note||''))badges+='<span class="badge badge-fact">📄 Fact Sheet</span>';
+  if(!e.date&&e.type!=='recurring')badges+='<span class="badge badge-tbd">Date TBD</span>';
   if(e.type==='recurring')badges+='<span class="badge badge-rec">🔁 Recurring</span>';
   if(tod)badges+='<span class="badge badge-today">TODAY</span>';
   if(past)badges+='<span class="badge badge-past">Completed</span>';
@@ -995,13 +1268,13 @@ function mkCard(e){
     ?`<div class="date-block" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;"><div style="font-size:8px;font-weight:700;letter-spacing:0.1em;color:#1a6a3c;text-transform:uppercase;">Recurring</div><div style="font-size:20px;line-height:1;">🔁</div></div>`
     :e.date
       ?`<div class="date-block"><div class="date-month">${mon}</div><div class="date-day">${day}</div>${endLabel?`<div class="date-end" style="font-size:10px;color:var(--gold);font-weight:600;letter-spacing:0;">${endLabel}</div>`:''}</div>`
-      :`<div class="date-block"></div>`;
+      :`<div class="date-block" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;"><div style="font-size:9px;font-weight:700;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;">Date</div><div style="font-family:'Lora',Georgia,serif;font-size:18px;color:var(--muted);">TBD</div></div>`;
   return `<div class="${cls}" id="card-${e.id}">
     ${checkbox}
     ${dateBlockHtml}
     <div class="event-info">
       <div class="event-name">${e.name}</div>
-      <div class="event-venue-label">${e.venue}</div>
+      <div class="event-venue-label">${formatVenueName(e.venue)}</div>
       ${e.note?`<div class="event-note">${e.note}</div>`:''}
       ${badges?`<div class="event-badges">${badges}</div>`:''}
     </div>
@@ -1014,7 +1287,7 @@ function filterVenue(v){
   currentVenue=v;
   document.querySelectorAll('.venue-btn').forEach(b=>b.classList.remove('active'));
   const b=document.getElementById('venue-'+v);if(b)b.classList.add('active');
-  document.getElementById('toolbarTitle').textContent=v==='ALL'?'All Venues':v;
+  document.getElementById('toolbarTitle').textContent=v==='ALL'?'All Venues':formatVenueName(v);
   render();
 }
 function setFilter(f,el){
@@ -1025,7 +1298,7 @@ function setFilter(f,el){
 function toggleAdd(){if(!IS_VIEW)document.getElementById('addForm').classList.toggle('open');}
 function closeAdd(){document.getElementById('addForm').classList.remove('open');}
 function addEvent(){
-  const name=document.getElementById('f-name').value.trim();
+  const name=normalizeEventName(document.getElementById('f-name').value.trim());
   if(!name){alert('Please enter an event name.');return;}
   const _d=parseDate(document.getElementById('f-date').value);
   const _de=parseDate(document.getElementById('f-date-end').value)||_d;
@@ -1038,9 +1311,9 @@ function addEvent(){
     return nameMatch&&venueMatch&&dateMatch;
   });
   const isDupFlag=!!_dup;
-  if(_dup&&!confirm('⚠️ "'+name+'" at '+_venue+' on the same date already exists.\n\nAdd anyway? It will be flagged as a possible duplicate.'))return;
+  if(_dup&&!confirm('⚠️ "'+name+'" at '+formatVenueName(_venue)+' on the same date already exists.\n\nAdd anyway? It will be flagged as a possible duplicate.'))return;
   const newEv={id:uid(),venue:_venue,name,date:_d,endDate:_de,
-    note:document.getElementById('f-note').value.trim(),
+    note:normalizeNote(document.getElementById('f-note').value.trim()),
     type:document.getElementById('f-type').value,isDup:isDupFlag};
   events.push(newEv);
   ['f-name','f-note','f-date','f-date-end'].forEach(id=>document.getElementById(id).value='');
@@ -1068,7 +1341,7 @@ function toggleSelectMode(){
   document.getElementById('eventsList').classList.toggle('select-mode',selectMode);
   document.getElementById('bulkBar').classList.toggle('visible',selectMode);
   const btn=document.getElementById('selectModeBtn');
-  if(btn)btn.textContent=selectMode?'✕ Cancel Select':'☑ Select';
+  if(btn)btn.textContent=selectMode?'✕ Cancel Select':'☑ Select Items';
   updateBulkCount();
   render();
 }
@@ -1077,7 +1350,7 @@ function exitSelectMode(){
   document.getElementById('eventsList').classList.remove('select-mode');
   document.getElementById('bulkBar').classList.remove('visible');
   const btn=document.getElementById('selectModeBtn');
-  if(btn)btn.textContent='☑ Select';
+  if(btn)btn.textContent='☑ Select Items';
   updateBulkCount();render();
 }
 function toggleSelect(id,checked){
@@ -1091,6 +1364,7 @@ function selectAll(){
   if(currentVenue!=='ALL')fl=fl.filter(e=>e.venue===currentVenue);
   if(currentFilter==='upcoming')fl=fl.filter(e=>!isPast(e));
   if(currentFilter==='past')fl=fl.filter(e=>isPast(e));
+  if(searchTerm)fl=fl.filter(matchesSearch);
   fl.forEach(e=>selectedIds.add(e.id));
   render();updateBulkCount();
 }
@@ -1126,24 +1400,24 @@ function parseBulkLine(line){
   line=line.trim();if(!line)return null;
   // Recurring - Name
   const recM=line.match(/^recurring\s*[-–]\s*(.+)$/i);
-  if(recM)return{name:recM[1].trim(),type:'recurring',date:null,endDate:null,note:''};
+  if(recM)return{name:normalizeEventName(recM[1].trim()),type:'recurring',date:null,endDate:null,note:''};
   // Natural language recurring: "Every Sunday...", "The month of...", "Daily...", "Each...", "Weekly..."
   if(/^(every\b|the month of\b|daily\b|weekly\b|each\b)/i.test(line.trim()))
-    return{name:line.trim(),type:'recurring',date:null,endDate:null,note:''};
+    return{name:normalizeEventName(line.trim()),type:'recurring',date:null,endDate:null,note:''};
   // Extract note in parens at end
   let note='';
   const noteM=line.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
-  if(noteM){line=noteM[1].trim();note=noteM[2].trim();}
+  if(noteM){line=noteM[1].trim();note=normalizeNote(noteM[2].trim());}
   // Start - End - Name  e.g. "5/1 - 5/3 - Event"
   const rangeM=line.match(/^(\d{1,2}\/\d{1,2})\s*[-–]\s*(\d{1,2}\/\d{1,2})\s*[-–]\s*(.+)$/);
-  if(rangeM)return{name:rangeM[3].trim(),type:'regular',date:parseDate(rangeM[1]),endDate:parseDate(rangeM[2]),note};
+  if(rangeM)return{name:normalizeEventName(rangeM[3]),type:'regular',date:parseDate(rangeM[1]),endDate:parseDate(rangeM[2]),note};
   // "m/d to m/d - Name"  e.g. "10/22 to 10/26 - Festival"
   const rangeToFull=line.match(/^(\d{1,2}\/\d{1,2})\s+to\s+(\d{1,2}\/\d{1,2})\s*[-–]\s*(.+)$/i);
-  if(rangeToFull)return{name:rangeToFull[3].trim(),type:'regular',date:parseDate(rangeToFull[1]),endDate:parseDate(rangeToFull[2]),note};
+  if(rangeToFull)return{name:normalizeEventName(rangeToFull[3]),type:'regular',date:parseDate(rangeToFull[1]),endDate:parseDate(rangeToFull[2]),note};
   // "m/d to d - Name"  e.g. "10/2 to 3 - Tournament" (same month, end day only)
   const rangeToDay=line.match(/^(\d{1,2})\/(\d{1,2})\s+to\s+(\d{1,2})\s*[-–]\s*(.+)$/i);
   if(rangeToDay){
-    return{name:rangeToDay[4].trim(),type:'regular',
+    return{name:normalizeEventName(rangeToDay[4]),type:'regular',
       date:parseDate(rangeToDay[1]+'/'+rangeToDay[2]),
       endDate:parseDate(rangeToDay[1]+'/'+rangeToDay[3]),note};
   }
@@ -1159,15 +1433,15 @@ function parseBulkLine(line){
     allDays.sort(function(a,b){return a-b;});
     const firstDay=parseInt(multiDay[2],10);
     const lastDay=allDays[allDays.length-1];
-    return{name:multiDay[4].trim(),type:'regular',
+    return{name:normalizeEventName(multiDay[4]),type:'regular',
       date:parseDate(monthStr+'/'+firstDay),
       endDate:parseDate(monthStr+'/'+lastDay),note};
   }
   // Date - Name (single date — use same date as endDate so range always shows)
   const dateM=line.match(/^(\d{1,2}\/\d{1,2})\s*[-–]\s*(.+)$/);
-  if(dateM){const d=parseDate(dateM[1]);return{name:dateM[2].trim(),type:'regular',date:d,endDate:d,note};}
+  if(dateM){const d=parseDate(dateM[1]);return{name:normalizeEventName(dateM[2]),type:'regular',date:d,endDate:d,note};}
   // Just name
-  return{name:line,type:'regular',date:null,endDate:null,note};
+  return{name:normalizeEventName(line),type:'regular',date:null,endDate:null,note};
 }
 function previewBulk(){
   const venue=document.getElementById('bulk-venue').value;
@@ -1255,8 +1529,8 @@ function shadeHex(hex,amt){
 let reportOrder = null;
 let arrangePanelOpen = false;
 
-const DEFAULT_PACE_PROPS=['BAHA MAR','HARD ROCK PUNTA CANA','HARD ROCK HOLLYWOOD','MOHEGAN SUN','MONTE CARLO','RITZ CARLTON'];
-const DEFAULT_LV_PROPS=['ALLEGIANT STADIUM','DURANGO','MGM GRAND','RED ROCK','SUNSET STATION','T-MOBILE ARENA','VIRGIN LAS VEGAS','WYNN LAS VEGAS'];
+const DEFAULT_PACE_PROPS=['BAHA MAR','CASINO ROYALE','HARD ROCK PUNTA CANA','HARD ROCK HOLLYWOOD','MOHEGAN SUN','MONTE CARLO','RITZ CARLTON'];
+const DEFAULT_LV_PROPS=['ALLEGIANT STADIUM','DURANGO','GREEN VALLEY','MGM GRAND','RED ROCK','SUNSET STATION','T-MOBILE ARENA','VIRGIN LAS VEGAS','WYNN LAS VEGAS'];
 const DEFAULT_OTHER_PROPS=['BIG EVENT','CRUISE','DRAFTKINGS'];
 
 function getDefaultReportSections(){
@@ -1331,7 +1605,7 @@ function renderArrangePanel(){
       html+=`<div class="arrange-venue" draggable="true" data-venue="${v.replace(/"/g,'&quot;')}" style="background:#fff;border:1px solid rgba(160,120,32,0.18);border-radius:5px;margin-bottom:6px;cursor:grab;">
         <div class="arrange-venue-header" style="padding:7px 9px;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#1a1612;">
           <span style="opacity:0.4;font-size:11px;">⠿</span>
-          <span style="flex:1;">${v.charAt(0)+v.slice(1).toLowerCase()}</span>
+          <span style="flex:1;">${formatVenueName(v)}</span>
           <span style="font-size:10px;color:#8a7a60;background:#f2ede4;border-radius:8px;padding:1px 6px;">${orderedEvs.length}</span>
         </div>
         ${orderedEvs.length?`<div class="arrange-event-list" data-venue="${v.replace(/"/g,'&quot;')}" style="border-top:1px solid #f0ece0;padding:4px 6px 6px;">
@@ -1442,16 +1716,33 @@ function commitArrangeOrderFromDOM(){
 }
 
 function buildReport(){
-  const title=document.getElementById('report-title').value;
-  const to=document.getElementById('report-to').value;
+  const title=document.getElementById('report-title').value||'PACE GAMING EVENTS UPDATE';
+  const to=document.getElementById('report-to').value||'Team';
   const showPast=document.getElementById('report-past').value==='yes';
   const accent=document.getElementById('report-color').value;
-  const layout=document.getElementById('report-layout').value;
-  const twoCol=layout==='2col';
-  const now=new Date();
-  const dateStr=now.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const twoCol=document.getElementById('report-layout').value==='2col';
+  const reportFocus=(document.getElementById('report-focus')||{}).value||'upcoming';
+  const dateStr=new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+  const now=today();
+  const endOfDay=(days)=>new Date(now.getFullYear(),now.getMonth(),now.getDate()+days,23,59,59);
+  const withinDays=(e,days)=>e.date && e.date>=now && e.date<=endOfDay(days);
+  const isCurrentMonth=(e)=>e.date && e.date.getMonth()===now.getMonth() && e.date.getFullYear()===now.getFullYear() && !isPast(e);
+  const hasFactSheet=(e)=>/fact sheet/i.test(e.note||'');
+  const focusLabels={
+    upcoming:'All Upcoming',thismonth:'This Month',next7:'Next 7 Days',next30:'Next 30 Days',next60:'Next 60 Days',next90:'Next 90 Days',priority:'Priority Only',factsheet:'Fact Sheets Only',tbd:'Date TBD Only',completed:'Completed Only'
+  };
 
   let evs=showPast?events:events.filter(e=>!isPast(e));
+  if(reportFocus==='thismonth')evs=events.filter(isCurrentMonth);
+  if(reportFocus==='next7')evs=events.filter(e=>withinDays(e,7));
+  if(reportFocus==='next30')evs=events.filter(e=>withinDays(e,30));
+  if(reportFocus==='next60')evs=events.filter(e=>withinDays(e,60));
+  if(reportFocus==='next90')evs=events.filter(e=>withinDays(e,90));
+  if(reportFocus==='priority')evs=events.filter(e=>!isPast(e)&&(e.type==='big'||hasFactSheet(e)||isSoon(e)||(!e.date&&e.type!=='recurring')));
+  if(reportFocus==='factsheet')evs=events.filter(e=>!isPast(e)&&hasFactSheet(e));
+  if(reportFocus==='tbd')evs=events.filter(e=>!isPast(e)&&!e.date&&e.type!=='recurring');
+  if(reportFocus==='completed')evs=events.filter(e=>isPast(e));
   evs=[...evs].sort((a,b)=>{if(!a.date&&!b.date)return 0;if(!a.date)return 1;if(!b.date)return-1;return a.date-b.date;});
 
   ensureReportOrder();
@@ -1463,49 +1754,89 @@ function buildReport(){
   const FONT_SANS="Arial,Helvetica,sans-serif";
   const accentDark=shadeHex(accent,-28);
   const accentMid=shadeHex(accent,-14);
+  const accentSoft=shadeHex(accent,58);
+  const maxW=twoCol?900:720;
+  const shareUrl = location.href.split('?')[0] + '?view';
 
+  function safe(s){
+    return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});
+  }
+  function noteHasFact(e){return /fact sheet/i.test(e.note||'');}
+  function eventReasonLabels(e){
+    const labels=[];
+    if(e.type==='big')labels.push('Big Event');
+    if(noteHasFact(e))labels.push('Fact Sheet');
+    if(e.type==='recurring')labels.push('Recurring');
+    if(!e.date&&e.type!=='recurring')labels.push('Date TBD');
+    if(isSoon(e)&&!isPast(e))labels.push('Next 7 Days');
+    if(isPast(e))labels.push('Completed');
+    return labels;
+  }
+  function metricCard(label,value,sub){
+    return `<td width="20%" style="padding:0 4px;">
+      <table role="presentation" width="100%" bgcolor="#ffffff" style="background:#ffffff;border:1px solid #e8e2d4;border-radius:8px;border-collapse:separate;">
+        <tr><td style="padding:12px 8px;text-align:center;">
+          <div style="font-family:${FONT_SERIF};font-size:24px;font-weight:bold;color:${accent};line-height:1;">${value}</div>
+          <div style="font-family:${FONT_SANS};font-size:9px;letter-spacing:1.2px;text-transform:uppercase;color:#666666;margin-top:5px;font-weight:bold;">${label}</div>
+          ${sub?`<div style="font-family:${FONT_SANS};font-size:9px;color:#999999;margin-top:3px;">${sub}</div>`:''}
+        </td></tr>
+      </table>
+    </td>`;
+  }
+  function eventBadge(label,bg,color){
+    return `<span style="display:inline-block;font-family:${FONT_SANS};font-size:9px;font-weight:bold;letter-spacing:.6px;text-transform:uppercase;color:${color};background:${bg};border:1px solid ${color}22;border-radius:999px;padding:2px 7px;margin:2px 3px 0 0;white-space:nowrap;">${label}</span>`;
+  }
   function mkEventCell(e,bg){
-    let datePart='';
-    if(e.type==='recurring')datePart='Recurring';
-    else if(e.date){datePart=shortDateRange(e.date,e.endDate);}
-    const isBig=e.type==='big';
-    const line=datePart?`${datePart} — ${e.name}`:e.name;
-    return `<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${bg}" style="background:${bg};mso-table-lspace:0pt;mso-table-rspace:0pt;">
+    const line=eventLineText(e);
+    return `<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${bg}" style="background:${bg};mso-table-lspace:0pt;mso-table-rspace:0pt;border-bottom:1px solid #e9e2d5;">
       <tr>
-        <td style="padding:8px 14px;border-bottom:1px solid #e8e2d4;">
-          ${isBig?'<span style="font-size:12px;margin-right:4px;">&#11088;</span>':''}<span style="font-family:${FONT_SANS};font-size:13px;color:#1a1a1a;font-weight:${isBig?'bold':'normal'};line-height:1.5;">${line}</span>${e.note?`<span style="font-family:${FONT_SANS};font-size:11px;color:#888888;font-style:italic;margin-left:6px;">(${e.note})</span>`:''}
+        <td valign="top" style="padding:9px 14px 9px 14px;font-family:${FONT_SANS};font-size:13px;color:#1a1a1a;line-height:1.55;">
+          <span style="font-weight:bold;color:${accent};white-space:nowrap;">${safe(eventDateLabel(e))}</span><span style="color:#555555;"> - </span><span style="font-weight:600;color:#1a1a1a;">${safe(e.name)}</span>
         </td>
       </tr>
     </table>`;
   }
-
+  function nextDateLabel(vevs){
+    const next=vevs.filter(e=>e.date&&!isPast(e)).sort((a,b)=>a.date-b.date)[0];
+    return next?shortDateRange(next.date,next.endDate):'';
+  }
   function mkVenueHeaderTable(v,vevs,fontSize){
-    return `<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${accent}" style="background:${accent};mso-table-lspace:0pt;mso-table-rspace:0pt;border-left:5px solid ${accentDark};">
+    const next=nextDateLabel(vevs);
+    return `<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="${accent}" style="background:${accent};mso-table-lspace:0pt;mso-table-rspace:0pt;border-left:6px solid ${accentDark};">
       <tr>
-        <td style="padding:11px 16px;">
-          <div style="font-family:${FONT_SERIF};font-size:${fontSize}px;font-weight:bold;color:#ffffff;letter-spacing:1px;text-transform:uppercase;line-height:1.3;">${v}</div>
-          <div style="font-family:${FONT_SANS};font-size:10px;color:#ffffff;opacity:0.75;margin-top:3px;letter-spacing:1px;text-transform:uppercase;">${vevs.length} event${vevs.length!==1?'s':''}</div>
+        <td style="padding:12px 16px;">
+          <div style="font-family:${FONT_SERIF};font-size:${fontSize}px;font-weight:bold;color:#ffffff;letter-spacing:1px;text-transform:uppercase;line-height:1.3;">${safe(formatVenueName(v))}</div>
+          <div style="font-family:${FONT_SANS};font-size:10px;color:#ffffff;opacity:0.82;margin-top:4px;letter-spacing:1px;text-transform:uppercase;">${vevs.length} event${vevs.length!==1?'s':''}${next?' · Next: '+safe(next):''}</div>
         </td>
       </tr>
     </table>`;
   }
-
   function mkVenueBlock(v,vevs){
     const headerHtml=mkVenueHeaderTable(v,vevs,17);
-    let evRows=vevs.map((e,i)=>`<tr><td>${mkEventCell(e,i%2===0?'#ffffff':'#faf7f0')}</td></tr>`).join('');
-    return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:10px;mso-table-lspace:0pt;mso-table-rspace:0pt;">
-      <tr><td style="padding:8px 0 0 0;">${headerHtml}</td></tr>
+    const dated=vevs.filter(e=>e.date||e.type==='recurring');
+    const tbd=vevs.filter(e=>!e.date&&e.type!=='recurring');
+    const ordered=[...dated,...tbd];
+    let evRows=ordered.map((e,i)=>`<tr><td>${mkEventCell(e,i%2===0?'#ffffff':'#fbf8f2')}</td></tr>`).join('');
+    return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:14px;mso-table-lspace:0pt;mso-table-rspace:0pt;border:1px solid #e6dcc8;background:#ffffff;">
+      <tr><td>${headerHtml}</td></tr>
       ${evRows}
-      <tr><td style="padding:3px 0 8px;"><div style="height:1px;line-height:1px;font-size:1px;background:#dddddd;">&nbsp;</div></td></tr>
     </table>`;
   }
-
-  function mkSectionHeader(label,accentColor){
-    return `<tr><td style="padding:26px 22px 9px 22px;">
-      <div style="font-family:${FONT_SANS};font-size:11px;font-weight:bold;letter-spacing:3px;text-transform:uppercase;color:${accentColor};border-bottom:3px solid ${accentColor};padding-bottom:8px;">— ${label} —</div>
+  function mkSectionHeader(label,accentColor,description,count){
+    return `<tr><td style="padding:28px 24px 10px 24px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-bottom:3px solid ${accentColor};">
+        <tr>
+          <td valign="bottom" style="padding-bottom:8px;">
+            <div style="font-family:${FONT_SANS};font-size:11px;font-weight:bold;letter-spacing:3px;text-transform:uppercase;color:${accentColor};">${safe(label)}</div>
+            <div style="font-family:${FONT_SANS};font-size:11px;color:#777777;margin-top:4px;line-height:1.5;">${safe(description)}</div>
+          </td>
+          <td align="right" valign="bottom" style="padding-bottom:8px;">
+            <span style="font-family:${FONT_SANS};font-size:10px;color:${accentColor};background:#ffffff;border:1px solid #e8e2d4;border-radius:999px;padding:5px 10px;font-weight:bold;text-transform:uppercase;letter-spacing:.7px;">${count} event${count!==1?'s':''}</span>
+          </td>
+        </tr>
+      </table>
     </td></tr>`;
   }
-
   function applyEventOrder(v,vevs){
     const order=reportOrder.eventOrder[v];
     if(!order||!order.length)return vevs;
@@ -1514,20 +1845,22 @@ function buildReport(){
     const leftover=vevs.filter(e=>!order.includes(e.id));
     return [...ordered,...leftover];
   }
-
-  function buildGroup(groupVenues){
+  function groupBlocks(groupVenues){
     const venueBlocks=[];
     groupVenues.forEach(v=>{
       const vevs=applyEventOrder(v,evs.filter(e=>e.venue===v));
       if(!vevs.length)return;
       venueBlocks.push({v,vevs});
     });
+    return venueBlocks;
+  }
+  function buildGroup(venueBlocks){
     if(!venueBlocks.length)return'';
     let html='';
     if(twoCol){
       for(let i=0;i<venueBlocks.length;i+=2){
         const left=venueBlocks[i];const right=venueBlocks[i+1];
-        html+=`<tr><td style="padding:0 20px;">
+        html+=`<tr><td style="padding:0 22px;">
           <table width="100%" cellpadding="0" cellspacing="0" border="0" style="mso-table-lspace:0pt;mso-table-rspace:0pt;"><tr>
             <td width="49%" valign="top" style="padding-right:8px;">${mkVenueBlock(left.v,left.vevs)}</td>
             <td width="2%">&nbsp;</td>
@@ -1543,45 +1876,94 @@ function buildReport(){
     return html;
   }
 
+  const paceBlocks=groupBlocks(PACE_PROPS);
+  const lvBlocks=groupBlocks(LV_PROPS);
+  const otherBlocks=groupBlocks(OTHER_PROPS);
+  const paceCount=paceBlocks.reduce((sum,b)=>sum+b.vevs.length,0);
+  const lvCount=lvBlocks.reduce((sum,b)=>sum+b.vevs.length,0);
+  const otherCount=otherBlocks.reduce((sum,b)=>sum+b.vevs.length,0);
   let bodyHtml='';
-  const paceHtml=buildGroup(PACE_PROPS);
-  const lvHtml=buildGroup(LV_PROPS);
-  const otherHtml=buildGroup(OTHER_PROPS);
-  if(paceHtml)bodyHtml+=mkSectionHeader('PACE Properties',accent)+paceHtml;
-  if(lvHtml)bodyHtml+=mkSectionHeader('Las Vegas',accent)+lvHtml;
-  if(otherHtml)bodyHtml+=mkSectionHeader('Other',accent)+otherHtml;
+  if(paceBlocks.length)bodyHtml+=mkSectionHeader('PACE Properties',''+accent,'Primary casino and resort property events, tournaments, concerts, and fact-sheet items.',paceCount)+buildGroup(paceBlocks);
+  if(lvBlocks.length)bodyHtml+=mkSectionHeader('Las Vegas',''+accent,'Local Las Vegas arenas and properties, grouped separately for quick review.',lvCount)+buildGroup(lvBlocks);
+  if(otherBlocks.length)bodyHtml+=mkSectionHeader('Other / Seasonal',''+accent,'Big events, cruises, DraftKings opportunities, and open items needing confirmation.',otherCount)+buildGroup(otherBlocks);
+  if(!bodyHtml){
+    bodyHtml=`<tr><td style="padding:22px 30px 36px 30px;"><table role="presentation" width="100%" bgcolor="#ffffff" style="background:#ffffff;border:1px solid #e8e2d4;"><tr><td style="padding:24px;text-align:center;font-family:${FONT_SANS};font-size:13px;color:#777777;line-height:1.6;">No events match the selected report focus: <strong style="color:${accent};">${safe(focusLabels[reportFocus]||'Current View')}</strong>.</td></tr></table></td></tr>`;
+  }
 
-  const maxW=twoCol?860:680;
-  const shareUrl = location.href.split('?')[0] + '?view';
   const tplKey=(document.getElementById('draft-template')||{}).value||'newsletter';
   const tplData=DRAFT_TEMPLATES[tplKey]||DRAFT_TEMPLATES.newsletter;
   const emailIntro=tplData.intro?tplData.intro(to):'';
   const emailOutro=tplData.outro?tplData.outro():'';
-  const introHtml=emailIntro?`<tr><td style="padding:18px 28px 4px 28px;"><p style="font-family:${FONT_SANS};font-size:13px;color:#333333;line-height:1.7;margin:0;">${emailIntro.replace(/\n/g,'<br>')}</p></td></tr>`:'';
-  const outroHtml=emailOutro?`<tr><td style="padding:4px 28px 18px 28px;"><p style="font-family:${FONT_SANS};font-size:13px;color:#333333;line-height:1.7;margin:0;">${emailOutro.replace(/\n/g,'<br>')}</p></td></tr>`:'';
+  const introHtml=emailIntro?`<tr><td style="padding:20px 30px 6px 30px;"><p style="font-family:${FONT_SANS};font-size:13px;color:#333333;line-height:1.7;margin:0;">${safe(emailIntro).replace(/\n/g,'<br>')}</p></td></tr>`:'';
+  const outroHtml=emailOutro?`<tr><td style="padding:8px 30px 22px 30px;"><p style="font-family:${FONT_SANS};font-size:13px;color:#333333;line-height:1.7;margin:0;">${safe(emailOutro).replace(/\n/g,'<br>')}</p></td></tr>`:'';
+  const upcomingCount=evs.filter(e=>!isPast(e)).length;
+  const thisMonthCount=evs.filter(e=>!isPast(e)&&e.date&&e.date.getMonth()===today().getMonth()&&e.date.getFullYear()===today().getFullYear()).length;
+  const bigCount=evs.filter(e=>e.type==='big').length;
+  const factCount=evs.filter(e=>noteHasFact(e)).length;
+  const tbdCount=evs.filter(e=>!e.date&&e.type!=='recurring').length;
+  const summaryHtml=`<tr><td style="padding:18px 24px 8px 24px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+      ${metricCard('Upcoming',upcomingCount,'active list')}
+      ${metricCard('This Month',thisMonthCount,'time-sensitive')}
+      ${metricCard('Big Events',bigCount,'priority')}
+      ${metricCard('Fact Sheets',factCount,'ready to send')}
+      ${metricCard('Dates TBD',tbdCount,'needs follow-up')}
+    </tr></table>
+  </td></tr>`;
+  const priorityItems=evs.filter(e=>!isPast(e)&&(e.type==='big'||noteHasFact(e)||isSoon(e)||(!e.date&&e.type!=='recurring'))).sort((a,b)=>getPriorityScore(b)-getPriorityScore(a)||(a.date||new Date(2999,0,1))-(b.date||new Date(2999,0,1))).slice(0,6);
+  const priorityRows=priorityItems.map((e,i)=>{
+    return `<tr>
+      <td valign="top" style="padding:8px 8px;border-top:${i?'1px solid #eadfca':'0'};font-family:${FONT_SANS};font-size:12px;color:#222222;line-height:1.55;">
+        <span style="font-weight:bold;color:${accent};white-space:nowrap;">${safe(eventDateLabel(e))}</span><span style="color:#555555;"> - </span><span style="font-weight:600;">${safe(e.name)}</span>
+      </td>
+    </tr>`;
+  }).join('');
+  const priorityHtml=priorityItems.length?`<tr><td style="padding:12px 30px 6px 30px;">
+    <table role="presentation" width="100%" bgcolor="#fffaf0" style="background:#fffaf0;border:1px solid #e7d7aa;border-left:6px solid ${accent};border-collapse:collapse;">
+      <tr><td style="padding:12px 16px 2px 16px;">
+        <div style="font-family:${FONT_SANS};font-size:10px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;color:${accent};">Priority Highlights</div>
+        <div style="font-family:${FONT_SANS};font-size:11px;color:#777777;margin-top:4px;">Clean event lines only — ready to copy into WhatsApp or email.</div>
+      </td></tr>
+      <tr><td style="padding:4px 16px 12px 16px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${priorityRows}</table></td></tr>
+    </table>
+  </td></tr>`:'';
+  const mapHtml=`<tr><td style="padding:6px 30px 10px 30px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#ffffff" style="background:#ffffff;border:1px solid #e8e2d4;">
+      <tr>
+        <td style="padding:10px 14px;font-family:${FONT_SANS};font-size:11px;color:#666666;line-height:1.7;">
+          <strong style="color:${accent};text-transform:uppercase;letter-spacing:1.5px;font-size:10px;">Report Map</strong><br>
+          Focus: <strong style="color:#222222;">${safe(focusLabels[reportFocus]||'All Upcoming')}</strong> &nbsp; | &nbsp; PACE Properties: <strong style="color:#222222;">${paceCount}</strong> &nbsp; | &nbsp; Las Vegas: <strong style="color:#222222;">${lvCount}</strong> &nbsp; | &nbsp; Other / Seasonal: <strong style="color:#222222;">${otherCount}</strong>
+        </td>
+      </tr>
+    </table>
+  </td></tr>`;
   const html=`<!--[if mso]>
 <table role="presentation" width="${maxW}" align="center" cellpadding="0" cellspacing="0" border="0"><tr><td>
 <![endif]-->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#fdfaf4" style="background:#fdfaf4;max-width:${maxW}px;margin:0 auto;font-family:${FONT_SANS};mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;">
-  <tr><td bgcolor="${accent}" style="background:${accent};padding:30px 28px 22px;">
-    <div style="font-family:${FONT_SERIF};font-size:24px;font-weight:bold;color:#ffffff;letter-spacing:2px;text-transform:uppercase;line-height:1.3;">${title}</div>
-    <div style="font-family:${FONT_SANS};font-size:11px;color:#ffffff;opacity:0.8;margin-top:8px;letter-spacing:0.5px;">${dateStr}</div>
+  <tr><td bgcolor="${accent}" style="background:${accent};padding:32px 30px 24px;border-bottom:5px solid ${accentDark};">
+    <div style="font-family:${FONT_SANS};font-size:10px;font-weight:bold;color:#ffffff;opacity:.78;letter-spacing:2.6px;text-transform:uppercase;margin-bottom:9px;">PACE Gaming Team Newsletter</div>
+    <div style="font-family:${FONT_SERIF};font-size:26px;font-weight:bold;color:#ffffff;letter-spacing:1.8px;text-transform:uppercase;line-height:1.25;">${safe(title)}</div>
+    <div style="font-family:${FONT_SANS};font-size:11px;color:#ffffff;opacity:0.85;margin-top:9px;letter-spacing:0.4px;">${safe(dateStr)} &nbsp; | &nbsp; Prepared by Anne Joy</div>
   </td></tr>
-  <tr><td bgcolor="#f0ece0" style="background:#f0ece0;padding:10px 28px;border-bottom:2px solid ${accent};">
-    <span style="font-family:${FONT_SANS};font-size:11px;color:#666666;">TO: <strong style="color:#333333;">${to}</strong></span>
+  <tr><td bgcolor="#f0ece0" style="background:#f0ece0;padding:11px 30px;border-bottom:1px solid #ded4c4;">
+    <span style="font-family:${FONT_SANS};font-size:11px;color:#666666;text-transform:uppercase;letter-spacing:.8px;">To: <strong style="color:#333333;">${safe(to)}</strong></span>
   </td></tr>
   ${introHtml}
+  ${summaryHtml}
+  ${priorityHtml}
+  ${mapHtml}
   ${bodyHtml}
   ${outroHtml}
-  <tr><td bgcolor="${accentDark}" style="background:${accentDark};padding:20px 28px;">
+  <tr><td bgcolor="${accentDark}" style="background:${accentDark};padding:20px 30px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="mso-table-lspace:0pt;mso-table-rspace:0pt;">
       <tr>
         <td valign="top" style="font-family:${FONT_SERIF};">
-          <div style="font-family:${FONT_SERIF};font-size:10px;color:#ffffff;opacity:0.75;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;">PACE Events Newsletter</div>
-          <div style="font-family:${FONT_SANS};font-size:10px;color:#ffffff;opacity:0.6;font-style:italic;">Report prepared by Anne Joy for Pace Gaming Team</div>
+          <div style="font-family:${FONT_SERIF};font-size:11px;color:#ffffff;opacity:0.82;letter-spacing:2px;text-transform:uppercase;margin-bottom:5px;">PACE Events Newsletter</div>
+          <div style="font-family:${FONT_SANS};font-size:10px;color:#ffffff;opacity:0.65;font-style:italic;">Report prepared by Anne Joy for PACE Gaming Team</div>
         </td>
         <td align="right" valign="top">
-          <a href="${shareUrl}" target="_blank" style="display:inline-block;font-family:${FONT_SANS};font-size:10px;color:#ffffff;text-decoration:none;border:1px solid #ffffff;padding:6px 12px;letter-spacing:1px;text-transform:uppercase;">View-Only Link &#8594;</a>
+          <a href="${shareUrl}" target="_blank" style="display:inline-block;font-family:${FONT_SANS};font-size:10px;color:#ffffff;text-decoration:none;border:1px solid #ffffff;padding:7px 13px;letter-spacing:1px;text-transform:uppercase;">View-Only Link &#8594;</a>
         </td>
       </tr>
     </table>
@@ -1592,7 +1974,6 @@ function buildReport(){
 <![endif]-->`;
 
   document.getElementById('reportContent').innerHTML=html;
-  // update stats
   const upEl=document.getElementById('rstat-upcoming');
   const bgEl=document.getElementById('rstat-big');
   const rcEl=document.getElementById('rstat-recurring');
@@ -1620,24 +2001,84 @@ function copyHtml(){
     setTimeout(()=>b.textContent='Copy HTML',2000);
   });
 }
+function getReportGroups(){
+  ensureReportOrder();
+  return [
+    ['PACE PROPERTIES', (reportOrder.sections&&reportOrder.sections.pace)||DEFAULT_PACE_PROPS],
+    ['LAS VEGAS', (reportOrder.sections&&reportOrder.sections.lv)||DEFAULT_LV_PROPS],
+    ['OTHER / SEASONAL', (reportOrder.sections&&reportOrder.sections.other)||DEFAULT_OTHER_PROPS]
+  ];
+}
+function buildPlainTextEventList(evs){
+  const groups=getReportGroups();
+  const covered=[];
+  let text='';
+  groups.forEach(([section,venues])=>{
+    let sectionText='';
+    venues.forEach(v=>{
+      covered.push(v);
+      const vevs=evs.filter(e=>e.venue===v);if(!vevs.length)return;
+      sectionText+=`${formatVenueName(v)}\n`;
+      vevs.forEach(e=>{sectionText+=`${eventLineText(e)}\n`;});
+      sectionText+='\n';
+    });
+    if(sectionText)text+=`${section}\n${sectionText}`;
+  });
+  const leftovers=[...new Set(evs.map(e=>e.venue))].filter(v=>!covered.includes(v));
+  if(leftovers.length){
+    let sectionText='';
+    leftovers.forEach(v=>{
+      const vevs=evs.filter(e=>e.venue===v);if(!vevs.length)return;
+      sectionText+=`${formatVenueName(v)}\n`;
+      vevs.forEach(e=>{sectionText+=`${eventLineText(e)}\n`;});
+      sectionText+='\n';
+    });
+    if(sectionText)text+=`OTHER VENUES\n${sectionText}`;
+  }
+  return text.trimEnd();
+}
+function buildWhatsAppText(evs,title,dateStr,to){
+  const list=buildPlainTextEventList(evs);
+  return `${title}\n${dateStr}\nTo: ${to}\n\n${list}`.trimEnd();
+}
+function flashButton(btn, label='✓ Copied!'){
+  if(!btn)return;
+  const orig=btn.textContent;
+  btn.textContent=label;
+  setTimeout(()=>btn.textContent=orig,2000);
+}
 function copyText(){
   const {evs,title,dateStr,to}=buildReport();
-  let t=`${title}\n${dateStr}\nTo: ${to}\n\n`;
-  VENUES_ORDER.forEach(v=>{
-    const vevs=evs.filter(e=>e.venue===v);if(!vevs.length)return;
-    t+=`${v}\n`;
-    vevs.forEach(e=>{
-      let d='';
-      if(e.type==='recurring')d='Recurring';
-      else if(e.date){d=shortDateRange(e.date,e.endDate);}
-      t+=`${d?d+' - ':''}${e.name}\n`;
-    });
-    t+='\n';
-  });
-  navigator.clipboard.writeText(t.trimEnd()).then(()=>{
-    const b=event.target;b.textContent='✓ Copied!';
-    setTimeout(()=>b.textContent='📋 Copy Plain Text',2000);
-  });
+  const t=buildWhatsAppText(evs,title,dateStr,to);
+  navigator.clipboard.writeText(t).then(()=>flashButton(event.target));
+}
+function copySubjectLine(){
+  const tplKey=(document.getElementById('draft-template')||{}).value||'newsletter';
+  const t=DRAFT_TEMPLATES[tplKey]||DRAFT_TEMPLATES.newsletter;
+  const subject=t.subject?t.subject():'PACE Gaming Events Update';
+  navigator.clipboard.writeText(subject).then(()=>flashButton(event.target));
+}
+function copyPriorityText(){
+  const {evs,title,dateStr,to}=buildReport();
+  const priority=evs.filter(e=>!isPast(e)&&(e.type==='big'||/fact sheet/i.test(e.note||'')||isSoon(e)||(!e.date&&e.type!=='recurring')))
+    .sort((a,b)=>getPriorityScore(b)-getPriorityScore(a)||((a.date||new Date(2999,0,1))-(b.date||new Date(2999,0,1))));
+  const text=priority.length
+    ? buildWhatsAppText(priority, `${title} — PRIORITY HIGHLIGHTS`, dateStr, to)
+    : `No priority events found for the current report view.`;
+  navigator.clipboard.writeText(text).then(()=>flashButton(event.target));
+}
+function downloadPlainText(){
+  const {evs,title,dateStr,to}=buildReport();
+  const text=buildWhatsAppText(evs,title,dateStr,to);
+  const blob=new Blob([text],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a');
+  const clean=(title||'PACE Events').replace(/[^a-z0-9]+/gi,'_').replace(/^_|_$/g,'');
+  a.href=URL.createObjectURL(blob);
+  a.download=clean+'_WhatsApp_Format.txt';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);
+  flashButton(event.target,'✓ Downloaded');
 }
 
 // ── SHARE ──
@@ -1840,43 +2281,103 @@ document.getElementById('bulk-venue').addEventListener('change',function(){
 const DRAFT_TEMPLATES = {
   newsletter: {
     subject: () => { const n=new Date(); return `PACE Gaming Events Update — ${n.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`; },
-    intro: (to) => `Hi ${to},\n\nPlease see the updated PACE Gaming Events list below for your reference. Let me know if you'd like a fact sheet for any of the listed events.`,
-    outro: () => `Full interactive list: ${location.href.split('?')[0]+'?view'}\n\nBest regards,\nAnne Joy Therese\nPACE Gaming`
+    intro: (to) => `Hi ${to},\n\nPlease see the latest PACE Gaming events update below. I highlighted upcoming events, major tournaments, fact sheets, and date-sensitive items for quick reference. Let me know which events need follow-up or client-ready details.`,
+    outro: () => `Interactive view-only dashboard: ${location.href.split('?')[0]+'?view'}\n\nBest regards,\nAnne Joy Therese\nPACE Gaming`
+  },
+  executive: {
+    subject: () => { const n=new Date(); return `Executive Events Summary — PACE Gaming | ${n.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`; },
+    intro: (to) => `Hi ${to},\n\nBelow is the executive summary of upcoming PACE Gaming events. I organized the list by property and kept the event lines clean so the team can quickly review what needs attention, promotion, or follow-up.`,
+    outro: () => `Recommended next step: confirm which priority events need fact sheets, host outreach, or client-ready invite language.\n\nBest,\nAnne Joy Therese\nPACE Gaming`
+  },
+  weekly: {
+    subject: () => { const n=new Date(); return `Weekly PACE Events Planning List | ${n.toLocaleDateString('en-US',{month:'long',day:'numeric'})}`; },
+    intro: (to) => `Hi ${to},\n\nHere is the weekly planning list for PACE Gaming events. This is organized for quick review, team coordination, and follow-up planning.`,
+    outro: () => `Please let me know what should be prioritized this week and I can prepare the next round of follow-ups.\n\nBest,\nAnne Joy Therese`
+  },
+  monthlyPlanning: {
+    subject: () => { const n=new Date(); return `Monthly Events Planning — ${n.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`; },
+    intro: (to) => `Hi ${to},\n\nSharing the monthly events planning view for PACE Gaming. This should help us identify the strongest upcoming opportunities, confirm event details, and decide which items need client-facing materials.`,
+    outro: () => `Once reviewed, I can help separate this into priority outreach, fact sheet requests, and client-ready highlights.\n\nBest regards,\nAnne Joy Therese`
+  },
+  approval: {
+    subject: () => `For Review: PACE Gaming Events Update`,
+    intro: (to) => `Hi ${to},\n\nPlease review the updated PACE Gaming events list below. I kept the formatting clean and grouped by venue for easier checking.`,
+    outro: () => `Please let me know if anything should be added, removed, renamed, or moved to a priority list before this is shared further.\n\nThank you,\nAnne Joy Therese`
   },
   followup: {
     subject: () => { const n=new Date(); return `Follow-Up: PACE Gaming Events | ${n.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}`; },
-    intro: (to) => `Hi ${to},\n\nJust following up with the latest PACE Gaming Events for your review.`,
-    outro: () => `Happy to send a fact sheet for any event — just let me know.\n\nBest regards,\nAnne Joy Therese\nPACE Gaming`
+    intro: (to) => `Hi ${to},\n\nJust following up with the latest PACE Gaming events for your review.`,
+    outro: () => `Happy to send a fact sheet or help prioritize follow-ups for any event — just let me know.\n\nBest regards,\nAnne Joy Therese\nPACE Gaming`
+  },
+  next7: {
+    subject: () => `PACE Gaming Events — Next 7 Days`,
+    intro: (to) => `Hi ${to},\n\nSharing the most time-sensitive PACE Gaming events for the next few days. These are the items I would review first for any quick follow-up or last-minute client opportunity.`,
+    outro: () => `Let me know which events need immediate action and I can help prepare the next message or fact sheet request.\n\nBest,\nAnne Joy Therese`
+  },
+  factSheet: {
+    subject: () => `Fact Sheet Follow-Up — PACE Gaming Events`,
+    intro: (to) => `Hi ${to},\n\nHere are the events that may need fact sheet review or confirmation. I grouped them by property so it is easier to check what is ready and what still needs details.`,
+    outro: () => `Please send over any available fact sheets or notes, and I can update the event list accordingly.\n\nThank you,\nAnne Joy Therese`
+  },
+  tbdFollowup: {
+    subject: () => `Dates Needed: PACE Gaming Events`,
+    intro: (to) => `Hi ${to},\n\nSharing the current events that still need date confirmation or additional details. These should be reviewed before sending anything client-facing.`,
+    outro: () => `Once the missing dates/details are confirmed, I can update the dashboard and resend the clean version.\n\nBest,\nAnne Joy Therese`
+  },
+  recap: {
+    subject: () => `Completed Events Recap — PACE Gaming`,
+    intro: (to) => `Hi ${to},\n\nHere is a recap view of completed PACE Gaming events. This can be used for tracking, reference, or deciding what should be archived.`,
+    outro: () => `Let me know if any completed events should remain visible or be moved out of the active list.\n\nBest,\nAnne Joy Therese`
   },
   highlight: {
     subject: () => { const n=new Date(); return `PACE Gaming — Events Highlights | ${n.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`; },
-    intro: (to) => `Hi ${to},\n\nSharing the latest PACE Gaming Events highlights for your reference.`,
+    intro: (to) => `Hi ${to},\n\nSharing the latest PACE Gaming event highlights for your reference.`,
     outro: () => `Reach out if you need a fact sheet for any specific event.\n\nBest regards,\nAnne Joy Therese\nPACE Gaming`
-  },
-  brief: {
-    subject: () => `PACE Gaming Events Update`,
-    intro: (to) => `Hi ${to}, please find the updated events list below.`,
-    outro: () => `Let me know if you need anything.\n\nBest,\nAnne Joy Therese`
   },
   vip: {
     subject: () => { const n=new Date(); return `Exclusive PACE Gaming Events — ${n.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`; },
     intro: (to) => `Dear ${to},\n\nWe are pleased to present our curated selection of upcoming PACE Gaming events. These are exclusive opportunities we believe would be of great interest to you and your guests.`,
     outro: () => `We would be delighted to assist with any arrangements. Please do not hesitate to reach out.\n\nWith warm regards,\nAnne Joy Therese\nPACE Gaming`
   },
+  clientInvite: {
+    subject: () => `You're Invited: Upcoming PACE Gaming Events`,
+    intro: (to) => `Hi ${to},\n\nWe wanted to share a few upcoming PACE Gaming events that may be of interest to you. Please see the current event list below.`,
+    outro: () => `If any event catches your eye, reply back and we will be happy to help with next steps.\n\nWarm regards,\nAnne Joy Therese\nPACE Gaming`
+  },
+  hostOutreach: {
+    subject: () => `Host Outreach List — Upcoming PACE Gaming Events`,
+    intro: (to) => `Hi ${to},\n\nBelow is the current host outreach list for upcoming PACE Gaming events. This version is formatted for easy scanning and follow-up assignment.`,
+    outro: () => `Please let me know which items should be assigned for host follow-up or client outreach.\n\nBest,\nAnne Joy Therese`
+  },
+  propertySpotlight: {
+    subject: () => `Property Event Spotlight — PACE Gaming`,
+    intro: (to) => `Hi ${to},\n\nSharing a property-focused event update below. This format should make it easier to review each venue and identify the strongest event opportunities.`,
+    outro: () => `Let me know which property should be featured first for a client-facing message.\n\nBest,\nAnne Joy Therese`
+  },
+  concierge: {
+    subject: () => `Curated Event Opportunities from PACE Gaming`,
+    intro: (to) => `Hi ${to},\n\nWe have curated the upcoming PACE Gaming event opportunities below for your consideration. Each item is listed clearly by date and event for easy review.`,
+    outro: () => `Our team would be happy to assist with details, availability, and next steps.\n\nWarm regards,\nAnne Joy Therese\nPACE Gaming`
+  },
   reminder: {
     subject: () => { const n=new Date(); return `Reminder: Upcoming PACE Gaming Events | ${n.toLocaleDateString('en-US',{month:'long',year:'numeric'})}`; },
-    intro: (to) => `Hi ${to},\n\nJust a quick reminder of the upcoming PACE Gaming events listed below. Don't miss out — some of these fill up fast!`,
-    outro: () => `Let me know if you'd like to reserve a spot or need more details on any event.\n\nBest regards,\nAnne Joy Therese\nPACE Gaming`
+    intro: (to) => `Hi ${to},\n\nJust a quick reminder of the upcoming PACE Gaming events listed below. Some of these may fill up fast, so these are worth reviewing soon.`,
+    outro: () => `Let me know if you would like to reserve a spot or need more details on any event.\n\nBest regards,\nAnne Joy Therese\nPACE Gaming`
   },
   welcome: {
     subject: () => `Welcome to PACE Gaming Events`,
-    intro: (to) => `Hi ${to},\n\nWelcome! We're excited to share our upcoming events with you. Below is a full overview of what's coming up across our PACE Gaming venues — there's something for everyone.`,
+    intro: (to) => `Hi ${to},\n\nWelcome! We're excited to share our upcoming events with you. Below is a full overview of what's coming up across our PACE Gaming venues.`,
     outro: () => `We look forward to seeing you at one of our events soon. Feel free to reach out anytime.\n\nWarm regards,\nAnne Joy Therese\nPACE Gaming`
   },
   thankyou: {
     subject: () => `Thank You + Upcoming PACE Gaming Events`,
-    intro: (to) => `Hi ${to},\n\nThank you for your continued support and partnership with PACE Gaming. We truly appreciate it. Please find our upcoming events below — we hope to see you at a few of them!`,
-    outro: () => `Thanks again, and don't hesitate to reach out if you need anything at all.\n\nGratefully,\nAnne Joy Therese\nPACE Gaming`
+    intro: (to) => `Hi ${to},\n\nThank you for your continued support and partnership with PACE Gaming. We truly appreciate it. Please find our upcoming events below.`,
+    outro: () => `Thanks again, and do not hesitate to reach out if you need anything at all.\n\nGratefully,\nAnne Joy Therese\nPACE Gaming`
+  },
+  brief: {
+    subject: () => `PACE Gaming Events Update`,
+    intro: (to) => `Hi ${to}, please find the updated events list below.`,
+    outro: () => `Let me know if you need anything.\n\nBest,\nAnne Joy Therese`
   }
 };
 
@@ -1901,18 +2402,9 @@ function copyDraftText(){
   const intro = t.intro ? t.intro(to) : '';
   const outro = t.outro ? t.outro() : '';
   const {evs} = buildReport();
-  // Build plain text event list
-  let list = '';
-  VENUES_ORDER.forEach(v=>{
-    const vevs = evs.filter(e=>e.venue===v); if(!vevs.length) return;
-    list += v + '\n';
-    vevs.forEach(e=>{
-      let d = e.type==='recurring'?'Recurring':e.date?shortDateRange(e.date,e.endDate):'';
-      list += (d?d+' - ':'') + e.name + '\n';
-    });
-    list += '\n';
-  });
-  const body = [intro, list.trimEnd(), outro].filter(Boolean).join('\n\n');
+  // Build plain text event list in the same organized WhatsApp-style sections
+  const list = buildPlainTextEventList(evs);
+  const body = [intro, list, outro].filter(Boolean).join('\n\n');
   const text = `Subject: ${subject}\n\n${body}`;
   navigator.clipboard.writeText(text).then(()=>{
     const b = event.target;

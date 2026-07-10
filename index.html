@@ -1071,6 +1071,9 @@ function eventDateLabel(e){
 function eventLineText(e){
   return eventDateLabel(e)+' - '+e.name;
 }
+function eventLineWithVenueText(e){
+  return eventDateLabel(e)+' - '+formatVenueName(e.venue)+' - '+e.name;
+}
 function shouldDefaultPriority(e){
   return !!(e&&(e.type==='big'||/fact sheet/i.test(e.note||'')));
 }
@@ -1318,7 +1321,7 @@ function mkFeaturedSection(){
   if(!featured.length)return'';
   return `<section class="featured-panel">
     <div class="featured-head">
-      <div><div class="featured-title">Priority Highlights</div><div class="featured-sub">Manually selected events only. Use Add Priority / Remove Priority to control this list.</div></div>
+      <div><div class="featured-title">Priority Highlights</div></div>
       <div style="font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;">${featured.length} highlighted</div>
     </div>
     <div class="featured-grid">${featured.map(mkFeaturedCard).join('')}</div>
@@ -1327,11 +1330,11 @@ function mkFeaturedSection(){
 
 function mkFeaturedCard(e){
   const date=eventDateLabel(e);
-  const note=/fact sheet/i.test(e.note||'')?' · Fact Sheet':'';
+  const note=/fact sheet/i.test(e.note||'')?'Fact Sheet Available':'';
   return `<div class="featured-card">
     <div class="featured-date">${date}</div>
-    <div class="featured-name">${e.type==='big'?'⭐ ':''}${e.name}</div>
-    <div class="featured-venue">${formatVenueName(e.venue)}${note}</div>
+    <div class="featured-name">${e.type==='big'?'⭐ ':''}${formatVenueName(e.venue)} - ${e.name}</div>
+    ${note?`<div class="featured-venue">${note}</div>`:''}
     ${!IS_VIEW?`<div class="featured-actions"><button class="btn btn-ghost btn-sm" onclick="togglePriority('${e.id}',event)">Remove</button></div>`:''}
   </div>`;
 }
@@ -2054,13 +2057,12 @@ function buildReport(){
       ${evRows}
     </table>`;
   }
-  function mkSectionHeader(label,accentColor,description,count){
+  function mkSectionHeader(label,accentColor,count){
     return `<tr><td style="padding:28px 24px 10px 24px;">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-bottom:3px solid ${accentColor};">
         <tr>
           <td valign="bottom" style="padding-bottom:8px;">
             <div style="font-family:${FONT_SANS};font-size:11px;font-weight:bold;letter-spacing:3px;text-transform:uppercase;color:${accentColor};">${safe(label)}</div>
-            <div style="font-family:${FONT_SANS};font-size:11px;color:#777777;margin-top:4px;line-height:1.5;">${safe(description)}</div>
           </td>
           <td align="right" valign="bottom" style="padding-bottom:8px;">
             <span style="font-family:${FONT_SANS};font-size:10px;color:${accentColor};background:#ffffff;border:1px solid #e8e2d4;border-radius:999px;padding:5px 10px;font-weight:bold;text-transform:uppercase;letter-spacing:.7px;">${count} event${count!==1?'s':''}</span>
@@ -2115,9 +2117,9 @@ function buildReport(){
   const lvCount=lvBlocks.reduce((sum,b)=>sum+b.vevs.length,0);
   const otherCount=otherBlocks.reduce((sum,b)=>sum+b.vevs.length,0);
   let bodyHtml='';
-  if(paceBlocks.length)bodyHtml+=mkSectionHeader('PACE Properties',''+accent,'Primary casino and resort property events, tournaments, concerts, and fact-sheet items.',paceCount)+buildGroup(paceBlocks);
-  if(lvBlocks.length)bodyHtml+=mkSectionHeader('Las Vegas',''+accent,'Local Las Vegas arenas and properties, grouped separately for quick review.',lvCount)+buildGroup(lvBlocks);
-  if(otherBlocks.length)bodyHtml+=mkSectionHeader('Other / Seasonal',''+accent,'Big events, cruises, DraftKings opportunities, and open items needing confirmation.',otherCount)+buildGroup(otherBlocks);
+  if(paceBlocks.length)bodyHtml+=mkSectionHeader('PACE Properties',''+accent,paceCount)+buildGroup(paceBlocks);
+  if(lvBlocks.length)bodyHtml+=mkSectionHeader('Las Vegas',''+accent,lvCount)+buildGroup(lvBlocks);
+  if(otherBlocks.length)bodyHtml+=mkSectionHeader('Other / Seasonal',''+accent,otherCount)+buildGroup(otherBlocks);
   if(!bodyHtml){
     bodyHtml=`<tr><td style="padding:22px 30px 36px 30px;"><table role="presentation" width="100%" bgcolor="#ffffff" style="background:#ffffff;border:1px solid #e8e2d4;"><tr><td style="padding:24px;text-align:center;font-family:${FONT_SANS};font-size:13px;color:#777777;line-height:1.6;">No events match the selected report focus: <strong style="color:${accent};">${safe(focusLabels[reportFocus]||'Current View')}</strong>.</td></tr></table></td></tr>`;
   }
@@ -2146,7 +2148,7 @@ function buildReport(){
   const priorityRows=priorityItems.map((e,i)=>{
     return `<tr>
       <td valign="top" style="padding:8px 8px;border-top:${i?'1px solid #eadfca':'0'};font-family:${FONT_SANS};font-size:12px;color:#222222;line-height:1.55;">
-        <span style="font-weight:bold;color:${accent};white-space:nowrap;">${safe(eventDateLabel(e))}</span><span style="color:#555555;"> - </span><span style="font-weight:600;">${safe(e.name)}</span>
+        <span style="font-weight:bold;color:${accent};white-space:nowrap;">${safe(eventDateLabel(e))}</span><span style="color:#555555;"> - </span><span style="font-weight:700;color:#333333;">${safe(formatVenueName(e.venue))}</span><span style="color:#555555;"> - </span><span style="font-weight:600;">${safe(e.name)}</span>
       </td>
     </tr>`;
   }).join('');
@@ -2154,7 +2156,6 @@ function buildReport(){
     <table role="presentation" width="100%" bgcolor="#fffaf0" style="background:#fffaf0;border:1px solid #e7d7aa;border-left:6px solid ${accent};border-collapse:collapse;">
       <tr><td style="padding:12px 16px 2px 16px;">
         <div style="font-family:${FONT_SANS};font-size:10px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;color:${accent};">Priority Highlights</div>
-        <div style="font-family:${FONT_SANS};font-size:11px;color:#777777;margin-top:4px;">Manually selected priority events only — ready to copy into WhatsApp or email.</div>
       </td></tr>
       <tr><td style="padding:4px 16px 12px 16px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${priorityRows}</table></td></tr>
     </table>
@@ -2292,11 +2293,15 @@ function copySubjectLine(){
   const subject=t.subject?t.subject():'PACE Gaming Events Update';
   navigator.clipboard.writeText(subject).then(()=>flashButton(event.target));
 }
+function buildPriorityWhatsAppText(priority,title,dateStr,to){
+  const lines=(priority||[]).map(e=>eventLineWithVenueText(e)).join('\n');
+  return `${title}\n${dateStr}\nTo: ${to}\n\nPRIORITY HIGHLIGHTS\n${lines}`.trimEnd();
+}
 function copyPriorityText(){
   const {evs,title,dateStr,to}=buildReport();
   const priority=getPriorityEvents(evs);
   const text=priority.length
-    ? buildWhatsAppText(priority, `${title} — PRIORITY HIGHLIGHTS`, dateStr, to)
+    ? buildPriorityWhatsAppText(priority, `${title} — PRIORITY HIGHLIGHTS`, dateStr, to)
     : `No priority events found for the current report view.`;
   navigator.clipboard.writeText(text).then(()=>flashButton(event.target));
 }

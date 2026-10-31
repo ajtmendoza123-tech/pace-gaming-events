@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#102a43">
-<title>PACE Events | Custom Color Studio | Internal Event Hub V15 (2026–2027)</title>
+<title>PACE Events | Custom Color Studio | Internal Event Hub V16 (2026–2027)</title>
 <style>
 :root{
   --navy-950:#0b2037;--navy-900:#102a43;--navy-800:#173f68;--navy-700:#235785;
@@ -574,7 +574,7 @@ function selectedPropertyLabel(){const id=$('reportProperty')?.value||'ALL';retu
 function reportYearLabel(){const from=$('reportFrom').value,to=$('reportTo').value;if(from&&to){const a=from.slice(0,4),b=to.slice(0,4);return a===b?a:`${a}–${b}`}return (from||to||todayISO()).slice(0,4)}
 function templateValue(value){return String(value||'').replaceAll('{property}',selectedPropertyLabel()).replaceAll('{year}',reportYearLabel()).replaceAll('{range}',formatRangeLabel())}
 function messageValue(id){return templateValue($(id)?.value||'')}
-function reportEventLine(e){const line=eventLine(e);if(!e.startDate)return line;const year=e.startDate.slice(0,4);const endYear=(e.endDate||e.startDate).slice(0,4);return `${line} (${year===endYear?year:`${year}–${endYear}`})`}
+function reportEventLine(e){return eventLine(e)}
 
 function applyEmailTemplate(key,notify=true){const t=EMAIL_TEMPLATES[key]||EMAIL_TEMPLATES['team-update'];$('emailTemplate').value=key in EMAIL_TEMPLATES?key:'team-update';if(key==='highlights')$('reportHighlightMode').value='only';$('emailHeadline').value=t.headline;$('emailSubject').value=t.subject;$('emailGreeting').value=t.greeting;$('emailIntro').value=t.intro;$('emailClosing').value=t.closing;$('emailFooter').value=t.footer;$('templateDescription').textContent=t.description;renderReport();if(notify)toast('Email template loaded')}
 function resetEmailTemplate(){applyEmailTemplate($('emailTemplate').value)}
